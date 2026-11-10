@@ -2,1260 +2,1051 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#075638">
-  <meta name="description" content="Website Resmi Pondok Pesantren Darul Fikr Cianjur Singkut, Kabupaten Sarolangun. Membangun generasi berilmu, beriman, dan berakhlakul karimah.">
-  <title>Pondok Pesantren Darul Fikr | Cianjur Singkut</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --green: #075638;
-      --green-dark: #043c28;
-      --green-mid: #0b7049;
-      --green-light: #15915c;
-      --gold: #d9b45b;
-      --gold-light: #f5e8bf;
-      --cream: #fbf8ef;
-      --white: #ffffff;
-      --ink: #18372a;
-      --muted: #64766c;
-      --shadow: 0 12px 35px rgba(4, 60, 40, .11);
-      --radius: 20px;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      scroll-padding-top: 95px;
-    }
-
-    body {
-      font-family: "Nunito Sans", sans-serif;
-      color: var(--ink);
-      background: #f5f8f5;
-      line-height: 1.7;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    img {
-      display: block;
-      max-width: 100%;
-    }
-
-    button {
-      font: inherit;
-    }
-
-    .container {
-      width: min(1160px, 92%);
-      margin: auto;
-    }
-
-    .section {
-      position: relative;
-      padding: 88px 0;
-      overflow: hidden;
-    }
-
-    .section-heading {
-      max-width: 760px;
-      margin: 0 auto 42px;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-
-    .eyebrow {
-      display: inline-block;
-      color: var(--green-mid);
-      background: rgba(217, 180, 91, .19);
-      border: 1px solid rgba(217, 180, 91, .5);
-      border-radius: 50px;
-      padding: 6px 16px;
-      margin-bottom: 13px;
-      font-size: .82rem;
-      font-weight: 900;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    .section-heading h2 {
-      font-family: "Playfair Display", serif;
-      color: var(--green);
-      font-size: clamp(2rem, 4vw, 2.8rem);
-      line-height: 1.2;
-      margin-bottom: 12px;
-    }
-
-    .section-heading p {
-      color: var(--muted);
-    }
-
-    .ornament {
-      width: 76px;
-      height: 4px;
-      margin: 18px auto 0;
-      border-radius: 5px;
-      background: linear-gradient(90deg, var(--green), var(--gold));
-    }
-
-    /* HEADER */
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background: linear-gradient(110deg, var(--green-dark), var(--green));
-      box-shadow: 0 5px 22px rgba(0, 0, 0, .15);
-      border-bottom: 2px solid var(--gold);
-    }
-
-    .header-inner {
-      min-height: 82px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      color: white;
-      min-width: 0;
-    }
-
-    .brand img {
-      width: 57px;
-      height: 57px;
-      object-fit: contain;
-      background: white;
-      border-radius: 50%;
-      padding: 4px;
-      border: 2px solid var(--gold);
-    }
-
-    .brand-text strong {
-      display: block;
-      font-family: "Playfair Display", serif;
-      font-size: 1.05rem;
-      line-height: 1.25;
-      letter-spacing: .3px;
-    }
-
-    .brand-text span {
-      display: block;
-      color: var(--gold-light);
-      font-size: .77rem;
-      margin-top: 3px;
-    }
-
-    .main-nav {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .main-nav a {
-      color: white;
-      padding: 10px 12px;
-      font-size: .88rem;
-      font-weight: 800;
-      border-radius: 30px;
-      transition: .25s;
-    }
-
-    .main-nav a:hover {
-      background: var(--gold);
-      color: var(--green-dark);
-    }
-
-    .menu-toggle {
-      display: none;
-      color: white;
-      background: transparent;
-      border: 1px solid rgba(255,255,255,.5);
-      border-radius: 10px;
-      padding: 7px 12px;
-      font-size: 1.35rem;
-      cursor: pointer;
-    }
-
-    /* HERO */
-    .hero {
-      min-height: 590px;
-      position: relative;
-      display: flex;
-      align-items: center;
-      color: white;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 85% 20%, rgba(217,180,91,.25), transparent 25%),
-        radial-gradient(circle at 10% 90%, rgba(21,145,92,.3), transparent 30%),
-        linear-gradient(120deg, #043c28, #075638 58%, #0b7049);
-    }
-
-    .hero::before,
-    .pattern-section::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: .10;
-      background-image:
-        linear-gradient(45deg, transparent 46%, var(--gold) 47%, var(--gold) 49%, transparent 50%),
-        linear-gradient(-45deg, transparent 46%, var(--gold) 47%, var(--gold) 49%, transparent 50%);
-      background-size: 42px 42px;
-    }
-
-    .hero-inner {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: 1.35fr .65fr;
-      align-items: center;
-      gap: 50px;
-      padding-top: 65px;
-      padding-bottom: 65px;
-    }
-
-    .hero-label {
-      color: var(--gold-light);
-      font-size: .9rem;
-      font-weight: 900;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 18px;
-    }
-
-    .hero h1 {
-      font-family: "Playfair Display", serif;
-      font-size: clamp(2.5rem, 5vw, 4.2rem);
-      line-height: 1.13;
-      margin-bottom: 20px;
-    }
-
-    .hero h1 span {
-      color: var(--gold);
-    }
-
-    .hero-copy {
-      max-width: 650px;
-      color: rgba(255,255,255,.88);
-      font-size: 1.05rem;
-      margin-bottom: 28px;
-    }
-
-    .hero-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 13px;
-    }
-
-    .btn {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 23px;
-      border-radius: 50px;
-      font-weight: 900;
-      transition: .25s;
-      border: 2px solid transparent;
-    }
-
-    .btn:hover {
-      transform: translateY(-3px);
-    }
-
-    .btn-gold {
-      background: var(--gold);
-      color: var(--green-dark);
-    }
-
-    .btn-outline {
-      color: white;
-      border-color: rgba(255,255,255,.7);
-    }
-
-    .btn-outline:hover {
-      background: white;
-      color: var(--green);
-    }
-
-    .hero-emblem {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .hero-logo-frame {
-      width: min(300px, 75vw);
-      aspect-ratio: 1;
-      border-radius: 50%;
-      background: rgba(255,255,255,.1);
-      border: 3px solid var(--gold);
-      box-shadow: 0 0 0 14px rgba(217,180,91,.09), 0 25px 65px rgba(0,0,0,.2);
-      padding: 23px;
-    }
-
-    .hero-logo-frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      background: white;
-      border-radius: 50%;
-      padding: 12px;
-    }
-
-    /* PROFIL */
-    #profil {
-      background:
-        radial-gradient(circle at 0 0, rgba(217,180,91,.16), transparent 28%),
-        linear-gradient(135deg, #fffdf6, #edf6ef);
-    }
-
-    .profile-intro {
-      max-width: 900px;
-      margin: 0 auto 32px;
-      padding: 27px;
-      border-radius: var(--radius);
-      background: white;
-      box-shadow: var(--shadow);
-      border-left: 5px solid var(--gold);
-      text-align: center;
-    }
-
-    .profile-intro p {
-      color: var(--muted);
-    }
-
-    .profile-subnav {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin: 30px 0;
-    }
-
-    .profile-subnav a {
-      padding: 9px 17px;
-      border-radius: 30px;
-      background: white;
-      color: var(--green);
-      border: 1px solid rgba(7,86,56,.15);
-      box-shadow: 0 5px 14px rgba(7,86,56,.06);
-      font-size: .9rem;
-      font-weight: 900;
-      transition: .25s;
-    }
-
-    .profile-subnav a:hover {
-      background: var(--green);
-      color: white;
-      transform: translateY(-2px);
-    }
-
-    .profile-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap: 22px;
-    }
-
-    .profile-detail {
-      padding: 28px;
-      border-radius: var(--radius);
-      background: white;
-      border: 1px solid rgba(7,86,56,.08);
-      box-shadow: var(--shadow);
-      scroll-margin-top: 105px;
-    }
-
-    .profile-detail h3 {
-      color: var(--green);
-      font-family: "Playfair Display", serif;
-      font-size: 1.5rem;
-      margin-bottom: 12px;
-    }
-
-    .profile-detail p {
-      color: var(--muted);
-    }
-
-    .profile-detail.vision {
-      background: linear-gradient(135deg, #075638, #0b7049);
-      color: white;
-    }
-
-    .profile-detail.vision h3,
-    .profile-detail.vision p {
-      color: white;
-    }
-
-    .profile-detail.mission {
-      background: linear-gradient(135deg, #fff8e7, #f5e5b9);
-    }
-
-    .profile-detail.goals {
-      background: linear-gradient(135deg, #e5f4e9, #cce8d4);
-    }
-
-    .profile-detail.values {
-      background: linear-gradient(135deg, #f2eaff, #e5d8f8);
-    }
-
-    .number-list {
-      padding-left: 22px;
-      color: var(--muted);
-    }
-
-    .number-list li {
-      padding: 4px 0 4px 5px;
-    }
-
-    .value-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .value-card {
-      background: rgba(255,255,255,.75);
-      border-radius: 13px;
-      padding: 13px;
-      font-weight: 800;
-      color: var(--green);
-      text-align: center;
-    }
-
-    /* PENDIDIKAN */
-    #pendidikan {
-      background:
-        radial-gradient(circle at 100% 0, rgba(217,180,91,.18), transparent 30%),
-        linear-gradient(135deg, #eaf5ed, #f8fbf5);
-    }
-
-    .program-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 20px;
-    }
-
-    .program-card {
-      position: relative;
-      overflow: hidden;
-      padding: 27px 23px;
-      min-height: 220px;
-      border-radius: var(--radius);
-      background: white;
-      border: 1px solid rgba(7,86,56,.1);
-      box-shadow: var(--shadow);
-      transition: .3s;
-    }
-
-    .program-card:nth-child(2),
-    .program-card:nth-child(5) {
-      background: linear-gradient(145deg, #fff8e8, #f3e4bd);
-    }
-
-    .program-card:nth-child(3),
-    .program-card:nth-child(6) {
-      background: linear-gradient(145deg, #e9f5ff, #d8eafa);
-    }
-
-    .program-card:hover {
-      transform: translateY(-7px);
-    }
-
-    .program-icon {
-      width: 55px;
-      height: 55px;
-      display: grid;
-      place-items: center;
-      background: var(--green);
-      color: var(--gold-light);
-      border-radius: 16px;
-      font-size: 1.65rem;
-      margin-bottom: 17px;
-    }
-
-    .program-card h3 {
-      color: var(--green);
-      margin-bottom: 8px;
-      font-size: 1.15rem;
-    }
-
-    .program-card p {
-      color: var(--muted);
-      font-size: .94rem;
-    }
-
-    /* KEGIATAN */
-    #kegiatan {
-      background:
-        radial-gradient(circle at 0 100%, rgba(217,180,91,.18), transparent 30%),
-        linear-gradient(135deg, #fffaf0, #f1f7f0);
-    }
-
-    .activity-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 22px;
-    }
-
-    .activity-card {
-      text-align: center;
-      padding: 30px 23px;
-      border-radius: var(--radius);
-      background: white;
-      box-shadow: var(--shadow);
-      border-bottom: 4px solid var(--gold);
-      transition: .3s;
-    }
-
-    .activity-card:hover {
-      transform: translateY(-6px);
-    }
-
-    .activity-icon {
-      width: 72px;
-      height: 72px;
-      display: grid;
-      place-items: center;
-      margin: 0 auto 17px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--green), var(--green-light));
-      color: var(--gold-light);
-      font-size: 2rem;
-    }
-
-    .activity-card h3 {
-      color: var(--green);
-      margin-bottom: 8px;
-    }
-
-    .activity-card p {
-      color: var(--muted);
-      font-size: .94rem;
-    }
-
-    /* GALERI */
-    #galeri {
-      background: linear-gradient(135deg, #edf6ee, #fff9e9);
-    }
-
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 20px;
-    }
-
-    .gallery-item {
-      overflow: hidden;
-      border-radius: var(--radius);
-      background: white;
-      box-shadow: var(--shadow);
-      transition: .3s;
-    }
-
-    .gallery-item:hover {
-      transform: translateY(-6px);
-    }
-
-    .gallery-item img {
-      width: 100%;
-      height: 245px;
-      object-fit: cover;
-      transition: transform .5s;
-    }
-
-    .gallery-item:hover img {
-      transform: scale(1.05);
-    }
-
-    .gallery-caption {
-      padding: 15px 18px;
-      color: var(--green);
-      font-weight: 900;
-    }
-
-    /* PENDAFTARAN */
-    #pendaftaran {
-      color: white;
-      background:
-        radial-gradient(circle at 90% 10%, rgba(217,180,91,.22), transparent 28%),
-        linear-gradient(120deg, #043c28, #0b7049);
-    }
-
-    .admission {
-      text-align: center;
-      max-width: 850px;
-      margin: auto;
-      padding: 45px 30px;
-      border: 1px solid rgba(245,232,191,.4);
-      border-radius: 28px;
-      background: rgba(255,255,255,.07);
-      box-shadow: 0 20px 50px rgba(0,0,0,.12);
-    }
-
-    .admission h2 {
-      font-family: "Playfair Display", serif;
-      font-size: clamp(2rem,4vw,2.8rem);
-      margin-bottom: 14px;
-    }
-
-    .admission p {
-      color: rgba(255,255,255,.85);
-      margin-bottom: 24px;
-    }
-
-    /* KONTAK */
-    #kontak {
-      background:
-        radial-gradient(circle at 100% 100%, rgba(217,180,91,.17), transparent 30%),
-        linear-gradient(135deg, #fffdf6, #eaf5ed);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 20px;
-    }
-
-    .contact-card {
-      padding: 27px 20px;
-      text-align: center;
-      border-radius: var(--radius);
-      background: white;
-      box-shadow: var(--shadow);
-      border-top: 4px solid var(--gold);
-    }
-
-    .contact-card .symbol {
-      width: 55px;
-      height: 55px;
-      display: grid;
-      place-items: center;
-      margin: 0 auto 14px;
-      border-radius: 50%;
-      background: var(--green);
-      color: var(--gold-light);
-      font-size: 1.5rem;
-    }
-
-    .contact-card h3 {
-      color: var(--green);
-      margin-bottom: 8px;
-    }
-
-    .contact-card p,
-    .contact-card a {
-      color: var(--muted);
-      overflow-wrap: anywhere;
-    }
-
-    .contact-card a:hover {
-      color: var(--green-light);
-      text-decoration: underline;
-    }
-
-    /* FOOTER */
-    .site-footer {
-      padding: 35px 0 25px;
-      color: rgba(255,255,255,.83);
-      text-align: center;
-      background: linear-gradient(120deg, #032f20, #075638);
-      border-top: 3px solid var(--gold);
-    }
-
-    .footer-name {
-      color: var(--gold-light);
-      font-family: "Playfair Display", serif;
-      font-size: 1.25rem;
-      font-weight: 800;
-      margin-bottom: 7px;
-    }
-
-    .footer-small {
-      margin-top: 12px;
-      font-size: .85rem;
-      color: rgba(255,255,255,.65);
-    }
-
-    .back-top {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
-      z-index: 900;
-      width: 46px;
-      height: 46px;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      background: var(--gold);
-      color: var(--green-dark);
-      font-size: 1.3rem;
-      font-weight: 900;
-      box-shadow: var(--shadow);
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(10px);
-      transition: .25s;
-    }
-
-    .back-top.show {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-      .main-nav {
-        gap: 0;
-      }
-
-      .main-nav a {
-        padding: 9px 8px;
-        font-size: .8rem;
-      }
-
-      .hero-inner {
-        gap: 25px;
-      }
-
-      .program-grid {
-        grid-template-columns: repeat(2, minmax(0,1fr));
-      }
-    }
-
-    @media (max-width: 720px) {
-      html {
-        scroll-padding-top: 75px;
-      }
-
-      .header-inner {
-        min-height: 72px;
-      }
-
-      .brand img {
-        width: 48px;
-        height: 48px;
-      }
-
-      .brand-text strong {
-        font-size: .9rem;
-      }
-
-      .brand-text span {
-        font-size: .68rem;
-      }
-
-      .menu-toggle {
-        display: block;
-      }
-
-      .main-nav {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        display: none;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 4px;
-        padding: 14px 4%;
-        background: var(--green-dark);
-        border-top: 1px solid rgba(255,255,255,.15);
-        box-shadow: 0 12px 20px rgba(0,0,0,.15);
-      }
-
-      .main-nav.open {
-        display: flex;
-      }
-
-      .main-nav a {
-        padding: 11px 15px;
-        font-size: .92rem;
-      }
-
-      .hero {
-        min-height: auto;
-      }
-
-      .hero-inner {
-        grid-template-columns: 1fr;
-        text-align: center;
-        padding-top: 55px;
-        padding-bottom: 55px;
-      }
-
-      .hero-copy {
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .hero-buttons {
-        justify-content: center;
-      }
-
-      .hero-emblem {
-        grid-row: 1;
-      }
-
-      .hero-logo-frame {
-        width: 185px;
-        padding: 15px;
-      }
-
-      .section {
-        padding: 65px 0;
-      }
-
-      .profile-grid,
-      .activity-grid,
-      .gallery-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .program-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .profile-detail {
-        padding: 23px;
-      }
-
-      .gallery-item img {
-        height: 235px;
-      }
-
-      .admission {
-        padding: 35px 20px;
-      }
-    }
-
-    @media (max-width: 380px) {
-      .brand-text strong {
-        font-size: .8rem;
-      }
-
-      .brand-text span {
-        font-size: .62rem;
-      }
-
-      .brand img {
-        width: 43px;
-        height: 43px;
-      }
-
-      .value-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-
-      *,
-      *::before,
-      *::after {
-        transition-duration: .01ms !important;
-        animation-duration: .01ms !important;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#075638">
+<meta name="description" content="Website Resmi Pondok Pesantren Darul Fikr Cianjur Singkut, Kabupaten Sarolangun.">
+<title>Pondok Pesantren Darul Fikr | Cianjur Singkut</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --hijau: #075638;
+  --hijau-gelap: #043c28;
+  --hijau-muda: #0b7049;
+  --emas: #d9b45b;
+  --emas-cerah: #ffdf00;
+  --putih: #ffffff;
+  --teks: #18372a;
+  --abu: #64766c;
+  --bayangan: 0 12px 35px rgba(4,60,40,.11);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
+body {
+  font-family: "Nunito Sans", sans-serif;
+  color: var(--teks);
+  background: #f5f8f5;
+  line-height: 1.7;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+.container { width: min(1160px, 92%); margin: auto; }
+
+.section {
+  position: relative;
+  padding: 85px 0;
+  overflow: hidden;
+}
+
+.section-heading {
+  max-width: 760px;
+  margin: 0 auto 42px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow {
+  display: inline-block;
+  color: var(--hijau);
+  background: rgba(217,180,91,.19);
+  border: 1px solid rgba(217,180,91,.5);
+  border-radius: 50px;
+  padding: 6px 16px;
+  margin-bottom: 13px;
+  font-size: .82rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.section-heading h2 {
+  font-family: "Playfair Display", serif;
+  color: var(--hijau);
+  font-size: clamp(2rem,4vw,2.8rem);
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+.section-heading p { color: var(--abu); }
+
+.ornament {
+  width: 76px;
+  height: 4px;
+  margin: 18px auto 0;
+  border-radius: 5px;
+  background: linear-gradient(90deg,var(--hijau),var(--emas));
+}
+
+/* HEADER */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(110deg,var(--hijau-gelap),var(--hijau));
+  box-shadow: 0 5px 22px rgba(0,0,0,.15);
+  border-bottom: 2px solid var(--emas);
+}
+
+.header-inner {
+  min-height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.brand img {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+  background: white;
+  border-radius: 50%;
+  padding: 4px;
+  border: 2px solid var(--emas);
+}
+
+.brand-text strong {
+  display: block;
+  font-family: "Playfair Display",serif;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.brand-text span {
+  display: block;
+  color: #f5e8bf;
+  font-size: .72rem;
+  margin-top: 4px;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.main-nav a {
+  color: white;
+  padding: 8px 10px;
+  font-size: .82rem;
+  font-weight: 800;
+  border-radius: 30px;
+  transition: .25s;
+}
+
+.main-nav a:hover {
+  background: var(--emas);
+  color: var(--hijau-gelap);
+}
+
+.main-nav .foundation-link {
+  background: var(--emas);
+  color: var(--hijau-gelap);
+  border: 1px solid #f5e8bf;
+  margin-left: 5px;
+}
+
+.main-nav .foundation-link:hover {
+  background: #ffdf00;
+  color: #043c28;
+}
+
+.menu-toggle {
+  display: none;
+  color: white;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.5);
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+/* BERANDA */
+.hero {
+  min-height: 570px;
+  display: flex;
+  align-items: center;
+  color: white;
+  background:
+    radial-gradient(circle at 85% 20%,rgba(217,180,91,.25),transparent 25%),
+    radial-gradient(circle at 10% 90%,rgba(21,145,92,.3),transparent 30%),
+    linear-gradient(120deg,#043c28,#075638 58%,#0b7049);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .09;
+  pointer-events: none;
+  background-image:
+    linear-gradient(45deg,transparent 46%,#d9b45b 47%,#d9b45b 49%,transparent 50%),
+    linear-gradient(-45deg,transparent 46%,#d9b45b 47%,#d9b45b 49%,transparent 50%);
+  background-size: 42px 42px;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.35fr .65fr;
+  align-items: center;
+  gap: 45px;
+  padding-top: 65px;
+  padding-bottom: 65px;
+}
+
+.hero-label {
+  color: #f5e8bf;
+  font-size: .9rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  margin-bottom: 18px;
+}
+
+.hero h1 {
+  font-family: "Playfair Display",serif;
+  font-size: clamp(2.4rem,5vw,4.1rem);
+  line-height: 1.13;
+  margin-bottom: 20px;
+}
+
+.hero h1 span { color: var(--emas); }
+
+.hero-copy {
+  max-width: 650px;
+  color: rgba(255,255,255,.9);
+  font-size: 1.03rem;
+  margin-bottom: 28px;
+}
+
+.hero-buttons { display: flex; flex-wrap: wrap; gap: 13px; }
+
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 23px;
+  border-radius: 50px;
+  font-weight: 900;
+  transition: .25s;
+  border: 2px solid transparent;
+}
+
+.btn:hover { transform: translateY(-3px); }
+
+.btn-gold { background: var(--emas); color: var(--hijau-gelap); }
+.btn-outline { color: white; border-color: rgba(255,255,255,.7); }
+.btn-outline:hover { background: white; color: var(--hijau); }
+
+.hero-emblem { display: flex; justify-content: center; }
+
+.hero-logo-frame {
+  width: min(290px,75vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(255,255,255,.1);
+  border: 3px solid var(--emas);
+  box-shadow: 0 0 0 14px rgba(217,180,91,.09),0 25px 65px rgba(0,0,0,.2);
+  padding: 22px;
+}
+
+.hero-logo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: white;
+  border-radius: 50%;
+  padding: 12px;
+}
+
+/* PROFIL */
+#profil {
+  background: radial-gradient(circle at 0 0,rgba(217,180,91,.16),transparent 28%),
+              linear-gradient(135deg,#fffdf6,#edf6ef);
+}
+
+.profile-intro {
+  max-width: 900px;
+  margin: 0 auto 32px;
+  padding: 27px;
+  border-radius: 20px;
+  background: white;
+  box-shadow: var(--bayangan);
+  border-left: 5px solid var(--emas);
+  text-align: center;
+}
+
+.profile-intro p { color: var(--abu); }
+
+.profile-subnav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 30px 0;
+}
+
+.profile-subnav a {
+  padding: 9px 17px;
+  border-radius: 30px;
+  background: white;
+  color: var(--hijau);
+  border: 1px solid rgba(7,86,56,.15);
+  box-shadow: 0 5px 14px rgba(7,86,56,.06);
+  font-size: .9rem;
+  font-weight: 900;
+}
+
+.profile-subnav a:hover { background: var(--hijau); color: white; }
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 22px;
+}
+
+.profile-detail {
+  padding: 28px;
+  border-radius: 20px;
+  background: white;
+  border: 1px solid rgba(7,86,56,.08);
+  box-shadow: var(--bayangan);
+  scroll-margin-top: 105px;
+}
+
+.profile-detail h3 {
+  color: var(--hijau);
+  font-family: "Playfair Display",serif;
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+}
+
+.profile-detail p { color: var(--abu); }
+
+.profile-detail.vision {
+  background: linear-gradient(135deg,#075638,#0b7049);
+  color: white;
+}
+
+.profile-detail.vision h3,
+.profile-detail.vision p { color: white; }
+
+.profile-detail.mission { background: linear-gradient(135deg,#fff8e7,#f5e5b9); }
+.profile-detail.goals { background: linear-gradient(135deg,#e5f4e9,#cce8d4); }
+.profile-detail.values { background: linear-gradient(135deg,#f2eaff,#e5d8f8); }
+
+.number-list { padding-left: 22px; color: var(--abu); }
+.number-list li { padding: 4px 0 4px 5px; }
+
+.value-grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.value-card {
+  background: rgba(255,255,255,.78);
+  border-radius: 13px;
+  padding: 13px;
+  font-weight: 800;
+  color: var(--hijau);
+  text-align: center;
+}
+
+/* PENDIDIKAN */
+#pendidikan {
+  background: radial-gradient(circle at 100% 0,rgba(217,180,91,.18),transparent 30%),
+              linear-gradient(135deg,#eaf5ed,#f8fbf5);
+}
+
+.program-grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 20px;
+}
+
+.program-card {
+  padding: 27px 23px;
+  min-height: 220px;
+  border-radius: 20px;
+  background: white;
+  border: 1px solid rgba(7,86,56,.1);
+  box-shadow: var(--bayangan);
+  transition: .3s;
+}
+
+.program-card:nth-child(2),
+.program-card:nth-child(5) { background: linear-gradient(145deg,#fff8e8,#f3e4bd); }
+
+.program-card:nth-child(3),
+.program-card:nth-child(6) { background: linear-gradient(145deg,#e9f5ff,#d8eafa); }
+
+.program-card:hover { transform: translateY(-7px); }
+
+.program-icon {
+  width: 55px;
+  height: 55px;
+  display: grid;
+  place-items: center;
+  background: var(--hijau);
+  color: #f5e8bf;
+  border-radius: 16px;
+  font-size: 1.65rem;
+  margin-bottom: 17px;
+}
+
+.program-card h3 { color: var(--hijau); margin-bottom: 8px; }
+.program-card p { color: var(--abu); font-size: .94rem; }
+
+/* KEGIATAN */
+#kegiatan {
+  background: radial-gradient(circle at 0 100%,rgba(217,180,91,.18),transparent 30%),
+              linear-gradient(135deg,#fffaf0,#f1f7f0);
+}
+
+.activity-grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 22px;
+}
+
+.activity-card {
+  text-align: center;
+  padding: 30px 23px;
+  border-radius: 20px;
+  background: white;
+  box-shadow: var(--bayangan);
+  border-bottom: 4px solid var(--emas);
+  transition: .3s;
+}
+
+.activity-card:hover { transform: translateY(-6px); }
+
+.activity-icon {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 17px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,var(--hijau),#15915c);
+  color: #f5e8bf;
+  font-size: 2rem;
+}
+
+.activity-card h3 { color: var(--hijau); margin-bottom: 8px; }
+.activity-card p { color: var(--abu); font-size: .94rem; }
+
+/* GALERI */
+#galeri { background: linear-gradient(135deg,#edf6ee,#fff9e9); }
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 20px;
+}
+
+.gallery-item {
+  overflow: hidden;
+  border-radius: 20px;
+  background: white;
+  box-shadow: var(--bayangan);
+  transition: .3s;
+}
+
+.gallery-item:hover { transform: translateY(-6px); }
+
+.gallery-item img {
+  width: 100%;
+  height: 245px;
+  object-fit: cover;
+  transition: transform .5s;
+}
+
+.gallery-item:hover img { transform: scale(1.05); }
+
+.gallery-caption {
+  padding: 15px 18px;
+  color: var(--hijau);
+  font-weight: 900;
+}
+
+/* PENDAFTARAN */
+#pendaftaran {
+  color: white;
+  background: radial-gradient(circle at 90% 10%,rgba(217,180,91,.22),transparent 28%),
+              linear-gradient(120deg,#043c28,#0b7049);
+}
+
+.admission {
+  text-align: center;
+  max-width: 850px;
+  margin: auto;
+  padding: 45px 30px;
+  border: 1px solid rgba(245,232,191,.4);
+  border-radius: 28px;
+  background: rgba(255,255,255,.07);
+  box-shadow: 0 20px 50px rgba(0,0,0,.12);
+}
+
+.admission h2 {
+  font-family: "Playfair Display",serif;
+  font-size: clamp(2rem,4vw,2.8rem);
+  margin-bottom: 14px;
+}
+
+.admission p {
+  color: rgba(255,255,255,.9);
+  margin-bottom: 24px;
+}
+
+/* KHUSUS TULISAN INFORMASI PENERIMAAN: KUNING EMAS CERAH */
+#pendaftaran .eyebrow {
+  color: #ffdf00;
+  background: rgba(255,223,0,.16);
+  border: 1px solid #ffdf00;
+  font-weight: 900;
+  text-shadow: 0 1px 3px rgba(0,0,0,.4);
+}
+
+/* KONTAK */
+#kontak {
+  background: radial-gradient(circle at 100% 100%,rgba(217,180,91,.17),transparent 30%),
+              linear-gradient(135deg,#fffdf6,#eaf5ed);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 20px;
+}
+
+.contact-card {
+  padding: 27px 20px;
+  text-align: center;
+  border-radius: 20px;
+  background: white;
+  box-shadow: var(--bayangan);
+  border-top: 4px solid var(--emas);
+}
+
+.contact-card .symbol {
+  width: 55px;
+  height: 55px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: var(--hijau);
+  color: #f5e8bf;
+  font-size: 1.5rem;
+}
+
+.contact-card h3 { color: var(--hijau); margin-bottom: 8px; }
+.contact-card p,.contact-card a { color: var(--abu); overflow-wrap: anywhere; }
+.contact-card a:hover { color: var(--hijau-muda); text-decoration: underline; }
+
+/* FOOTER */
+.site-footer {
+  padding: 35px 0 25px;
+  color: rgba(255,255,255,.83);
+  text-align: center;
+  background: linear-gradient(120deg,#032f20,#075638);
+  border-top: 3px solid var(--emas);
+}
+
+.footer-name {
+  color: #f5e8bf;
+  font-family: "Playfair Display",serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 7px;
+}
+
+.footer-small {
+  margin-top: 12px;
+  font-size: .85rem;
+  color: rgba(255,255,255,.65);
+}
+
+.back-top {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 900;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--emas);
+  color: var(--hijau-gelap);
+  font-size: 1.3rem;
+  font-weight: 900;
+  box-shadow: var(--bayangan);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: .25s;
+}
+
+.back-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
+
+/* TAMPILAN HP DAN TABLET */
+@media(max-width:950px) {
+  .header-inner { flex-wrap: wrap; padding: 10px 0; }
+  .main-nav { gap: 2px; }
+  .main-nav a { font-size: .77rem; padding: 7px 8px; }
+  .program-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+
+@media(max-width:720px) {
+  html { scroll-padding-top: 80px; }
+
+  .header-inner { min-height: 72px; flex-wrap: nowrap; }
+  .brand img { width: 47px; height: 47px; }
+  .brand-text strong { font-size: .86rem; }
+  .brand-text span { font-size: .64rem; }
+
+  .menu-toggle { display: block; }
+
+  .main-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 13px 4%;
+    background: var(--hijau-gelap);
+    border-top: 1px solid rgba(255,255,255,.15);
+    box-shadow: 0 12px 20px rgba(0,0,0,.15);
+  }
+
+  .main-nav.open { display: flex; }
+  .main-nav a { padding: 11px 15px; font-size: .9rem; }
+  .main-nav .foundation-link { margin: 5px 0 0; text-align: center; }
+
+  .hero { min-height: auto; }
+  .hero-inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 50px 0;
+    gap: 25px;
+  }
+
+  .hero-emblem { grid-row: 1; }
+  .hero-logo-frame { width: 180px; padding: 14px; }
+  .hero-copy { margin-left: auto; margin-right: auto; }
+  .hero-buttons { justify-content: center; }
+
+  .section { padding: 62px 0; }
+  .profile-grid,.activity-grid,.gallery-grid,.contact-grid { grid-template-columns: 1fr; }
+  .program-grid { grid-template-columns: 1fr; }
+  .profile-detail { padding: 23px; }
+  .value-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .gallery-item img { height: 235px; }
+  .admission { padding: 35px 20px; }
+}
+
+@media(max-width:380px) {
+  .brand-text strong { font-size: .76rem; }
+  .brand-text span { font-size: .58rem; }
+  .brand img { width: 42px; height: 42px; }
+  .value-grid { grid-template-columns: 1fr; }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  html { scroll-behavior: auto; }
+  *,*::before,*::after { transition-duration: .01ms !important; }
+}
+</style>
 </head>
 
 <body>
 
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="#beranda" aria-label="Beranda Pondok Pesantren Darul Fikr">
+<header class="site-header">
+  <div class="container header-inner">
+
+    <a class="brand" href="#beranda">
+      <img src="https://website-darul-fikr-singkut.pages.dev/icon-ponpes.png.png"
+           alt="Logo Pondok Pesantren Darul Fikr">
+      <span class="brand-text">
+        <strong>PONDOK PESANTREN<br>DARUL FIKR</strong>
+        <span>CIANJUR SINGKUT · SAROLANGUN</span>
+      </span>
+    </a>
+
+    <button class="menu-toggle" id="menuToggle"
+            type="button" aria-label="Buka menu" aria-expanded="false">☰</button>
+
+    <nav class="main-nav" id="mainNav" aria-label="Navigasi utama">
+      <a href="#beranda">Beranda</a>
+      <a href="#profil">Profil</a>
+      <a href="#pendidikan">Pendidikan</a>
+      <a href="#kegiatan">Kegiatan</a>
+      <a href="#galeri">Galeri</a>
+      <a href="#pendaftaran">Pendaftaran</a>
+      <a href="#kontak">Kontak</a>
+      <a class="foundation-link"
+         href="https://website-darul-fikr-singkut.pages.dev/"
+         target="_blank" rel="noopener">
+        ↩ Website Yayasan
+      </a>
+    </nav>
+
+  </div>
+</header>
+
+<main>
+
+<section class="hero" id="beranda">
+  <div class="container hero-inner">
+    <div>
+      <div class="hero-label">Pendidikan · Keislaman · Pembinaan Akhlak</div>
+      <h1>Membangun Generasi <span>Berilmu, Beriman,</span> dan Berakhlakul Karimah</h1>
+      <p class="hero-copy">
+        Selamat datang di website resmi Pondok Pesantren Darul Fikr Cianjur Singkut.
+        Tempat menimba ilmu, memperkuat keimanan, membiasakan ibadah, serta
+        membentuk generasi muslim yang berakhlak mulia dan bermanfaat bagi masyarakat.
+      </p>
+      <div class="hero-buttons">
+        <a class="btn btn-gold" href="#profil">Mengenal Pesantren</a>
+        <a class="btn btn-outline" href="#kontak">Hubungi Kami</a>
+      </div>
+    </div>
+
+    <div class="hero-emblem">
+      <div class="hero-logo-frame">
         <img src="https://website-darul-fikr-singkut.pages.dev/icon-ponpes.png.png"
              alt="Logo Pondok Pesantren Darul Fikr">
-        <span class="brand-text">
-          <strong>PONDOK PESANTREN<br>DARUL FIKR</strong>
-          <span>CIANJUR SINGKUT · SAROLANGUN</span>
-        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="profil">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">Mengenal Pesantren</span>
+      <h2>Profil Pondok Pesantren</h2>
+      <p>Mengenal sejarah, arah pendidikan, dan nilai-nilai yang menjadi pedoman Pondok Pesantren Darul Fikr.</p>
+      <div class="ornament"></div>
+    </div>
+
+    <div class="profile-intro">
+      <p>
+        Pondok Pesantren Darul Fikr Cianjur Singkut merupakan lembaga pendidikan
+        Islam yang berkomitmen menyelenggarakan pendidikan dan pembinaan santri
+        melalui penguatan ilmu agama, pendidikan, ibadah, kedisiplinan,
+        kemandirian, dan akhlakul karimah.
+      </p>
+    </div>
+
+    <nav class="profile-subnav" aria-label="Navigasi profil">
+      <a href="#sejarah">Sejarah</a>
+      <a href="#visi">Visi</a>
+      <a href="#misi">Misi</a>
+      <a href="#tujuan">Tujuan Pendidikan</a>
+      <a href="#nilai">Nilai-Nilai Pesantren</a>
+    </nav>
+
+    <div class="profile-grid">
+      <article class="profile-detail" id="sejarah">
+        <h3>01. Sejarah Pesantren</h3>
+        <p>
+          Pondok Pesantren Darul Fikr hadir sebagai bagian dari ikhtiar
+          pendidikan dan dakwah Islam di lingkungan Cianjur Singkut.
+          Pesantren dibangun dengan semangat memberikan ruang belajar
+          bagi generasi muda agar memperoleh pendidikan keislaman,
+          pembinaan akhlak, dan bekal kehidupan bermasyarakat.
+        </p>
+        <p style="margin-top:12px">
+          Dalam perkembangannya, Darul Fikr terus berupaya meningkatkan
+          kualitas pendidikan, pembinaan santri, dan pelayanan kepada masyarakat.
+        </p>
+      </article>
+
+      <article class="profile-detail vision" id="visi">
+        <h3>02. Visi Pesantren</h3>
+        <p>
+          Terwujudnya generasi muslim yang berilmu, beriman, bertakwa,
+          mandiri, serta berakhlakul karimah.
+        </p>
+      </article>
+
+      <article class="profile-detail mission" id="misi">
+        <h3>03. Misi Pesantren</h3>
+        <ol class="number-list">
+          <li>Menyelenggarakan pendidikan Islam yang berlandaskan Ahlus Sunah Wal Jamaah.</li>
+          <li>Membina santri agar memiliki pemahaman agama yang kuat dan pengamalan ibadah yang baik.</li>
+          <li>Mengembangkan pendidikan formal dan nonformal yang berkualitas.</li>
+          <li>Menanamkan kedisiplinan, kemandirian, tanggung jawab, dan kepedulian sosial.</li>
+          <li>Membentuk generasi yang berakhlakul karimah serta bermanfaat bagi masyarakat.</li>
+        </ol>
+      </article>
+
+      <article class="profile-detail goals" id="tujuan">
+        <h3>04. Tujuan Pendidikan</h3>
+        <ol class="number-list">
+          <li>Membentuk santri yang memahami dan mengamalkan ajaran Islam.</li>
+          <li>Mengembangkan kemampuan ilmu pengetahuan dan keterampilan santri.</li>
+          <li>Membiasakan perilaku disiplin, mandiri, jujur, dan bertanggung jawab.</li>
+          <li>Membentuk pribadi yang santun, toleran, dan peduli terhadap sesama.</li>
+          <li>Mempersiapkan generasi yang mampu memberikan manfaat bagi agama, bangsa, dan masyarakat.</li>
+        </ol>
+      </article>
+
+      <article class="profile-detail values" id="nilai" style="grid-column:1/-1">
+        <h3>05. Nilai-Nilai Pesantren</h3>
+        <p>
+          Pendidikan di Pondok Pesantren Darul Fikr berpedoman pada nilai-nilai
+          keislaman yang diterapkan dalam kehidupan sehari-hari.
+        </p>
+        <div class="value-grid">
+          <div class="value-card">Keimanan dan Ketakwaan</div>
+          <div class="value-card">Keilmuan</div>
+          <div class="value-card">Akhlakul Karimah</div>
+          <div class="value-card">Kedisiplinan</div>
+          <div class="value-card">Kemandirian</div>
+          <div class="value-card">Kepedulian Sosial</div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pendidikan">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">Pembinaan Santri</span>
+      <h2>Pendidikan dan Pembinaan</h2>
+      <p>Berbagai aspek pendidikan untuk membentuk santri yang berilmu, beriman, mandiri, dan berakhlak mulia.</p>
+      <div class="ornament"></div>
+    </div>
+
+    <div class="program-grid">
+      <article class="program-card">
+        <div class="program-icon">📖</div>
+        <h3>Pendidikan Al-Qur’an</h3>
+        <p>Pembelajaran membaca, memahami, menghafal, dan membiasakan interaksi dengan Al-Qur’an.</p>
+      </article>
+      <article class="program-card">
+        <div class="program-icon">🕌</div>
+        <h3>Pendidikan Keislaman</h3>
+        <p>Pembelajaran dasar-dasar keislaman, akidah, fikih, akhlak, dan ilmu agama lainnya.</p>
+      </article>
+      <article class="program-card">
+        <div class="program-icon">🤲</div>
+        <h3>Pembinaan Ibadah</h3>
+        <p>Pembiasaan ibadah dan pengamalan ajaran Islam dalam kehidupan sehari-hari.</p>
+      </article>
+      <article class="program-card">
+        <div class="program-icon">🌿</div>
+        <h3>Pembinaan Akhlak</h3>
+        <p>Menanamkan sopan santun, adab, tanggung jawab, dan perilaku terpuji.</p>
+      </article>
+      <article class="program-card">
+        <div class="program-icon">📚</div>
+        <h3>Pengembangan Ilmu</h3>
+        <p>Mendorong semangat belajar, wawasan, kreativitas, dan kemampuan berpikir santri.</p>
+      </article>
+      <article class="program-card">
+        <div class="program-icon">🤝</div>
+        <h3>Kemandirian dan Sosial</h3>
+        <p>Membiasakan hidup mandiri, bekerja sama, disiplin, dan peduli terhadap lingkungan.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="kegiatan">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">Aktivitas Pesantren</span>
+      <h2>Kegiatan Santri</h2>
+      <p>Kegiatan pendidikan dan pembiasaan yang mendukung perkembangan ilmu, ibadah, dan akhlak santri.</p>
+      <div class="ornament"></div>
+    </div>
+
+    <div class="activity-grid">
+      <article class="activity-card">
+        <div class="activity-icon">📗</div>
+        <h3>Belajar Al-Qur’an</h3>
+        <p>Kegiatan membaca dan mempelajari Al-Qur’an sebagai bagian dari pembinaan keagamaan santri.</p>
+      </article>
+      <article class="activity-card">
+        <div class="activity-icon">🕌</div>
+        <h3>Ibadah Berjamaah</h3>
+        <p>Pembiasaan ibadah untuk menumbuhkan kedisiplinan, kebersamaan, dan ketakwaan.</p>
+      </article>
+      <article class="activity-card">
+        <div class="activity-icon">🌙</div>
+        <h3>Kegiatan Keagamaan</h3>
+        <p>Kegiatan keislaman untuk memperkuat pemahaman agama dan membangun akhlak mulia.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="galeri">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">Dokumentasi</span>
+      <h2>Galeri Pesantren</h2>
+      <p>Dokumentasi kegiatan dan aktivitas Pondok Pesantren Darul Fikr.</p>
+      <div class="ornament"></div>
+    </div>
+
+    <div class="gallery-grid">
+      <figure class="gallery-item">
+        <img src="https://website-darul-fikr-singkut.pages.dev/hsn.jpg"
+             alt="Dokumentasi kegiatan santri" loading="lazy">
+        <figcaption class="gallery-caption">Kegiatan Santri</figcaption>
+      </figure>
+      <figure class="gallery-item">
+        <img src="https://website-darul-fikr-singkut.pages.dev/kegiatan%201.jpg"
+             alt="Dokumentasi kegiatan pesantren" loading="lazy">
+        <figcaption class="gallery-caption">Aktivitas Pesantren</figcaption>
+      </figure>
+      <figure class="gallery-item">
+        <img src="https://website-darul-fikr-singkut.pages.dev/kegiatan%20khataman.jpg"
+             alt="Dokumentasi kegiatan khataman" loading="lazy">
+        <figcaption class="gallery-caption">Kegiatan Khataman</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pendaftaran">
+  <div class="container">
+    <div class="admission">
+      <span class="eyebrow">Informasi Penerimaan</span>
+      <h2>Mari Bergabung Bersama Darul Fikr</h2>
+      <p>
+        Untuk memperoleh informasi mengenai pendidikan dan pendaftaran
+        santri Pondok Pesantren Darul Fikr, silakan menghubungi kami
+        melalui WhatsApp.
+      </p>
+      <a class="btn btn-gold"
+         href="https://wa.me/6281366445510?text=Assalamu%27alaikum%2C%20saya%20ingin%20bertanya%20tentang%20pendaftaran%20santri%20Pondok%20Pesantren%20Darul%20Fikr."
+         target="_blank" rel="noopener">
+        Hubungi Panitia Pendaftaran
       </a>
-
-      <button class="menu-toggle" id="menuToggle"
-              type="button" aria-label="Buka menu" aria-expanded="false">
-        ☰
-      </button>
-
-      <nav class="main-nav" id="mainNav" aria-label="Navigasi utama">
-        <a href="#beranda">Beranda</a>
-        <a href="#profil">Profil</a>
-        <a href="#pendidikan">Pendidikan</a>
-        <a href="#kegiatan">Kegiatan</a>
-        <a href="#galeri">Galeri</a>
-        <a href="#pendaftaran">Pendaftaran</a>
-        <a href="#kontak">Kontak</a>
-      </nav>
     </div>
-  </header>
+  </div>
+</section>
 
-  <main>
-
-    <!-- BERANDA -->
-    <section class="hero" id="beranda">
-      <div class="container hero-inner">
-        <div>
-          <div class="hero-label">Pendidikan · Keislaman · Pembinaan Akhlak</div>
-          <h1>Membangun Generasi <span>Berilmu, Beriman,</span> dan Berakhlakul Karimah</h1>
-          <p class="hero-copy">
-            Selamat datang di website resmi Pondok Pesantren Darul Fikr Cianjur Singkut.
-            Tempat menimba ilmu, memperkuat keimanan, membiasakan ibadah, serta
-            membentuk generasi muslim yang berakhlak mulia dan bermanfaat bagi masyarakat.
-          </p>
-          <div class="hero-buttons">
-            <a class="btn btn-gold" href="#profil">Mengenal Pesantren</a>
-            <a class="btn btn-outline" href="#kontak">Hubungi Kami</a>
-          </div>
-        </div>
-
-        <div class="hero-emblem">
-          <div class="hero-logo-frame">
-            <img src="https://website-darul-fikr-singkut.pages.dev/icon-ponpes.png.png"
-                 alt="Logo Pondok Pesantren Darul Fikr">
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PROFIL -->
-    <section class="section pattern-section" id="profil">
-      <div class="container">
-        <div class="section-heading">
-          <span class="eyebrow">Mengenal Pesantren</span>
-          <h2>Profil Pondok Pesantren</h2>
-          <p>Mengenal sejarah, arah pendidikan, dan nilai-nilai yang menjadi pedoman Pondok Pesantren Darul Fikr.</p>
-          <div class="ornament"></div>
-        </div>
-
-        <div class="profile-intro">
-          <p>
-            Pondok Pesantren Darul Fikr Cianjur Singkut merupakan lembaga pendidikan
-            Islam yang berkomitmen menyelenggarakan pendidikan dan pembinaan santri
-            melalui penguatan ilmu agama, pendidikan, ibadah, kedisiplinan,
-            kemandirian, dan akhlakul karimah.
-          </p>
-        </div>
-
-        <nav class="profile-subnav" aria-label="Navigasi profil">
-          <a href="#sejarah">Sejarah</a>
-          <a href="#visi">Visi</a>
-          <a href="#misi">Misi</a>
-          <a href="#tujuan">Tujuan Pendidikan</a>
-          <a href="#nilai">Nilai-Nilai Pesantren</a>
-        </nav>
-
-        <div class="profile-grid">
-          <article class="profile-detail" id="sejarah">
-            <h3>01. Sejarah Pesantren</h3>
-            <p>
-              Pondok Pesantren Darul Fikr hadir sebagai bagian dari ikhtiar
-              pendidikan dan dakwah Islam di lingkungan Cianjur Singkut.
-              Pesantren dibangun dengan semangat memberikan ruang belajar
-              bagi generasi muda agar memperoleh pendidikan keislaman,
-              pembinaan akhlak, dan bekal kehidupan bermasyarakat.
-            </p>
-            <p style="margin-top:12px">
-              Dalam perkembangannya, Darul Fikr terus berupaya meningkatkan
-              kualitas pendidikan, pembinaan santri, dan pelayanan kepada masyarakat.
-            </p>
-          </article>
-
-          <article class="profile-detail vision" id="visi">
-            <h3>02. Visi Pesantren</h3>
-            <p>
-              Terwujudnya generasi muslim yang berilmu, beriman, bertakwa,
-              mandiri, serta berakhlakul karimah.
-            </p>
-          </article>
-
-          <article class="profile-detail mission" id="misi">
-            <h3>03. Misi Pesantren</h3>
-            <ol class="number-list">
-              <li>Menyelenggarakan pendidikan Islam yang berlandaskan Ahlus Sunah Wal Jamaah.</li>
-              <li>Membina santri agar memiliki pemahaman agama yang kuat dan pengamalan ibadah yang baik.</li>
-              <li>Mengembangkan pendidikan formal dan nonformal yang berkualitas.</li>
-              <li>Menanamkan kedisiplinan, kemandirian, tanggung jawab, dan kepedulian sosial.</li>
-              <li>Membentuk generasi yang berakhlakul karimah serta bermanfaat bagi masyarakat.</li>
-            </ol>
-          </article>
-
-          <article class="profile-detail goals" id="tujuan">
-            <h3>04. Tujuan Pendidikan</h3>
-            <ol class="number-list">
-              <li>Membentuk santri yang memahami dan mengamalkan ajaran Islam.</li>
-              <li>Mengembangkan kemampuan ilmu pengetahuan dan keterampilan santri.</li>
-              <li>Membiasakan perilaku disiplin, mandiri, jujur, dan bertanggung jawab.</li>
-              <li>Membentuk pribadi yang santun, toleran, dan peduli terhadap sesama.</li>
-              <li>Mempersiapkan generasi yang mampu memberikan manfaat bagi agama, bangsa, dan masyarakat.</li>
-            </ol>
-          </article>
-
-          <article class="profile-detail values" id="nilai" style="grid-column:1/-1">
-            <h3>05. Nilai-Nilai Pesantren</h3>
-            <p>
-              Pendidikan di Pondok Pesantren Darul Fikr berpedoman pada nilai-nilai
-              keislaman yang diterapkan dalam kehidupan sehari-hari.
-            </p>
-            <div class="value-grid">
-              <div class="value-card">Keimanan dan Ketakwaan</div>
-              <div class="value-card">Keilmuan</div>
-              <div class="value-card">Akhlakul Karimah</div>
-              <div class="value-card">Kedisiplinan</div>
-              <div class="value-card">Kemandirian</div>
-              <div class="value-card">Kepedulian Sosial</div>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- PENDIDIKAN -->
-    <section class="section pattern-section" id="pendidikan">
-      <div class="container">
-        <div class="section-heading">
-          <span class="eyebrow">Pembinaan Santri</span>
-          <h2>Pendidikan dan Pembinaan</h2>
-          <p>Berbagai aspek pendidikan untuk membentuk santri yang berilmu, beriman, mandiri, dan berakhlak mulia.</p>
-          <div class="ornament"></div>
-        </div>
-
-        <div class="program-grid">
-          <article class="program-card">
-            <div class="program-icon">📖</div>
-            <h3>Pendidikan Al-Qur’an</h3>
-            <p>Pembelajaran membaca, memahami, menghafal, dan membiasakan interaksi dengan Al-Qur’an.</p>
-          </article>
-
-          <article class="program-card">
-            <div class="program-icon">🕌</div>
-            <h3>Pendidikan Keislaman</h3>
-            <p>Pembelajaran dasar-dasar keislaman, akidah, fikih, akhlak, dan ilmu agama lainnya.</p>
-          </article>
-
-          <article class="program-card">
-            <div class="program-icon">🤲</div>
-            <h3>Pembinaan Ibadah</h3>
-            <p>Pembiasaan ibadah dan pengamalan ajaran Islam dalam kehidupan sehari-hari.</p>
-          </article>
-
-          <article class="program-card">
-            <div class="program-icon">🌿</div>
-            <h3>Pembinaan Akhlak</h3>
-            <p>Menanamkan sopan santun, adab, tanggung jawab, dan perilaku terpuji.</p>
-          </article>
-
-          <article class="program-card">
-            <div class="program-icon">📚</div>
-            <h3>Pengembangan Ilmu</h3>
-            <p>Mendorong semangat belajar, wawasan, kreativitas, dan kemampuan berpikir santri.</p>
-          </article>
-
-          <article class="program-card">
-            <div class="program-icon">🤝</div>
-            <h3>Kemandirian dan Sosial</h3>
-            <p>Membiasakan hidup mandiri, bekerja sama, disiplin, dan peduli terhadap lingkungan.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- KEGIATAN -->
-    <section class="section pattern-section" id="kegiatan">
-      <div class="container">
-        <div class="section-heading">
-          <span class="eyebrow">Aktivitas Pesantren</span>
-          <h2>Kegiatan Santri</h2>
-          <p>Kegiatan pendidikan dan pembiasaan yang mendukung perkembangan ilmu, ibadah, dan akhlak santri.</p>
-          <div class="ornament"></div>
-        </div>
-
-        <div class="activity-grid">
-          <article class="activity-card">
-            <div class="activity-icon">📗</div>
-            <h3>Belajar Al-Qur’an</h3>
-            <p>Kegiatan membaca dan mempelajari Al-Qur’an sebagai bagian dari pembinaan keagamaan santri.</p>
-          </article>
-
-          <article class="activity-card">
-            <div class="activity-icon">🕌</div>
-            <h3>Ibadah Berjamaah</h3>
-            <p>Pembiasaan ibadah untuk menumbuhkan kedisiplinan, kebersamaan, dan ketakwaan.</p>
-          </article>
-
-          <article class="activity-card">
-            <div class="activity-icon">🌙</div>
-            <h3>Kegiatan Keagamaan</h3>
-            <p>Kegiatan keislaman untuk memperkuat pemahaman agama dan membangun akhlak mulia.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- GALERI -->
-    <section class="section pattern-section" id="galeri">
-      <div class="container">
-        <div class="section-heading">
-          <span class="eyebrow">Dokumentasi</span>
-          <h2>Galeri Pesantren</h2>
-          <p>Dokumentasi kegiatan dan aktivitas Pondok Pesantren Darul Fikr.</p>
-          <div class="ornament"></div>
-        </div>
-
-        <div class="gallery-grid">
-          <figure class="gallery-item">
-            <img src="https://website-darul-fikr-singkut.pages.dev/hsn.jpg"
-                 alt="Dokumentasi kegiatan santri"
-                 loading="lazy">
-            <figcaption class="gallery-caption">Kegiatan Santri</figcaption>
-          </figure>
-
-          <figure class="gallery-item">
-            <img src="https://website-darul-fikr-singkut.pages.dev/kegiatan%201.jpg"
-                 alt="Dokumentasi kegiatan pesantren"
-                 loading="lazy">
-            <figcaption class="gallery-caption">Aktivitas Pesantren</figcaption>
-          </figure>
-
-          <figure class="gallery-item">
-            <img src="https://website-darul-fikr-singkut.pages.dev/kegiatan%20khataman.jpg"
-                 alt="Dokumentasi kegiatan khataman"
-                 loading="lazy">
-            <figcaption class="gallery-caption">Kegiatan Khataman</figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- PENDAFTARAN -->
-    <section class="section" id="pendaftaran">
-      <div class="container">
-        <div class="admission">
-          <span class="eyebrow">Informasi Penerimaan</span>
-          <h2>Mari Bergabung Bersama Darul Fikr</h2>
-          <p>
-            Untuk memperoleh informasi mengenai pendidikan dan pendaftaran
-            santri Pondok Pesantren Darul Fikr, silakan menghubungi kami
-            melalui WhatsApp.
-          </p>
-          <a class="btn btn-gold"
-             href="https://wa.me/6281366445510?text=Assalamu%27alaikum%2C%20saya%20ingin%20bertanya%20tentang%20pendaftaran%20santri%20Pondok%20Pesantren%20Darul%20Fikr."
-             target="_blank" rel="noopener">
-            Hubungi Panitia Pendaftaran
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- KONTAK -->
-    <section class="section pattern-section" id="kontak">
-      <div class="container">
-        <div class="section-heading">
-          <span class="eyebrow">Informasi dan Layanan</span>
-          <h2>Hubungi Kami</h2>
-          <p>Silakan menghubungi Pondok Pesantren Darul Fikr untuk informasi lebih lanjut.</p>
-          <div class="ornament"></div>
-        </div>
-
-        <div class="contact-grid">
-          <article class="contact-card">
-            <div class="symbol">📍</div>
-            <h3>Alamat</h3>
-            <p>Jl. Pinang RW 07 Cianjur Singkut, Kabupaten Sarolangun</p>
-          </article>
-
-          <article class="contact-card">
-            <div class="symbol">📱</div>
-            <h3>WhatsApp</h3>
-            <p><a href="https://wa.me/6281366445510" target="_blank" rel="noopener">+62 813-6644-5510</a></p>
-          </article>
-
-          <article class="contact-card">
-            <div class="symbol">✉️</div>
-            <h3>Email</h3>
-            <p><a href="mailto:darulfikr.singkut@gmail.com">darulfikr.singkut@gmail.com</a></p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-name">PONDOK PESANTREN DARUL FIKR</div>
-      <p>Cianjur Singkut · Kabupaten Sarolangun</p>
-      <p>Membangun Generasi Berilmu, Beriman, dan Berakhlakul Karimah</p>
-      <div class="footer-small">
-        © <span id="currentYear"></span> Pondok Pesantren Darul Fikr. Seluruh hak cipta dilindungi.
-      </div>
+<section class="section" id="kontak">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">Informasi dan Layanan</span>
+      <h2>Hubungi Kami</h2>
+      <p>Silakan menghubungi Pondok Pesantren Darul Fikr untuk informasi lebih lanjut.</p>
+      <div class="ornament"></div>
     </div>
-  </footer>
 
-  <a href="#beranda" class="back-top" id="backTop" aria-label="Kembali ke atas">↑</a>
+    <div class="contact-grid">
+      <article class="contact-card">
+        <div class="symbol">📍</div>
+        <h3>Alamat</h3>
+        <p>Jl. Pinang RW 07 Cianjur Singkut, Kabupaten Sarolangun</p>
+      </article>
+      <article class="contact-card">
+        <div class="symbol">📱</div>
+        <h3>WhatsApp</h3>
+        <p><a href="https://wa.me/6281366445510" target="_blank" rel="noopener">+62 813-6644-5510</a></p>
+      </article>
+      <article class="contact-card">
+        <div class="symbol">✉️</div>
+        <h3>Email</h3>
+        <p><a href="mailto:darulfikr.singkut@gmail.com">darulfikr.singkut@gmail.com</a></p>
+      </article>
+    </div>
+  </div>
+</section>
 
-  <script>
-    // Menu navigasi untuk perangkat seluler
-    const menuToggle = document.getElementById("menuToggle");
-    const mainNav = document.getElementById("mainNav");
+</main>
 
-    menuToggle.addEventListener("click", function () {
-      const isOpen = mainNav.classList.toggle("open");
-      menuToggle.setAttribute("aria-expanded", String(isOpen));
-      menuToggle.innerHTML = isOpen ? "×" : "☰";
-    });
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-name">PONDOK PESANTREN DARUL FIKR</div>
+    <p>Cianjur Singkut · Kabupaten Sarolangun</p>
+    <p>Membangun Generasi Berilmu, Beriman, dan Berakhlakul Karimah</p>
+    <div class="footer-small">
+      © <span id="currentYear"></span> Pondok Pesantren Darul Fikr. Seluruh hak cipta dilindungi.
+    </div>
+    <p style="margin-top:12px">
+      <a href="https://website-darul-fikr-singkut.pages.dev/"
+         target="_blank" rel="noopener"
+         style="color:#ffdf00;font-weight:900">
+        Kunjungi Website Yayasan Darul Fikr
+      </a>
+    </p>
+  </div>
+</footer>
 
-    // Tutup menu setelah tautan dipilih
-    mainNav.querySelectorAll("a").forEach(function (link) {
-      link.addEventListener("click", function () {
-        mainNav.classList.remove("open");
-        menuToggle.setAttribute("aria-expanded", "false");
-        menuToggle.innerHTML = "☰";
-      });
-    });
+<a href="#beranda" class="back-top" id="backTop" aria-label="Kembali ke atas">↑</a>
 
-    // Tahun otomatis pada footer
-    document.getElementById("currentYear").textContent =
-      new Date().getFullYear();
+<script>
+const menuToggle = document.getElementById("menuToggle");
+const mainNav = document.getElementById("mainNav");
 
-    // Tombol kembali ke atas
-    const backTop = document.getElementById("backTop");
+menuToggle.addEventListener("click", function() {
+  const isOpen = mainNav.classList.toggle("open");
+  menuToggle.setAttribute("aria-expanded", String(isOpen));
+  menuToggle.innerHTML = isOpen ? "×" : "☰";
+});
 
-    window.addEventListener("scroll", function () {
-      if (window.scrollY > 400) {
-        backTop.classList.add("show");
-      } else {
-        backTop.classList.remove("show");
-      }
-    });
-  </script>
+mainNav.querySelectorAll("a").forEach(function(link) {
+  link.addEventListener("click", function() {
+    mainNav.classList.remove("open");
+    menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle.innerHTML = "☰";
+  });
+});
+
+document.getElementById("currentYear").textContent =
+  new Date().getFullYear();
+
+const backTop = document.getElementById("backTop");
+
+window.addEventListener("scroll", function() {
+  if (window.scrollY > 400) {
+    backTop.classList.add("show");
+  } else {
+    backTop.classList.remove("show");
+  }
+});
+</script>
 
 </body>
 </html>
