@@ -255,6 +255,63 @@ footer p{font-size:13px;color:#d4e5d9;margin:5px 0}
   z-index:900;
 }
 
+
+/* SUBBAGIAN PROFIL */
+.profile-subnav{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:10px;
+  margin:0 auto 38px;
+}
+.profile-subnav a{
+  display:inline-block;padding:9px 15px;border:1px solid #d9b45b;
+  border-radius:30px;color:#075638;background:#fff;
+  font-size:13px;font-weight:bold;transition:.2s;
+}
+.profile-subnav a:hover{background:#075638;color:#fff}
+.profile-detail{
+  scroll-margin-top:110px;
+  background:#fff;border-radius:16px;padding:30px;
+  margin:24px 0;box-shadow:var(--bayangan);
+  border-left:5px solid var(--emas);
+}
+.profile-detail h3{
+  color:var(--hijau);font-size:24px;margin-bottom:14px;
+}
+.profile-detail p{color:#5d6e64;margin-bottom:12px}
+.profile-detail ul,.profile-detail ol{
+  color:#5d6e64;padding-left:22px;margin:10px 0;
+}
+.profile-detail li{margin:8px 0;padding-left:4px}
+.profile-detail .number-list{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  list-style:none;padding:0;margin-top:18px;
+}
+.profile-detail .number-list li{
+  background:#f5f8f5;border-radius:10px;padding:14px;
+  margin:0;border:1px solid #e3eee6;
+}
+.profile-detail .number-list strong{
+  display:block;color:#075638;margin-bottom:4px;
+}
+.profile-detail .value-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px;
+}
+.profile-detail .value-card{
+  background:#f5f8f5;border-radius:12px;padding:18px;
+  border-top:3px solid var(--emas);
+}
+.profile-detail .value-card h4{color:#075638;margin-bottom:6px}
+.profile-detail .value-card p{font-size:14px;margin:0}
+@media(max-width:760px){
+  .profile-detail{padding:22px}
+  .profile-detail .number-list{grid-template-columns:1fr}
+  .profile-detail .value-grid{grid-template-columns:1fr 1fr}
+  .profile-subnav{gap:7px}
+  .profile-subnav a{font-size:12px;padding:8px 11px}
+}
+@media(max-width:500px){
+  .profile-detail .value-grid{grid-template-columns:1fr}
+}
+
 /* RESPONSIVE */
 @media(max-width:900px){
   nav{gap:12px}
@@ -360,34 +417,121 @@ footer p{font-size:13px;color:#d4e5d9;margin:5px 0}
       <p>Mengenal lebih dekat Pondok Pesantren Darul Fikr Cianjur Singkut.</p>
     </div>
 
-    <div class="profile-grid">
-      <div class="profile-art">
-        <img src="https://website-darul-fikr-singkut.pages.dev/icon-ponpes.png.png"
-             alt="Logo Pondok Pesantren Darul Fikr">
-      </div>
+    <div class="profile-subnav" aria-label="Navigasi bagian profil">
+      <a href="#sejarah">Sejarah</a>
+      <a href="#visi">Visi</a>
+      <a href="#misi">Misi</a>
+      <a href="#tujuan">Tujuan Pendidikan</a>
+      <a href="#nilai">Nilai-Nilai Pesantren</a>
+    </div>
 
-      <div class="profile-text">
-        <h3>Pondok Pesantren Darul Fikr</h3>
-        <p>
-          Pondok Pesantren Darul Fikr merupakan lembaga pendidikan
-          Islam di Cianjur Singkut yang berkomitmen membina generasi
-          muda melalui pendidikan agama, pembiasaan ibadah,
-          kedisiplinan, dan penanaman akhlakul karimah.
-        </p>
-        <p>
-          Kami berupaya menghadirkan lingkungan pendidikan yang
-          mendukung tumbuhnya santri yang berilmu, beriman,
-          bertanggung jawab, dan bermanfaat bagi masyarakat.
-        </p>
-
-        <div class="profile-points">
-          <div><span class="check">✓</span><span>Pembinaan ilmu agama dan keislaman.</span></div>
-          <div><span class="check">✓</span><span>Pembiasaan ibadah dan kedisiplinan santri.</span></div>
-          <div><span class="check">✓</span><span>Pendidikan akhlak dan kemandirian.</span></div>
-          <div><span class="check">✓</span><span>Pembinaan kecintaan terhadap Al-Qur'an.</span></div>
+    <!-- 1. SEJARAH PONDOK PESANTREN -->
+    <article class="profile-detail" id="sejarah">
+      <h3>1. Sejarah Pondok Pesantren</h3>
+      <div class="profile-grid">
+        <div class="profile-art">
+          <img src="https://website-darul-fikr-singkut.pages.dev/icon-ponpes.png.png"
+               alt="Logo Pondok Pesantren Darul Fikr">
+        </div>
+        <div class="profile-text">
+          <h3>Pondok Pesantren Darul Fikr</h3>
+          <p>
+            Pondok Pesantren Darul Fikr merupakan lembaga pendidikan Islam
+            yang berada di Cianjur Singkut, Kabupaten Sarolangun. Pesantren
+            ini hadir sebagai wadah pendidikan, pembinaan keagamaan, dan
+            pembentukan karakter generasi muslim.
+          </p>
+          <p>
+            Dalam penyelenggaraan pendidikannya, Pondok Pesantren Darul Fikr
+            berkomitmen membina santri melalui pendidikan agama, pembiasaan
+            ibadah, penguatan kedisiplinan, serta penanaman akhlakul karimah.
+            Proses pendidikan diarahkan agar santri memiliki bekal ilmu,
+            keimanan, kemandirian, dan tanggung jawab dalam kehidupan.
+          </p>
+          <p>
+            Dengan semangat pendidikan Islam, Darul Fikr terus berupaya
+            menghadirkan lingkungan belajar yang mendukung tumbuhnya generasi
+            muslim yang berilmu, beriman, bertakwa, dan bermanfaat bagi
+            masyarakat.
+          </p>
         </div>
       </div>
-    </div>
+      <p><em>Catatan: Uraian sejarah ini disusun berdasarkan informasi profil yang tersedia. Tahun berdiri, tokoh pendiri, dan perkembangan kelembagaan dapat ditambahkan setelah data resminya tersedia.</em></p>
+    </article>
+
+    <!-- 2. VISI -->
+    <article class="profile-detail" id="visi">
+      <h3>2. Visi Pesantren</h3>
+      <p>
+        <strong>“Terwujudnya generasi muslim yang berilmu, beriman, bertakwa,
+        mandiri, serta berakhlakul karimah.”</strong>
+      </p>
+    </article>
+
+    <!-- 3. MISI -->
+    <article class="profile-detail" id="misi">
+      <h3>3. Misi Pesantren</h3>
+      <ol>
+        <li>Menyelenggarakan pendidikan Islam yang berlandaskan Ahlus Sunah Wal Jamaah.</li>
+        <li>Membina santri agar memiliki pemahaman agama yang kuat dan pengamalan ibadah yang baik.</li>
+        <li>Mengembangkan pendidikan formal dan nonformal yang berkualitas.</li>
+        <li>Menanamkan kedisiplinan, kemandirian, tanggung jawab, dan kepedulian sosial.</li>
+        <li>Membentuk generasi yang berakhlakul karimah serta bermanfaat bagi masyarakat.</li>
+      </ol>
+    </article>
+
+    <!-- 4. TUJUAN PENDIDIKAN -->
+    <article class="profile-detail" id="tujuan">
+      <h3>4. Tujuan Pendidikan</h3>
+      <p>
+        Pendidikan Pondok Pesantren Darul Fikr diarahkan untuk membentuk
+        santri yang memiliki keseimbangan antara ilmu pengetahuan,
+        keimanan, pengamalan agama, dan akhlak mulia.
+      </p>
+      <ol>
+        <li>Menghasilkan generasi muslim yang memahami dan mengamalkan ajaran Islam dalam kehidupan sehari-hari.</li>
+        <li>Mengembangkan kemampuan santri dalam membaca, memahami, dan mencintai Al-Qur'an.</li>
+        <li>Membentuk pribadi yang beriman, bertakwa, serta istiqamah dalam beribadah.</li>
+        <li>Menumbuhkan sikap mandiri, disiplin, jujur, dan bertanggung jawab.</li>
+        <li>Membekali santri dengan pengetahuan dan keterampilan untuk melanjutkan pendidikan serta menghadapi kehidupan bermasyarakat.</li>
+        <li>Membentuk generasi yang santun, peduli, dan mampu memberikan manfaat bagi lingkungan sekitarnya.</li>
+      </ol>
+    </article>
+
+    <!-- 5. NILAI-NILAI PESANTREN -->
+    <article class="profile-detail" id="nilai">
+      <h3>5. Nilai-Nilai Pesantren</h3>
+      <p>
+        Nilai-nilai berikut menjadi prinsip pembinaan yang diupayakan
+        dalam kehidupan dan pendidikan santri Pondok Pesantren Darul Fikr.
+      </p>
+      <div class="value-grid">
+        <div class="value-card">
+          <h4>Keimanan dan Ketakwaan</h4>
+          <p>Menjadikan iman dan takwa sebagai landasan dalam berpikir, bersikap, dan bertindak.</p>
+        </div>
+        <div class="value-card">
+          <h4>Keilmuan</h4>
+          <p>Menumbuhkan semangat belajar, mencintai ilmu, dan mengamalkan pengetahuan.</p>
+        </div>
+        <div class="value-card">
+          <h4>Akhlakul Karimah</h4>
+          <p>Membiasakan sikap santun, jujur, rendah hati, dan menghormati sesama.</p>
+        </div>
+        <div class="value-card">
+          <h4>Kedisiplinan</h4>
+          <p>Menghargai waktu serta menaati tata tertib dan tanggung jawab bersama.</p>
+        </div>
+        <div class="value-card">
+          <h4>Kemandirian</h4>
+          <p>Melatih santri agar mampu mengelola diri dan menyelesaikan tanggung jawabnya.</p>
+        </div>
+        <div class="value-card">
+          <h4>Kepedulian dan Kebersamaan</h4>
+          <p>Membangun persaudaraan, gotong royong, dan kepedulian terhadap masyarakat.</p>
+        </div>
+      </div>
+    </article>
   </div>
 </section>
 
