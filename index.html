@@ -8,6 +8,306 @@
 <meta name="description" content="Website Resmi Pondok Pesantren Darul Fikr Cianjur Singkut, Kabupaten Sarolangun. Membangun generasi berilmu, beriman, dan berakhlakul karimah.">
 <title>Pondok Pesantren Darul Fikr Cianjur Singkut</title>
 
+/* ==========================================
+   PENYEGARAN TAMPILAN BAGIAN BAWAH WEBSITE
+   Dashboard dan Hero tetap dipertahankan
+========================================== */
+
+/* Ornamen geometris lembut */
+#profil,
+#pendidikan,
+#kegiatan,
+#galeri,
+#kontak {
+  position: relative;
+  isolation: isolate;
+}
+
+#profil::before,
+#pendidikan::before,
+#kegiatan::before,
+#galeri::before,
+#kontak::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .20;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      transparent 0 38px,
+      rgba(7,86,56,.10) 39px 40px,
+      transparent 41px 78px
+    );
+}
+
+/* PROFIL */
+#profil {
+  background:
+    radial-gradient(circle at 5% 10%, #d8eadc, transparent 35%),
+    linear-gradient(135deg, #f5f8ed, #e8f2e8, #f8f1dc);
+}
+
+#profil .section-heading h2 {
+  color: #075638;
+}
+
+#profil .profile-subnav a {
+  background: linear-gradient(135deg, #ffffff, #edf5ed);
+  box-shadow: 0 4px 12px rgba(0,70,40,.08);
+  border-color: #c7a34c;
+}
+
+#profil .profile-detail {
+  background: linear-gradient(135deg, #ffffff, #f0f7ef);
+  border: 1px solid #d5e5d7;
+  border-left: 6px solid #d9b45b;
+  box-shadow: 0 12px 30px rgba(0,70,40,.09);
+  transition: transform .25s, box-shadow .25s;
+}
+
+#profil .profile-detail:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 17px 35px rgba(0,70,40,.13);
+}
+
+#profil #visi {
+  background: linear-gradient(120deg, #075638, #0b7049);
+  border-left-color: #e5c46f;
+}
+
+#profil #visi h3,
+#profil #visi p,
+#profil #visi strong {
+  color: #fff;
+}
+
+#profil #visi strong {
+  font-size: 19px;
+  line-height: 1.8;
+}
+
+#profil #misi {
+  background: linear-gradient(135deg, #e2f1e6, #f8f3df);
+}
+
+#profil #tujuan {
+  background: linear-gradient(135deg, #f8f0d9, #edf5e9);
+}
+
+#profil #nilai {
+  background: linear-gradient(135deg, #e3f0e7, #ffffff);
+}
+
+#profil .number-list li,
+#profil .value-card {
+  background: linear-gradient(145deg, #ffffff, #e9f3e9);
+  border: 1px solid #d3e5d6;
+  box-shadow: 0 5px 15px rgba(0,70,40,.06);
+  transition: .25s;
+}
+
+#profil .value-card:hover,
+#profil .number-list li:hover {
+  transform: translateY(-4px);
+  border-color: #d9b45b;
+}
+
+/* PENDIDIKAN */
+#pendidikan {
+  background:
+    radial-gradient(circle at 90% 10%, #c8e9d9, transparent 35%),
+    linear-gradient(135deg, #dcefe5, #edf5e8, #f8f0d9);
+}
+
+#pendidikan .program-card {
+  background: linear-gradient(145deg, #ffffff, #edf6ef);
+  border: 1px solid #d5e7d9;
+  border-bottom: 5px solid #d9b45b;
+  box-shadow: 0 12px 28px rgba(0,70,40,.10);
+}
+
+#pendidikan .program-card:nth-child(3n+2) {
+  background: linear-gradient(145deg, #e5f3ed, #ffffff);
+  border-bottom-color: #15915c;
+}
+
+#pendidikan .program-card:nth-child(3n) {
+  background: linear-gradient(145deg, #f9f0d9, #ffffff);
+  border-bottom-color: #c69a3c;
+}
+
+#pendidikan .program-icon {
+  background: linear-gradient(135deg, #075638, #15915c);
+  color: white;
+  box-shadow: 0 5px 12px rgba(0,70,40,.15);
+}
+
+/* KEGIATAN */
+#kegiatan {
+  background:
+    radial-gradient(circle at 10% 90%, #d1e9db, transparent 35%),
+    linear-gradient(135deg, #f3f7eb, #e0f0e8);
+}
+
+#kegiatan .activity-card {
+  border: 1px solid #d7e8dc;
+  box-shadow: 0 12px 28px rgba(0,70,40,.10);
+  transition: transform .25s, box-shadow .25s;
+}
+
+#kegiatan .activity-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 35px rgba(0,70,40,.15);
+}
+
+#kegiatan .activity-card .activity-icon {
+  background: linear-gradient(135deg, #075638, #15915c);
+  color: #f4e5b5;
+}
+
+#kegiatan .activity-card:nth-child(2) .activity-icon {
+  background: linear-gradient(135deg, #087c77, #38a99b);
+}
+
+#kegiatan .activity-card:nth-child(3) .activity-icon {
+  background: linear-gradient(135deg, #9c762c, #d9b45b);
+  color: white;
+}
+
+#kegiatan .activity-card div:last-child {
+  background: linear-gradient(145deg, #ffffff, #edf5ed);
+}
+
+/* GALERI */
+#galeri {
+  background:
+    radial-gradient(circle at 85% 15%, #e6d7a9, transparent 32%),
+    linear-gradient(135deg, #e7f1e7, #f7f1df);
+}
+
+#galeri .gallery-item {
+  border: 1px solid #d7e3d5;
+  box-shadow: 0 12px 28px rgba(0,60,35,.12);
+  transition: transform .25s;
+}
+
+#galeri .gallery-item:hover {
+  transform: translateY(-5px);
+}
+
+#galeri .gallery-item p {
+  background: linear-gradient(90deg, #075638, #0b7049);
+  color: #fff;
+  border-top: 3px solid #d9b45b;
+}
+
+/* PENDAFTARAN */
+.admission {
+  background:
+    radial-gradient(circle at 15% 20%, rgba(217,180,91,.23), transparent 28%),
+    radial-gradient(circle at 85% 80%, rgba(255,255,255,.12), transparent 30%),
+    linear-gradient(120deg, #023d29, #075638, #12875a);
+}
+
+.admission::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .12;
+  background-image:
+    repeating-linear-gradient(45deg, transparent 0 30px, #fff 31px 32px, transparent 33px 60px);
+}
+
+/* KONTAK */
+#kontak {
+  background:
+    radial-gradient(circle at 5% 15%, #d5eadb, transparent 35%),
+    linear-gradient(135deg, #e6f0e5, #f8f0dc);
+}
+
+#kontak .contact-card {
+  background: linear-gradient(145deg, #ffffff, #edf5ed);
+  border: 1px solid #d4e5d5;
+  border-bottom: 4px solid #d9b45b;
+  box-shadow: 0 12px 28px rgba(0,70,40,.10);
+  transition: transform .25s;
+}
+
+#kontak .contact-card:hover {
+  transform: translateY(-5px);
+}
+
+#kontak .contact-card .symbol {
+  width: 62px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #075638, #15915c);
+  color: white;
+}
+
+/* FOOTER */
+footer {
+  background:
+    radial-gradient(circle at 90% 0%, rgba(217,180,91,.16), transparent 30%),
+    linear-gradient(120deg, #022f22, #075638, #03452e);
+  border-top: 4px solid #d9b45b;
+  padding: 42px 0;
+  position: relative;
+}
+
+footer strong {
+  color: #f4e5b5;
+  letter-spacing: .7px;
+}
+
+footer p {
+  color: #e0eee4;
+}
+
+/* Tombol kembali ke atas */
+.back-top {
+  background: linear-gradient(135deg, #e5c46f, #c69a3c);
+  box-shadow: 0 6px 18px rgba(0,0,0,.22);
+  transition: transform .2s;
+}
+
+.back-top:hover {
+  transform: translateY(-5px);
+}
+
+/* RESPONSIVE */
+@media(max-width:760px) {
+  #profil .profile-detail:hover,
+  #pendidikan .program-card:hover,
+  #kegiatan .activity-card:hover,
+  #galeri .gallery-item:hover,
+  #kontak .contact-card:hover {
+    transform: none;
+  }
+
+  #profil #visi strong {
+    font-size: 17px;
+  }
+}
+
+/* Menghormati pengaturan gerakan perangkat */
+@media(prefers-reduced-motion:reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
+
 <style>
 :root{
   --hijau:#075638;
