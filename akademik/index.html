@@ -36,6 +36,36 @@
       <button class="submit" type="submit">MASUK KE PORTAL NILAI</button>
     </form>
     <p class="help">Santri dan wali santri menggunakan NIS dan PIN milik santri yang sama.<br>Lupa PIN? Silakan hubungi administrator Pondok Pesantren Darul Fikr.</p>
+    <div style="text-align:center;margin-top:22px">
+  <button type="button" id="showManager"
+    style="background:#fff;border:1px solid #075638;color:#075638;
+    padding:11px 20px;border-radius:10px;font-weight:900;cursor:pointer">
+    LOGIN PENGELOLA
+  </button>
+</div>
+
+<div id="managerPanel" style="display:none;margin-top:25px;border-top:1px solid #dce8df;padding-top:22px">
+  <h2>Login Pengelola</h2>
+  <p class="sub">Masuk menggunakan email dan password pengelola.</p>
+
+  <form id="managerForm">
+    <div class="field">
+      <label for="managerEmail">Email Pengelola</label>
+      <input id="managerEmail" type="email" autocomplete="username"
+        placeholder="Masukkan email" required>
+    </div>
+
+    <div class="field">
+      <label for="managerPassword">Password</label>
+      <input id="managerPassword" type="password"
+        autocomplete="current-password" placeholder="Masukkan password" required>
+    </div>
+
+    <button class="submit" type="submit">MASUK SEBAGAI PENGELOLA</button>
+  </form>
+
+  <div id="managerNotice" class="notice" role="status"></div>
+</div>
     <div class="notice" id="notice" role="status">Tampilan login sudah disiapkan, tetapi autentikasi belum diaktifkan. Login belum dapat digunakan sampai Firebase Authentication, database akun, dan aturan keamanan dipasang.</div>
   </section>
 </main>
@@ -44,6 +74,43 @@
 document.getElementById('year').textContent=new Date().getFullYear();
 document.getElementById('showPin').addEventListener('click',function(){const p=document.getElementById('pin');const visible=p.type==='password';p.type=visible?'text':'password';this.textContent=visible?'Sembunyi':'Lihat';this.setAttribute('aria-label',visible?'Sembunyikan PIN':'Tampilkan PIN');});
 document.getElementById('loginForm').addEventListener('submit',function(e){e.preventDefault();document.getElementById('notice').classList.add('show');});
+  document.getElementById('showManager').addEventListener('click', function () {
+  const panel = document.getElementById('managerPanel');
+  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+});
+
+document.getElementById('managerForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const notice = document.getElementById('managerNotice');
+  const email = document.getElementById('managerEmail').value.trim();
+  const password = document.getElementById('managerPassword').value;
+
+  notice.classList.add('show');
+  notice.textContent = 'Sedang memeriksa akun pengelola...';
+
+  try {
+    const response = await fetch(
+      'https://portal-pengelola-darul-fikr.darulfikr-singkut.workers.dev/api/login',
+      {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        credentials: 'include',
+        body: JSON.stringify({email, password})
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || 'Login pengelola gagal.');
+    }
+
+    notice.textContent = 'Login berhasil. Sesi pengelola telah dibuat. Dashboard pengelola akan kita siapkan pada tahap berikutnya.';
+  } catch (error) {
+    notice.textContent = 'Login gagal: ' + error.message;
+  }
+});
 </script>
 </body>
 </html>
