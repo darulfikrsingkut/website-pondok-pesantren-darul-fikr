@@ -7,110 +7,462 @@
 <meta name="theme-color" content="#075638">
 <meta name="description" content="Portal Nilai Santri Pondok Pesantren Darul Fikr Cianjur Singkut.">
 <title>Portal Nilai Santri | Pondok Pesantren Darul Fikr</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
 <style>
-:root{--green:#075638;--dark:#043c28;--gold:#d9b45b;--text:#18372a;--muted:#64766c;--line:#dce8df}
-*{box-sizing:border-box;margin:0;padding:0}body{font-family:"Nunito Sans",sans-serif;color:var(--text);background:linear-gradient(135deg,#eef5ef,#f9faf7);min-height:100vh;display:flex;flex-direction:column}a{color:inherit;text-decoration:none}.topbar{background:linear-gradient(110deg,var(--dark),var(--green));border-bottom:3px solid var(--gold);color:white;padding:15px 4%}.top-inner{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:flex;align-items:center;gap:12px}.brand img{width:52px;height:52px;object-fit:contain;background:white;border-radius:50%;padding:4px}.brand strong{font-family:"Playfair Display",serif;display:block;line-height:1.2}.brand span{display:block;font-size:.72rem;color:#f5e8bf;margin-top:4px;letter-spacing:.5px}.back{font-weight:800;font-size:.9rem;color:#ffdf00}.wrap{width:min(960px,92%);margin:48px auto;flex:1;display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:stretch}.intro{background:linear-gradient(145deg,var(--dark),#0b7049);color:white;border-radius:22px;padding:36px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;box-shadow:0 18px 45px rgba(4,60,40,.14)}.intro:after{content:"۞";position:absolute;right:-22px;bottom:-70px;font-size:230px;color:rgba(255,255,255,.06)}.eyebrow{color:#ffdf00;font-size:.78rem;font-weight:900;letter-spacing:1.4px;text-transform:uppercase}.intro h1{font-family:"Playfair Display",serif;font-size:clamp(2rem,4vw,3rem);line-height:1.12;margin:14px 0}.intro p{color:#e4efe7;line-height:1.8}.levels{display:flex;gap:9px;flex-wrap:wrap;margin-top:25px}.levels span{border:1px solid rgba(255,255,255,.3);border-radius:30px;padding:6px 12px;font-size:.8rem;font-weight:800}.login-card{background:white;border:1px solid var(--line);border-radius:22px;padding:34px;box-shadow:0 18px 45px rgba(4,60,40,.09)}.login-card h2{font-family:"Playfair Display",serif;color:var(--green);font-size:1.8rem}.sub{color:var(--muted);font-size:.9rem;margin:5px 0 25px}.field{margin-bottom:17px}.field label{display:block;font-size:.88rem;font-weight:800;margin-bottom:7px}.field input{width:100%;padding:14px 15px;border:1px solid #cddbd1;border-radius:11px;font:inherit;outline:none;background:#fbfdfb}.field input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(7,86,56,.1)}.pin-wrap{position:relative}.pin-wrap input{padding-right:55px}.show-pin{position:absolute;right:10px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:var(--green);font-weight:800;cursor:pointer;padding:8px}.submit{width:100%;border:0;border-radius:11px;padding:14px;background:linear-gradient(100deg,var(--green),#0b7049);color:white;font:900 1rem "Nunito Sans",sans-serif;cursor:pointer;margin-top:4px}.help{font-size:.83rem;color:var(--muted);text-align:center;margin-top:17px;line-height:1.6}.notice{display:none;margin-top:17px;padding:12px;border-radius:10px;background:#fff7df;border:1px solid #f0d58a;color:#70520c;font-size:.84rem;line-height:1.6}.notice.show{display:block}.foot{text-align:center;color:var(--muted);font-size:.8rem;padding:18px 4% 25px}.foot a{color:var(--green);font-weight:800}@media(max-width:760px){.wrap{grid-template-columns:1fr;margin:25px auto;gap:18px}.intro{padding:27px;min-height:240px}.login-card{padding:27px}.top-inner{align-items:flex-start}.brand img{width:44px;height:44px}.back{font-size:.78rem}}
+:root{
+  --green:#075638;
+  --dark:#043c28;
+  --gold:#d9b45b;
+  --text:#18372a;
+  --muted:#64766c;
+  --line:#dce8df;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:"Nunito Sans",sans-serif;
+  color:var(--text);
+  background:linear-gradient(135deg,#eef5ef,#f9faf7);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+a{color:inherit;text-decoration:none}
+.topbar{
+  background:linear-gradient(110deg,var(--dark),var(--green));
+  border-bottom:3px solid var(--gold);
+  color:white;
+  padding:15px 4%;
+}
+.top-inner{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{
+  width:52px;height:52px;object-fit:contain;
+  background:white;border-radius:50%;padding:4px;
+}
+.brand strong{
+  font-family:"Playfair Display",serif;
+  display:block;line-height:1.2;
+}
+.brand span{
+  display:block;font-size:.72rem;
+  color:#f5e8bf;margin-top:4px;letter-spacing:.5px;
+}
+.back{font-weight:800;font-size:.9rem;color:#ffdf00}
+
+.wrap{
+  width:min(960px,92%);
+  margin:48px auto;
+  flex:1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:28px;
+  align-items:stretch;
+}
+.intro{
+  background:linear-gradient(145deg,var(--dark),#0b7049);
+  color:white;border-radius:22px;padding:36px;
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;overflow:hidden;
+  box-shadow:0 18px 45px rgba(4,60,40,.14);
+}
+.intro:after{
+  content:"۞";position:absolute;right:-22px;bottom:-70px;
+  font-size:230px;color:rgba(255,255,255,.06);
+}
+.eyebrow{
+  color:#ffdf00;font-size:.78rem;font-weight:900;
+  letter-spacing:1.4px;text-transform:uppercase;
+}
+.intro h1{
+  font-family:"Playfair Display",serif;
+  font-size:clamp(2rem,4vw,3rem);
+  line-height:1.12;margin:14px 0;
+}
+.intro p{color:#e4efe7;line-height:1.8}
+.levels{display:flex;gap:9px;flex-wrap:wrap;margin-top:25px}
+.levels span{
+  border:1px solid rgba(255,255,255,.3);
+  border-radius:30px;padding:6px 12px;
+  font-size:.8rem;font-weight:800;
+}
+
+.login-card{
+  background:white;border:1px solid var(--line);
+  border-radius:22px;padding:34px;
+  box-shadow:0 18px 45px rgba(4,60,40,.09);
+}
+.login-card h2{
+  font-family:"Playfair Display",serif;
+  color:var(--green);font-size:1.8rem;
+}
+.sub{color:var(--muted);font-size:.9rem;margin:5px 0 25px}
+.field{margin-bottom:17px}
+.field label{
+  display:block;font-size:.88rem;font-weight:800;margin-bottom:7px;
+}
+.field input{
+  width:100%;padding:14px 15px;
+  border:1px solid #cddbd1;border-radius:11px;
+  font:inherit;outline:none;background:#fbfdfb;
+}
+.field input:focus{
+  border-color:var(--green);
+  box-shadow:0 0 0 3px rgba(7,86,56,.1);
+}
+.pin-wrap{position:relative}
+.pin-wrap input{padding-right:55px}
+.show-pin{
+  position:absolute;right:10px;top:50%;
+  transform:translateY(-50%);
+  border:0;background:transparent;color:var(--green);
+  font-weight:800;cursor:pointer;padding:8px;
+}
+.submit{
+  width:100%;border:0;border-radius:11px;padding:14px;
+  background:linear-gradient(100deg,var(--green),#0b7049);
+  color:white;font:900 1rem "Nunito Sans",sans-serif;
+  cursor:pointer;margin-top:4px;
+}
+.help{
+  font-size:.83rem;color:var(--muted);
+  text-align:center;margin-top:17px;line-height:1.6;
+}
+.notice{
+  display:none;margin-top:17px;padding:12px;
+  border-radius:10px;background:#fff7df;
+  border:1px solid #f0d58a;color:#70520c;
+  font-size:.84rem;line-height:1.6;overflow-wrap:anywhere;
+}
+.notice.show{display:block}
+.notice.error{
+  background:#fff0f0;border-color:#efc1c1;color:#9b2424;
+}
+.notice.success{
+  background:#eaf8ee;border-color:#b9dfc2;color:#176331;
+}
+
+.manager-divider{
+  border:0;border-top:1px solid var(--line);
+  margin:25px 0 18px;
+}
+.manager-toggle{
+  width:100%;padding:12px;border:1px solid var(--green);
+  border-radius:10px;background:white;color:var(--green);
+  font:800 .9rem "Nunito Sans",sans-serif;cursor:pointer;
+}
+.manager-toggle:hover{background:#edf6ef}
+.manager-panel{
+  display:none;margin-top:18px;padding-top:18px;
+  border-top:1px solid var(--line);
+}
+.manager-panel.show{display:block}
+.manager-panel h3{
+  color:var(--green);font-size:1.1rem;margin-bottom:6px;
+}
+.manager-desc{
+  color:var(--muted);font-size:.83rem;
+  line-height:1.6;margin-bottom:17px;
+}
+.foot{
+  text-align:center;color:var(--muted);
+  font-size:.8rem;padding:18px 4% 25px;
+}
+.foot a{color:var(--green);font-weight:800}
+
+@media(max-width:760px){
+  .wrap{grid-template-columns:1fr;margin:25px auto;gap:18px}
+  .intro{padding:27px;min-height:240px}
+  .login-card{padding:27px}
+  .top-inner{align-items:flex-start}
+  .brand img{width:44px;height:44px}
+  .back{font-size:.78rem}
+}
 </style>
 </head>
+
 <body>
-<header class="topbar"><div class="top-inner">
-  <a class="brand" href="/"><img src="https://website-darul-fikr-singkut.pages.dev/icon-ponpes.png.png" alt="Logo Pondok Pesantren Darul Fikr"><span><strong>PONDOK PESANTREN<br>DARUL FIKR</strong><span>CIANJUR SINGKUT · SAROLANGUN</span></span></a>
-  <a class="back" href="/">← Kembali ke Website Pondok</a>
-</div></header>
+
+<header class="topbar">
+  <div class="top-inner">
+    <a class="brand" href="/">
+      <img src="https://website-darul-fikr-singkut.pages.dev/icon-ponpes.png.png"
+           alt="Logo Pondok Pesantren Darul Fikr">
+      <span>
+        <strong>PONDOK PESANTREN<br>DARUL FIKR</strong>
+        <span>CIANJUR SINGKUT · SAROLANGUN</span>
+      </span>
+    </a>
+    <a class="back" href="/">← Kembali ke Website Pondok</a>
+  </div>
+</header>
+
 <main class="wrap">
+
   <section class="intro">
     <div class="eyebrow">Layanan akademik pesantren</div>
     <h1>Portal Nilai Santri</h1>
-    <p>Gunakan Nomor Induk Santri (NIS) dan PIN pribadi untuk melihat hasil belajar, perkembangan hafalan, kehadiran, serta rapor semester.</p>
-    <div class="levels"><span>Marhalah Ula</span><span>Marhalah Wustha</span><span>Marhalah Ulya</span></div>
+    <p>
+      Gunakan Nomor Induk Santri (NIS) dan PIN pribadi untuk
+      melihat hasil belajar, perkembangan hafalan, kehadiran,
+      serta rapor semester.
+    </p>
+    <div class="levels">
+      <span>Marhalah Ula</span>
+      <span>Marhalah Wustha</span>
+      <span>Marhalah Ulya</span>
+    </div>
   </section>
+
   <section class="login-card">
+
     <h2>Selamat Datang</h2>
     <p class="sub">Masuk untuk melihat rapor santri.</p>
+
+    <!-- LOGIN SANTRI DAN WALI -->
     <form id="loginForm">
-      <div class="field"><label for="nis">Nomor Induk Santri (NIS)</label><input id="nis" name="nis" type="text" inputmode="numeric" autocomplete="username" placeholder="Masukkan NIS" required></div>
-      <div class="field"><label for="pin">PIN pribadi</label><div class="pin-wrap"><input id="pin" name="pin" type="password" inputmode="numeric" autocomplete="current-password" minlength="6" placeholder="Minimal 6 digit" required><button class="show-pin" type="button" id="showPin" aria-label="Tampilkan PIN">Lihat</button></div></div>
-      <button class="submit" type="submit">MASUK KE PORTAL NILAI</button>
+      <div class="field">
+        <label for="nis">Nomor Induk Santri (NIS)</label>
+        <input id="nis" name="nis" type="text"
+          inputmode="numeric" autocomplete="username"
+          placeholder="Masukkan NIS" required>
+      </div>
+
+      <div class="field">
+        <label for="pin">PIN pribadi</label>
+        <div class="pin-wrap">
+          <input id="pin" name="pin" type="password"
+            inputmode="numeric" autocomplete="current-password"
+            minlength="6" placeholder="Minimal 6 digit" required>
+          <button class="show-pin" type="button" id="showPin">
+            Lihat
+          </button>
+        </div>
+      </div>
+
+      <button class="submit" type="submit">
+        MASUK KE PORTAL NILAI
+      </button>
     </form>
-    <p class="help">Santri dan wali santri menggunakan NIS dan PIN milik santri yang sama.<br>Lupa PIN? Silakan hubungi administrator Pondok Pesantren Darul Fikr.</p>
-    <div style="text-align:center;margin-top:22px">
-  <button type="button" id="showManager"
-    style="background:#fff;border:1px solid #075638;color:#075638;
-    padding:11px 20px;border-radius:10px;font-weight:900;cursor:pointer">
-    LOGIN PENGELOLA
-  </button>
-</div>
 
-<div id="managerPanel" style="display:none;margin-top:25px;border-top:1px solid #dce8df;padding-top:22px">
-  <h2>Login Pengelola</h2>
-  <p class="sub">Masuk menggunakan email dan password pengelola.</p>
+    <p class="help">
+      Santri dan wali santri menggunakan NIS dan PIN milik santri yang sama.
+      <br>Lupa PIN? Silakan hubungi administrator Pondok Pesantren Darul Fikr.
+    </p>
 
-  <form id="managerForm">
-    <div class="field">
-      <label for="managerEmail">Email Pengelola</label>
-      <input id="managerEmail" type="email" autocomplete="username"
-        placeholder="Masukkan email" required>
+    <div class="notice" id="notice" role="status">
+      Login santri/wali belum dihubungkan pada tahap ini.
     </div>
 
-    <div class="field">
-      <label for="managerPassword">Password</label>
-      <input id="managerPassword" type="password"
-        autocomplete="current-password" placeholder="Masukkan password" required>
+    <hr class="manager-divider">
+
+    <!-- TOMBOL LOGIN PENGELOLA -->
+    <button class="manager-toggle" type="button" id="showManager">
+      LOGIN PENGELOLA
+    </button>
+
+    <!-- FORM LOGIN PENGELOLA -->
+    <div class="manager-panel" id="managerPanel">
+      <h3>Login Pengelola</h3>
+      <p class="manager-desc">
+        Halaman khusus pengelola Pondok Pesantren Darul Fikr.
+        Gunakan email dan password akun pengelola.
+      </p>
+
+      <form id="managerForm">
+        <div class="field">
+          <label for="managerEmail">Email Pengelola</label>
+          <input id="managerEmail" type="email"
+            placeholder="Masukkan email pengelola"
+            autocomplete="username" required>
+        </div>
+
+        <div class="field">
+          <label for="managerPassword">Password</label>
+          <input id="managerPassword" type="password"
+            placeholder="Masukkan password"
+            autocomplete="current-password" required>
+        </div>
+
+        <button class="submit" id="managerSubmit" type="submit">
+          MASUK SEBAGAI PENGELOLA
+        </button>
+      </form>
+
+      <div class="notice" id="managerNotice" role="status"></div>
     </div>
 
-    <button class="submit" type="submit">MASUK SEBAGAI PENGELOLA</button>
-  </form>
-
-  <div id="managerNotice" class="notice" role="status"></div>
-</div>
-    <div class="notice" id="notice" role="status">Tampilan login sudah disiapkan, tetapi autentikasi belum diaktifkan. Login belum dapat digunakan sampai Firebase Authentication, database akun, dan aturan keamanan dipasang.</div>
   </section>
 </main>
-<footer class="foot">© <span id="year"></span> Pondok Pesantren Darul Fikr · <a href="/">Kembali ke halaman utama</a></footer>
+
+<footer class="foot">
+  © <span id="year"></span> Pondok Pesantren Darul Fikr ·
+  <a href="/">Kembali ke halaman utama</a>
+</footer>
+
 <script>
-document.getElementById('year').textContent=new Date().getFullYear();
-document.getElementById('showPin').addEventListener('click',function(){const p=document.getElementById('pin');const visible=p.type==='password';p.type=visible?'text':'password';this.textContent=visible?'Sembunyi':'Lihat';this.setAttribute('aria-label',visible?'Sembunyikan PIN':'Tampilkan PIN');});
-document.getElementById('loginForm').addEventListener('submit',function(e){e.preventDefault();document.getElementById('notice').classList.add('show');});
-  document.getElementById('showManager').addEventListener('click', function () {
-  const panel = document.getElementById('managerPanel');
-  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+/* =====================================================
+   PENGATURAN FIREBASE
+   GANTI TEKS API KEY DI BAWAH DENGAN API KEY FIREBASE
+   ===================================================== */
+
+const FIREBASE_API_KEY = "ISI_API_KEY_FIREBASE_DI_SINI";
+
+/* Alamat Worker Portal Pengelola */
+const WORKER_URL =
+  "https://portal-pengelola-darul-fikr.darulfikr-singkut.workers.dev";
+
+/* Tahun pada footer */
+document.getElementById("year").textContent =
+  new Date().getFullYear();
+
+/* Tampilkan atau sembunyikan PIN santri */
+document.getElementById("showPin").addEventListener("click", function(){
+  const pin = document.getElementById("pin");
+  const visible = pin.type === "password";
+
+  pin.type = visible ? "text" : "password";
+  this.textContent = visible ? "Sembunyi" : "Lihat";
 });
 
-document.getElementById('managerForm').addEventListener('submit', async function(e) {
+/* Login santri/wali masih ditunda sampai tahap berikutnya */
+document.getElementById("loginForm").addEventListener("submit", function(e){
   e.preventDefault();
 
-  const notice = document.getElementById('managerNotice');
-  const email = document.getElementById('managerEmail').value.trim();
-  const password = document.getElementById('managerPassword').value;
+  const notice = document.getElementById("notice");
+  notice.className = "notice show";
+  notice.textContent =
+    "Login santri dan wali akan kita aktifkan setelah pengujian login pengelola selesai.";
+});
 
-  notice.classList.add('show');
-  notice.textContent = 'Sedang memeriksa akun pengelola...';
+/* Buka/tutup form pengelola */
+document.getElementById("showManager").addEventListener("click", function(){
+  document.getElementById("managerPanel").classList.toggle("show");
+});
+
+/* Login pengelola */
+document.getElementById("managerForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  const notice = document.getElementById("managerNotice");
+  const submit = document.getElementById("managerSubmit");
+
+  const email = document.getElementById("managerEmail").value.trim();
+  const password = document.getElementById("managerPassword").value;
+
+  notice.className = "notice show";
+  notice.textContent = "Sedang memeriksa akun pengelola...";
+  submit.disabled = true;
+  submit.textContent = "MEMERIKSA...";
 
   try {
-    const response = await fetch(
-      'https://portal-pengelola-darul-fikr.darulfikr-singkut.workers.dev/api/login',
+
+    if (!FIREBASE_API_KEY ||
+        FIREBASE_API_KEY === "ISI_API_KEY_FIREBASE_DI_SINI") {
+      throw new Error("API Key Firebase belum diisi pada kode halaman.");
+    }
+
+    /* Tahap 1: Verifikasi email dan password ke Firebase */
+    const firebaseResponse = await fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" +
+      encodeURIComponent(FIREBASE_API_KEY),
       {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        credentials: 'include',
-        body: JSON.stringify({email, password})
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+          returnSecureToken: true
+        })
       }
     );
 
-    const result = await response.json();
+    const firebaseResult = await firebaseResponse.json();
 
-    if (!response.ok || !result.success) {
-      throw new Error(result.message || 'Login pengelola gagal.');
+    if (!firebaseResponse.ok || !firebaseResult.idToken) {
+      const firebaseError =
+        firebaseResult.error?.message || "AUTENTIKASI_FIREBASE_GAGAL";
+
+      throw new Error(firebaseError);
     }
 
-    notice.textContent = 'Login berhasil. Sesi pengelola telah dibuat. Dashboard pengelola akan kita siapkan pada tahap berikutnya.';
+    /* Tahap 2: Kirim Firebase ID Token ke Worker */
+    const workerResponse = await fetch(
+      WORKER_URL + "/api/auth/admin",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          idToken: firebaseResult.idToken
+        })
+      }
+    );
+
+    const workerResult = await workerResponse.json();
+
+    if (!workerResponse.ok ||
+        workerResult.status !== "BERHASIL" ||
+        !workerResult.token) {
+      throw new Error(
+        workerResult.pesan || "Akun belum memiliki akses pengelola."
+      );
+    }
+
+    /* Tahap 3: Simpan token sesi sementara di browser */
+    sessionStorage.setItem(
+      "darulfikr_admin_token",
+      workerResult.token
+    );
+
+    sessionStorage.setItem(
+      "darulfikr_admin_email",
+      workerResult.user?.email || email
+    );
+
+    notice.className = "notice show success";
+    notice.textContent =
+      "Login pengelola BERHASIL. Sesi telah dibuat dan disimpan sementara di browser. Dashboard pengelola akan disiapkan pada tahap berikutnya.";
+
   } catch (error) {
-    notice.textContent = 'Login gagal: ' + error.message;
+
+    notice.className = "notice show error";
+
+    let message = error.message || "Terjadi kesalahan.";
+
+    if (message === "EMAIL_NOT_FOUND" ||
+        message === "INVALID_PASSWORD" ||
+        message === "INVALID_LOGIN_CREDENTIALS") {
+      message = "Email atau password tidak benar.";
+    } else if (message === "USER_DISABLED") {
+      message = "Akun Firebase ini dinonaktifkan.";
+    } else if (message === "API_KEY_INVALID") {
+      message = "API Key Firebase tidak valid. Periksa kembali API Key.";
+    }
+
+    notice.textContent = "LOGIN GAGAL: " + message;
+
+  } finally {
+
+    submit.disabled = false;
+    submit.textContent = "MASUK SEBAGAI PENGELOLA";
+
   }
 });
 </script>
+
 </body>
 </html>
