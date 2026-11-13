@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#075638">
+<title>Uji Login Pengelola | Darul Fikr</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 24px;
+  display: grid;
+  place-items: center;
+  background: #edf4ef;
+  font-family: Arial, sans-serif;
+  color: #183c2c;
+}
+
+.container {
+  width: 100%;
+  max-width: 430px;
+  padding: 30px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 8px 30px #123b2018;
+}
+
+h2 { color: #075638; margin-top: 0; }
+p { line-height: 1.5; color: #64746b; }
+
+label {
+  display: block;
+  margin: 16px 0 7px;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #ccd9d0;
+  border-radius: 9px;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  margin-top: 18px;
+  padding: 13px;
+  border: 0;
+  border-radius: 9px;
+  background: #075638;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:disabled { opacity: .6; cursor: wait; }
+
+.secondary {
+  background: #e5eee8;
+  color: #075638;
+}
+
+#result {
+  margin-top: 20px;
+  padding: 13px;
+  border-radius: 9px;
+  background: #f1f5f2;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  font-size: 14px;
+}
+
+.hidden { display: none; }
+
+small { color: #748078; }
+</style>
+</head>
+
+<body>
+<main class="container">
+  <h2>Portal Pengelola Darul Fikr</h2>
+  <p>Halaman pengujian autentikasi pengelola.</p>
+
+  <form id="loginForm">
+    <label for="email">Email Pengelola</label>
+    <input
+      id="email"
+      type="email"
+      autocomplete="username"
+      required
+      placeholder="Masukkan email"
+    >
+
+    <label for="password">Password</label>
+    <input
+      id="password"
+      type="password"
+      autocomplete="current-password"
+      required
+      placeholder="Masukkan password"
+    >
+
+    <button id="loginButton" type="submit">Login</button>
+  </form>
+
+  <button id="checkButton" class="secondary" type="button">
+    Periksa Sesi
+  </button>
+
+  <button id="logoutButton" class="secondary" type="button">
+    Logout
+  </button>
+
+  <div id="result">Belum ada pengujian.</div>
+
+  <p><small>Halaman ini hanya untuk pengujian. Jangan bagikan password kepada siapa pun.</small></p>
+</main>
+
+<script>
+const API = "https://portal-pengelola-darul-fikr.darulfikr-singkut.workers.dev";
+
+const result = document.getElementById("result");
+const form = document.getElementById("loginForm");
+const loginButton = document.getElementById("loginButton");
+
+function show(message) {
+  result.textContent = message;
+}
+
+async function apiRequest(path, options = {}) {
+  const response = await fetch(API + path, {
+    ...options,
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {})
+    }
+  });
+
+  const data = await response.json();
+  return { response, data };
+}
+
+form.addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  loginButton.disabled = true;
+  loginButton.textContent = "Memeriksa...";
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  try {
+    const { response, data } = await apiRequest("/api/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password })
+    });
+
+    if (!response.ok || !data.success) {
+      show("LOGIN GAGAL\n" + (data.message || "Terjadi kesalahan."));
+      return;
+    }
+
+    document.getElementById("password").value = "";
+
+    show("LOGIN DITERIMA.\nMemeriksa sesi...");
+
+    const check = await apiRequest("/api/me");
+
+    if (check.response.ok && check.data.success) {
+      show(
+        "LOGIN DAN PEMERIKSAAN SESI BERHASIL.\n\n" +
+        "Email: " + check.data.user.email + "\n" +
+        "Role: " + check.data.user.role + "\n" +
+        "UID: " + check.data.user.uid
+      );
+    } else {
+      show(
+        "LOGIN DITERIMA, TETAPI PEMERIKSAAN SESI GAGAL.\n\n" +
+        (check.data.message || "Cookie sesi tidak terbaca.")
+      );
+    }
+
+  } catch (error) {
+    show("GAGAL MENGHUBUNGI WORKER.\n" + error.message);
+  } finally {
+    loginButton.disabled = false;
+    loginButton.textContent = "Login";
+  }
+});
+
+document.getElementById("checkButton").addEventListener("click", async function() {
+  try {
+    const { response, data } = await apiRequest("/api/me");
+
+    show(
+      "HASIL PEMERIKSAAN SESI\n" +
+      "HTTP: " + response.status + "\n" +
+      JSON.stringify(data, null, 2)
+    );
+  } catch (error) {
+    show("Gagal memeriksa sesi: " + error.message);
+  }
+});
+
+document.getElementById("logoutButton").addEventListener("click", async function() {
+  try {
+    const { response, data } = await apiRequest("/api/logout", {
+      method: "POST",
+      body: JSON.stringify({})
+    });
+
+    show(
+      "HASIL LOGOUT\n" +
+      "HTTP: " + response.status + "\n" +
+      JSON.stringify(data, null, 2)
+    );
+  } catch (error) {
+    show("Gagal logout: " + error.message);
+  }
+});
+</script>
+</body>
+</html>
