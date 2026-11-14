@@ -504,6 +504,7 @@ alert(
 
 checkSession();
 
+
 let studentData = [];
 
 function escapeHtml(value) {
@@ -516,6 +517,51 @@ function escapeHtml(value) {
   })[char]);
 }
 
+// MENGATUR FORM TAMBAH SANTRI
+function setAddMode() {
+  const form = document.getElementById("studentForm");
+
+  form.reset();
+  form.elements.namedItem("documentId").value = "";
+  document.getElementById("studentNis").readOnly = false;
+  document.getElementById("studentFormTitle").textContent = "Formulir Santri Baru";
+
+  const submitButton = form.querySelector('button[type="submit"]');
+  if (submitButton) {
+    submitButton.textContent = "SIMPAN SANTRI";
+  }
+}
+
+// MENGATUR FORM EDIT SANTRI
+function setEditMode(santri) {
+  const form = document.getElementById("studentForm");
+
+  form.reset();
+
+  form.elements.namedItem("documentId").value = santri.documentId || "";
+  form.elements.namedItem("nis").value = santri.nis || "";
+  form.elements.namedItem("nama").value = santri.nama || "";
+  form.elements.namedItem("jenisKelamin").value = santri.jenisKelamin || "";
+  form.elements.namedItem("marhalah").value = santri.marhalah || "";
+  form.elements.namedItem("kelas").value = santri.kelas || "";
+  form.elements.namedItem("tahunMasuk").value = santri.tahunMasuk || "";
+  form.elements.namedItem("status").value = santri.status || "";
+  form.elements.namedItem("tempatLahir").value = santri.tempatLahir || "";
+  form.elements.namedItem("tanggalLahir").value = santri.tanggalLahir || "";
+  form.elements.namedItem("namaAyah").value = santri.namaAyah || "";
+  form.elements.namedItem("namaIbu").value = santri.namaIbu || "";
+  form.elements.namedItem("alamat").value = santri.alamat || "";
+
+  document.getElementById("studentNis").readOnly = true;
+  document.getElementById("studentFormTitle").textContent = "Edit Data Santri";
+
+  const submitButton = form.querySelector('button[type="submit"]');
+  if (submitButton) {
+    submitButton.textContent = "SIMPAN PERUBAHAN";
+  }
+}
+
+// MENGAMBIL DAN MENAMPILKAN DATA SANTRI
 async function loadStudents() {
   const section = document.getElementById("studentSection");
   const info = document.getElementById("studentInfo");
@@ -530,6 +576,7 @@ async function loadStudents() {
 
   section.style.display = "block";
   info.textContent = "Sedang mengambil data santri...";
+
   table.innerHTML = `
     <tr>
       <td colspan="7" style="padding:20px;text-align:center">
@@ -597,31 +644,56 @@ async function loadStudents() {
   }
 }
 
-
+// TOMBOL KEMBALI KE DASHBOARD
 document.getElementById("backDashboard")?.addEventListener("click", function() {
   document.getElementById("studentSection").style.display = "none";
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
-// BUKA FORM TAMBAH SANTRI
+// TOMBOL TAMBAH SANTRI
 document.getElementById("addStudentBtn")?.addEventListener("click", function() {
   const formBox = document.getElementById("studentFormBox");
-  const form = document.getElementById("studentForm");
   const message = document.getElementById("studentFormMessage");
 
-  form.reset();
+  setAddMode();
   message.textContent = "";
   formBox.style.display = "block";
-
   formBox.scrollIntoView({ behavior: "smooth" });
 });
 
-// TUTUP FORM TAMBAH SANTRI
+// TOMBOL BATAL FORM
 document.getElementById("cancelStudentBtn")?.addEventListener("click", function() {
-  document.getElementById("studentFormBox").style.display = "none";
+  const formBox = document.getElementById("studentFormBox");
+
+  setAddMode();
+  document.getElementById("studentFormMessage").textContent = "";
+  formBox.style.display = "none";
 });
 
-// SIMPAN DATA SANTRI KE FIRESTORE
+// TOMBOL EDIT PADA TABEL SANTRI
+document.getElementById("studentTable")?.addEventListener("click", function(event) {
+  const editButton = event.target.closest("[data-edit-id]");
+
+  if (!editButton) return;
+
+  const documentId = editButton.dataset.editId;
+  const santri = studentData.find(item => item.documentId === documentId);
+
+  if (!santri) {
+    alert("Data santri tidak ditemukan. Silakan muat ulang daftar santri.");
+    return;
+  }
+
+  const formBox = document.getElementById("studentFormBox");
+
+  setEditMode(santri);
+  document.getElementById("studentFormMessage").textContent = "";
+
+  formBox.style.display = "block";
+  formBox.scrollIntoView({ behavior: "smooth" });
+});
+
+// SIMPAN DATA BARU ATAU PERUBAHAN DATA SANTRI
 document.getElementById("studentForm")?.addEventListener("submit", async function(event) {
   event.preventDefault();
 
@@ -639,7 +711,18 @@ document.getElementById("studentForm")?.addEventListener("submit", async functio
   }
 
   const data = Object.fromEntries(new FormData(form).entries());
+  const documentId = data.documentId;
+  const isEdit = Boolean(documentId);
+
   data.tahunMasuk = Number(data.tahunMasuk);
+
+  let successMessage = "";
+
+  if (isEdit) {
+    data.documentId = documentId;
+  } else {
+    delete data.documentId;
+  }
 
   submitButton.disabled = true;
   submitButton.textContent = "MENYIMPAN...";
@@ -649,7 +732,7 @@ document.getElementById("studentForm")?.addEventListener("submit", async functio
     const response = await fetch(
       "https://portal-pengelola-darul-fikr.darulfikr-singkut.workers.dev/api/admin/students",
       {
-        method: "POST",
+        method: isEdit ? "PATCH" : "POST",
         headers: {
           "Authorization": "Bearer " + token,
           "Content-Type": "application/json"
@@ -665,20 +748,27 @@ document.getElementById("studentForm")?.addEventListener("submit", async functio
       return;
     }
 
-    form.reset();
+    successMessage = isEdit
+      ? "Perubahan data santri berhasil disimpan."
+      : "Data santri berhasil disimpan: " + result.nis;
+
     formBox.style.display = "none";
-    studentInfo.textContent = "Data santri berhasil disimpan: " + result.nis;
+    setAddMode();
 
     await loadStudents();
+
+    studentInfo.textContent = successMessage;
 
   } catch (error) {
     message.textContent = "Terjadi kesalahan koneksi. Silakan coba lagi.";
     console.error(error);
+
   } finally {
     submitButton.disabled = false;
-    submitButton.textContent = "SIMPAN SANTRI";
+    submitButton.textContent = isEdit ? "SIMPAN PERUBAHAN" : "SIMPAN SANTRI";
   }
 });
+
 
 </script>
 
