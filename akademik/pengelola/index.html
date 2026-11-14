@@ -369,6 +369,82 @@ document.querySelectorAll("[data-menu]").forEach(function(button){
 });
 
 checkSession();
+async function loadStudents() {
+  const section = document.getElementById("studentSection");
+  const info = document.getElementById("studentInfo");
+  const table = document.getElementById("studentTable");
+
+  const token = sessionStorage.getItem("darulfikr_admin_token");
+
+  if (!token) {
+    info.textContent = "Sesi login tidak ditemukan. Silakan login kembali.";
+    return;
+  }
+
+  section.style.display = "block";
+  info.textContent = "Sedang mengambil data santri...";
+  table.innerHTML = `
+    <tr>
+      <td colspan="6" style="padding:20px;text-align:center">
+        Memuat data...
+      </td>
+    </tr>
+  `;
+
+  section.scrollIntoView({ behavior: "smooth" });
+
+  try {
+    const response = await fetch(
+      "https://portal-pengelola-darul-fikr.darulfikr-singkut.workers.dev/api/admin/students",
+      {
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Gagal mengambil data santri.");
+    }
+
+    info.textContent = "Jumlah santri: " + result.total;
+
+    if (!result.students || result.students.length === 0) {
+      table.innerHTML = `
+        <tr>
+          <td colspan="6" style="padding:20px;text-align:center">
+            Belum ada data santri.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    table.innerHTML = result.students.map((santri, index) => `
+      <tr style="border-top:1px solid #e5ece7">
+        <td style="padding:12px">${index + 1}</td>
+        <td style="padding:12px">${santri.nis || "-"}</td>
+        <td style="padding:12px">${santri.nama || "-"}</td>
+        <td style="padding:12px">${santri.marhalah || "-"}</td>
+        <td style="padding:12px">${santri.kelas || "-"}</td>
+        <td style="padding:12px">${santri.status || "-"}</td>
+      </tr>
+    `).join("");
+
+  } catch (error) {
+    info.textContent = "Gagal memuat data: " + error.message;
+    table.innerHTML = "";
+  }
+}
+
+document.getElementById("backDashboard")?.addEventListener("click", function() {
+  document.getElementById("studentSection").style.display = "none";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
 </script>
 
 </body>
