@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#075638">
+<title>Dashboard Pengelola | Darul Fikr</title>
+<style>
+:root{
+  --green:#075638;
+  --dark:#043c28;
+  --gold:#d9b45b;
+  --bg:#f1f6f1;
+  --text:#18372a;
+  --muted:#687b70;
+  --line:#dce8df;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+header{
+  background:linear-gradient(110deg,var(--dark),var(--green));
+  color:white;
+  padding:20px 5%;
+  border-bottom:4px solid var(--gold);
+}
+.header-inner{
+  max-width:1200px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{
+  width:48px;height:48px;object-fit:contain;
+  background:white;border-radius:50%;padding:4px;
+}
+.brand h1{font-size:18px;line-height:1.4}
+.brand p{font-size:12px;color:#f5e8bf;margin-top:3px}
+.logout{
+  border:1px solid #ffffff80;
+  background:transparent;color:white;
+  padding:10px 16px;border-radius:9px;
+  font-weight:bold;cursor:pointer;
+}
+.container{
+  width:min(1200px,92%);
+  margin:30px auto;
+}
+.welcome{
+  background:white;border:1px solid var(--line);
+  border-radius:16px;padding:25px;
+  box-shadow:0 8px 25px #043c2810;
+}
+.welcome h2{color:var(--green);font-size:25px}
+.welcome p{color:var(--muted);margin-top:8px;line-height:1.6}
+.email{
+  display:inline-block;margin-top:12px;
+  padding:7px 12px;border-radius:20px;
+  background:#eaf5ed;color:var(--green);
+  font-size:13px;font-weight:bold;
+}
+.section-title{
+  margin:30px 0 15px;
+  color:var(--green);font-size:19px;
+}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+}
+.stat{
+  background:white;border:1px solid var(--line);
+  border-radius:14px;padding:20px;
+}
+.stat .label{font-size:13px;color:var(--muted)}
+.stat .number{
+  display:block;font-size:30px;
+  color:var(--green);font-weight:bold;margin-top:9px;
+}
+.stat small{color:var(--muted);font-size:12px}
+.menu{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+.menu-item{
+  display:block;text-align:left;
+  background:white;border:1px solid var(--line);
+  border-radius:14px;padding:22px;
+  cursor:pointer;color:var(--text);
+  transition:.2s;
+}
+.menu-item:hover{
+  transform:translateY(-3px);
+  border-color:var(--green);
+  box-shadow:0 8px 20px #043c2810;
+}
+.menu-icon{font-size:27px}
+.menu-item h3{color:var(--green);margin:12px 0 7px}
+.menu-item p{font-size:13px;color:var(--muted);line-height:1.5}
+.status{
+  margin-top:25px;padding:15px;
+  border-radius:11px;background:#fff8e7;
+  border:1px solid #efdda9;
+  color:#725714;font-size:13px;line-height:1.6;
+}
+footer{
+  text-align:center;padding:25px;
+  color:var(--muted);font-size:12px;
+}
+.notice{
+  margin-top:15px;padding:12px;
+  background:#fff0f0;border:1px solid #efc1c1;
+  color:#9b2424;border-radius:9px;
+  display:none;font-size:13px;
+}
+@media(max-width:800px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .menu{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:520px){
+  .header-inner{align-items:flex-start}
+  .brand h1{font-size:15px}
+  .brand img{width:40px;height:40px}
+  .logout{font-size:12px;padding:9px}
+  .stats,.menu{grid-template-columns:1fr}
+  .welcome h2{font-size:21px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <img src="https://website-darul-fikr-singkut.pages.dev/icon-ponpes.png.png"
+           alt="Logo Darul Fikr">
+      <div>
+        <h1>PONDOK PESANTREN DARUL FIKR</h1>
+        <p>CIANJUR SINGKUT · SAROLANGUN</p>
+      </div>
+    </div>
+    <button class="logout" id="logoutButton">KELUAR</button>
+  </div>
+</header>
+
+<main class="container">
+  <section class="welcome">
+    <h2>Dashboard Pengelola</h2>
+    <p>
+      Selamat datang di pusat pengelolaan akademik Pondok Pesantren
+      Darul Fikr. Silakan pilih menu untuk mengelola data pendidikan.
+    </p>
+    <div class="email" id="managerEmail">Memeriksa akun...</div>
+    <div class="notice" id="notice"></div>
+  </section>
+
+  <h2 class="section-title">Ringkasan Akademik</h2>
+  <section class="stats">
+    <div class="stat">
+      <span class="label">Jumlah Santri</span>
+      <strong class="number" id="totalStudents">—</strong>
+      <small>Data santri terdaftar</small>
+    </div>
+    <div class="stat">
+      <span class="label">Jumlah Kelas</span>
+      <strong class="number" id="totalClasses">—</strong>
+      <small>Data kelas pesantren</small>
+    </div>
+    <div class="stat">
+      <span class="label">Mata Pelajaran</span>
+      <strong class="number" id="totalSubjects">—</strong>
+      <small>Daftar mata pelajaran</small>
+    </div>
+    <div class="stat">
+      <span class="label">Tahun Ajaran</span>
+      <strong class="number" id="totalYears">—</strong>
+      <small>Data tahun akademik</small>
+    </div>
+  </section>
+
+  <h2 class="section-title">Menu Pengelolaan</h2>
+  <section class="menu">
+    <button class="menu-item" data-menu="santri">
+      <div class="menu-icon">👨‍🎓</div>
+      <h3>Data Santri</h3>
+      <p>Melihat dan mengelola identitas serta data santri.</p>
+    </button>
+    <button class="menu-item" data-menu="kelas">
+      <div class="menu-icon">🏫</div>
+      <h3>Data Kelas</h3>
+      <p>Mengelola kelas dan penempatan santri.</p>
+    </button>
+    <button class="menu-item" data-menu="mapel">
+      <div class="menu-icon">📚</div>
+      <h3>Mata Pelajaran</h3>
+      <p>Mengelola daftar mata pelajaran pesantren.</p>
+    </button>
+    <button class="menu-item" data-menu="nilai">
+      <div class="menu-icon">📝</div>
+      <h3>Input Nilai</h3>
+      <p>Mengelola nilai belajar dan perkembangan santri.</p>
+    </button>
+    <button class="menu-item" data-menu="rapor">
+      <div class="menu-icon">📊</div>
+      <h3>Rapor Santri</h3>
+      <p>Melihat dan menyiapkan rapor semester.</p>
+    </button>
+    <button class="menu-item" data-menu="pengaturan">
+      <div class="menu-icon">⚙️</div>
+      <h3>Pengaturan Akademik</h3>
+      <p>Mengelola tahun ajaran dan semester.</p>
+    </button>
+  </section>
+
+  <div class="status">
+    <strong>Informasi:</strong> Dashboard awal telah disiapkan.
+    Menu pengelolaan dan ringkasan data akan dihubungkan ke database
+    Firestore secara bertahap. Data belum ditampilkan sebagai angka
+    sebelum API pembacaan data disiapkan.
+  </div>
+</main>
+
+<footer>
+  © <span id="year"></span> Pondok Pesantren Darul Fikr
+</footer>
+
+<script>
+const WORKER_URL =
+  "https://portal-pengelola-darul-fikr.darulfikr-singkut.workers.dev";
+
+const token = sessionStorage.getItem("darulfikr_admin_token");
+const savedEmail = sessionStorage.getItem("darulfikr_admin_email");
+
+document.getElementById("year").textContent =
+  new Date().getFullYear();
+
+function showError(message){
+  const notice = document.getElementById("notice");
+  notice.style.display = "block";
+  notice.textContent = message;
+}
+
+function backToLogin(){
+  sessionStorage.removeItem("darulfikr_admin_token");
+  sessionStorage.removeItem("darulfikr_admin_email");
+  window.location.href = "../";
+}
+
+async function checkSession(){
+  if(!token){
+    window.location.replace("../");
+    return;
+  }
+
+  try{
+    const response = await fetch(
+      WORKER_URL + "/api/auth/me",
+      {
+        method:"GET",
+        headers:{
+          "Authorization":"Bearer " + token
+        }
+      }
+    );
+
+    const result = await response.json();
+
+    if(!response.ok || result.success === false){
+      backToLogin();
+      return;
+    }
+
+    const email =
+      result.user?.email ||
+      result.email ||
+      savedEmail ||
+      "Pengelola";
+
+    document.getElementById("managerEmail").textContent = email;
+
+  }catch(error){
+    showError(
+      "Tidak dapat memeriksa sesi ke server. Periksa koneksi internet, lalu muat ulang halaman."
+    );
+    document.getElementById("managerEmail").textContent =
+      savedEmail || "Pengelola";
+  }
+}
+
+document.getElementById("logoutButton").addEventListener(
+  "click",
+  async function(){
+    if(token){
+      try{
+        await fetch(WORKER_URL + "/api/auth/logout",{
+          method:"POST",
+          headers:{
+            "Authorization":"Bearer " + token
+          }
+        });
+      }catch(error){}
+    }
+    backToLogin();
+  }
+);
+
+document.querySelectorAll("[data-menu]").forEach(function(button){
+  button.addEventListener("click",function(){
+    const names = {
+      santri:"Data Santri",
+      kelas:"Data Kelas",
+      mapel:"Mata Pelajaran",
+      nilai:"Input Nilai",
+      rapor:"Rapor Santri",
+      pengaturan:"Pengaturan Akademik"
+    };
+
+    alert(
+      "Menu " + names[this.dataset.menu] +
+      " akan kita bangun pada tahap berikutnya."
+    );
+  });
+});
+
+checkSession();
+</script>
+
+</body>
+</html>
