@@ -531,28 +531,32 @@ document.getElementById("logoutButton").addEventListener(
 );
 
 document.querySelectorAll("[data-menu]").forEach(function(button){
-  button.addEventListener("click",function(){
+  button.addEventListener("click", function(){
     const names = {
-      santri:"Data Santri",
-      kelas:"Data Kelas",
-      mapel:"Mata Pelajaran",
-      nilai:"Input Nilai",
-      rapor:"Rapor Santri",
-      pengaturan:"Pengaturan Akademik"
+      santri: "Data Santri",
+      kelas: "Data Kelas",
+      mapel: "Mata Pelajaran",
+      nilai: "Input Nilai",
+      rapor: "Rapor Santri",
+      pengaturan: "Pengaturan Akademik"
     };
 
     if (this.dataset.menu === "santri") {
-  loadStudents();
-  return;
-}
+      document.getElementById("classSection").style.display = "none";
+      return;
+    }
 
-alert(
-  "Menu " + names[this.dataset.menu] +
-  " akan kita bangun pada tahap berikutnya."
-);
-});
-});
+    if (this.dataset.menu === "kelas") {
+      loadClasses();
+      return;
+    }
 
+    alert(
+      "Menu " + names[this.dataset.menu] +
+      " akan kita bangun pada tahap berikutnya."
+    );
+  });
+});
 checkSession();
 
 
