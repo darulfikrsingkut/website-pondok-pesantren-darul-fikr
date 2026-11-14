@@ -387,6 +387,57 @@ footer{
 </section>
 
 
+  <!-- HALAMAN DATA KELAS -->
+  <section id="classSection" style="display:none;margin-top:30px">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <h2 class="section-title" style="margin:0">Data Kelas</h2>
+
+      <button id="backClassDashboard" type="button"
+        style="background:#687b70;color:white;border:0;padding:11px 16px;border-radius:8px;cursor:pointer;font-weight:bold">
+        KEMBALI
+      </button>
+    </div>
+
+    <p id="classInfo" style="margin:15px 0;color:#687b70">
+      Memuat data kelas...
+    </p>
+
+    <div id="classGrid"
+      style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:15px">
+    </div>
+
+    <div id="classMembersBox"
+      style="display:none;margin-top:25px">
+
+      <button id="backToClassList" type="button"
+        style="background:#687b70;color:white;border:0;padding:10px 15px;border-radius:8px;cursor:pointer;margin-bottom:15px">
+        ← KEMBALI KE DAFTAR KELAS
+      </button>
+
+      <h3 id="classMembersTitle" style="color:#075638;margin-bottom:8px">
+        Daftar Santri
+      </h3>
+
+      <p id="classMembersInfo" style="color:#687b70;margin-bottom:15px"></p>
+
+      <div style="overflow-x:auto;background:white;border:1px solid #dce8df;border-radius:12px">
+        <table style="width:100%;border-collapse:collapse;min-width:550px">
+          <thead style="background:#075638;color:white">
+            <tr>
+              <th style="padding:13px;text-align:left">No.</th>
+              <th style="padding:13px;text-align:left">NIS</th>
+              <th style="padding:13px;text-align:left">Nama Santri</th>
+              <th style="padding:13px;text-align:left">Jenis Kelamin</th>
+            </tr>
+          </thead>
+          <tbody id="classMembersTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </section>
+
   <div class="status">
     <strong>Informasi:</strong> Dashboard awal telah disiapkan.
     Menu pengelolaan dan ringkasan data akan dihubungkan ke database
