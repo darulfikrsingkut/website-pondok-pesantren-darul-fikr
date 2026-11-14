@@ -361,11 +361,16 @@ document.querySelectorAll("[data-menu]").forEach(function(button){
       pengaturan:"Pengaturan Akademik"
     };
 
-    alert(
-      "Menu " + names[this.dataset.menu] +
-      " akan kita bangun pada tahap berikutnya."
-    );
-  });
+    if (this.dataset.menu === "santri") {
+  loadStudents();
+  return;
+}
+
+alert(
+  "Menu " + names[this.dataset.menu] +
+  " akan kita bangun pada tahap berikutnya."
+);
+});
 });
 
 checkSession();
