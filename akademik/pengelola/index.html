@@ -249,15 +249,15 @@ footer{
   <div id="studentFormBox"
     style="display:none;background:white;border:1px solid #dce8df;border-radius:12px;padding:20px;margin-bottom:20px">
 
-    <h3 style="color:#075638;margin-top:0">Formulir Santri Baru</h3>
+    <h3 id="studentFormTitle" style="color:#075638;margin-top:0">Formulir Santri Baru</h3>
 
     <form id="studentForm">
-
+<input type="hidden" name="documentId">
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px">
 
         <div>
           <label>NIS</label>
-          <input name="nis" type="text" required
+          <input id="studentNis" name="nis" type="text" required
             placeholder="Contoh: DF0002"
             style="width:100%;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
         </div>
@@ -362,7 +362,7 @@ footer{
   </div>
 
   <div style="overflow-x:auto;background:white;border:1px solid #dce8df;border-radius:12px">
-    <table style="width:100%;border-collapse:collapse;min-width:650px">
+    <table style="width:100%;border-collapse:collapse;min-width:800px">
       <thead style="background:#075638;color:white">
         <tr>
           <th style="padding:13px;text-align:left">No.</th>
@@ -371,11 +371,12 @@ footer{
           <th style="padding:13px;text-align:left">Marhalah</th>
           <th style="padding:13px;text-align:left">Kelas</th>
           <th style="padding:13px;text-align:left">Status</th>
+          <th style="padding:13px;text-align:left">Tindakan</th>
         </tr>
       </thead>
       <tbody id="studentTable">
         <tr>
-          <td colspan="6" style="padding:20px;text-align:center">
+          <td colspan="7" style="padding:20px;text-align:center">
             Memuat data...
           </td>
         </tr>
