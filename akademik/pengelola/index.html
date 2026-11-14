@@ -222,41 +222,166 @@ footer{
   </section>
 
   <!-- HALAMAN DATA SANTRI -->
-  <section id="studentSection" style="display:none;margin-top:30px">
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
-      <h2 class="section-title" style="margin:0">Data Santri</h2>
+  
+<section id="studentSection" style="display:none;margin-top:30px">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+    <h2 class="section-title" style="margin:0">Data Santri</h2>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button id="addStudentBtn" type="button"
+        style="background:#075638;color:white;border:0;padding:11px 16px;border-radius:8px;cursor:pointer;font-weight:bold">
+        + TAMBAH SANTRI
+      </button>
+
       <button id="backDashboard" class="logout"
-        style="background:#075638;color:white">
+        style="background:#687b70;color:white">
         KEMBALI
       </button>
     </div>
+  </div>
 
-    <p id="studentInfo" style="margin:15px 0;color:#687b70">
-      Memuat data santri...
-    </p>
+  <p id="studentInfo" style="margin:15px 0;color:#687b70">
+    Memuat data santri...
+  </p>
 
-    <div style="overflow-x:auto;background:white;border:1px solid #dce8df;border-radius:12px">
-      <table style="width:100%;border-collapse:collapse;min-width:650px">
-        <thead style="background:#075638;color:white">
-          <tr>
-            <th style="padding:13px;text-align:left">No.</th>
-            <th style="padding:13px;text-align:left">NIS</th>
-            <th style="padding:13px;text-align:left">Nama Santri</th>
-            <th style="padding:13px;text-align:left">Marhalah</th>
-            <th style="padding:13px;text-align:left">Kelas</th>
-            <th style="padding:13px;text-align:left">Status</th>
-          </tr>
-        </thead>
-        <tbody id="studentTable">
-          <tr>
-            <td colspan="6" style="padding:20px;text-align:center">
-              Memuat data...
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+  <!-- FORM TAMBAH SANTRI -->
+  <div id="studentFormBox"
+    style="display:none;background:white;border:1px solid #dce8df;border-radius:12px;padding:20px;margin-bottom:20px">
+
+    <h3 style="color:#075638;margin-top:0">Formulir Santri Baru</h3>
+
+    <form id="studentForm">
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px">
+
+        <div>
+          <label>NIS</label>
+          <input name="nis" type="text" required
+            placeholder="Contoh: DF0002"
+            style="width:100%;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+        </div>
+
+        <div>
+          <label>Nama Lengkap</label>
+          <input name="nama" type="text" required
+            placeholder="Nama lengkap santri"
+            style="width:100%;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+        </div>
+
+        <div>
+          <label>Jenis Kelamin</label>
+          <select name="jenisKelamin" required
+            style="width:100%;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+            <option value="">Pilih jenis kelamin</option>
+            <option value="Laki-laki">Laki-laki</option>
+            <option value="Perempuan">Perempuan</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Marhalah</label>
+          <input name="marhalah" type="text" required
+            placeholder="Contoh: Ulya"
+            style="width:100%;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+        </div>
+
+        <div>
+          <label>Kelas</label>
+          <input name="kelas" type="text" required
+            placeholder="Contoh: 1, 2, atau 3"
+            style="width:100%;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+        </div>
+
+        <div>
+          <label>Tahun Masuk</label>
+          <input name="tahunMasuk" type="number" required
+            placeholder="Contoh: 2026"
+            style="width:100%;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+        </div>
+
+        <div>
+          <label>Status</label>
+          <select name="status" required
+            style="width:100%;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+            <option value="Aktif">Aktif</option>
+            <option value="Tidak Aktif">Tidak Aktif</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Tempat Lahir</label>
+          <input name="tempatLahir" type="text"
+            style="width:100%;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+        </div>
+
+        <div>
+          <label>Tanggal Lahir</label>
+          <input name="tanggalLahir" type="date"
+            style="width:100%;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+        </div>
+
+        <div>
+          <label>Nama Ayah</label>
+          <input name="namaAyah" type="text"
+            style="width:100%;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+        </div>
+
+        <div>
+          <label>Nama Ibu</label>
+          <input name="namaIbu" type="text"
+            style="width:100%;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+        </div>
+
+        <div style="grid-column:1/-1">
+          <label>Alamat</label>
+          <textarea name="alamat" rows="3"
+            style="width:100%;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px"></textarea>
+        </div>
+
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
+        <button type="submit"
+          style="background:#075638;color:white;border:0;padding:12px 20px;border-radius:8px;cursor:pointer">
+          SIMPAN SANTRI
+        </button>
+
+        <button type="button" id="cancelStudentBtn"
+          style="background:#e8eee9;color:#34483b;border:0;padding:12px 20px;border-radius:8px;cursor:pointer">
+          BATAL
+        </button>
+      </div>
+
+      <p id="studentFormMessage"></p>
+
+    </form>
+  </div>
+
+  <div style="overflow-x:auto;background:white;border:1px solid #dce8df;border-radius:12px">
+    <table style="width:100%;border-collapse:collapse;min-width:650px">
+      <thead style="background:#075638;color:white">
+        <tr>
+          <th style="padding:13px;text-align:left">No.</th>
+          <th style="padding:13px;text-align:left">NIS</th>
+          <th style="padding:13px;text-align:left">Nama Santri</th>
+          <th style="padding:13px;text-align:left">Marhalah</th>
+          <th style="padding:13px;text-align:left">Kelas</th>
+          <th style="padding:13px;text-align:left">Status</th>
+        </tr>
+      </thead>
+      <tbody id="studentTable">
+        <tr>
+          <td colspan="6" style="padding:20px;text-align:center">
+            Memuat data...
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>
+
 
   <div class="status">
     <strong>Informasi:</strong> Dashboard awal telah disiapkan.
