@@ -596,12 +596,63 @@ document.getElementById("cancelStudentBtn")?.addEventListener("click", function(
   document.getElementById("studentFormBox").style.display = "none";
 });
 
-// CEGAH PENGIRIMAN SEBELUM API SIMPAN DIBUAT
-document.getElementById("studentForm")?.addEventListener("submit", function(event) {
+// SIMPAN DATA SANTRI KE FIRESTORE
+document.getElementById("studentForm")?.addEventListener("submit", async function(event) {
   event.preventDefault();
 
-  document.getElementById("studentFormMessage").textContent =
-    "Fitur penyimpanan sedang disiapkan. Data belum disimpan.";
+  const form = this;
+  const message = document.getElementById("studentFormMessage");
+  const formBox = document.getElementById("studentFormBox");
+  const studentInfo = document.getElementById("studentInfo");
+  const submitButton = form.querySelector('button[type="submit"]');
+
+  const token = sessionStorage.getItem("darulfikr_admin_token");
+
+  if (!token) {
+    message.textContent = "Sesi login berakhir. Silakan login kembali.";
+    return;
+  }
+
+  const data = Object.fromEntries(new FormData(form).entries());
+  data.tahunMasuk = Number(data.tahunMasuk);
+
+  submitButton.disabled = true;
+  submitButton.textContent = "MENYIMPAN...";
+  message.textContent = "Sedang menyimpan data...";
+
+  try {
+    const response = await fetch(
+      "https://portal-pengelola-darul-fikr.darulfikr-singkut.workers.dev/api/admin/students",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + token,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      message.textContent = result.message || "Data gagal disimpan.";
+      return;
+    }
+
+    form.reset();
+    formBox.style.display = "none";
+    studentInfo.textContent = "Data santri berhasil disimpan: " + result.nis;
+
+    await loadStudents();
+
+  } catch (error) {
+    message.textContent = "Terjadi kesalahan koneksi. Silakan coba lagi.";
+    console.error(error);
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = "SIMPAN SANTRI";
+  }
 });
 
 </script>
