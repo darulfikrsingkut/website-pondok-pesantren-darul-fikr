@@ -575,6 +575,32 @@ document.getElementById("backDashboard")?.addEventListener("click", function() {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
+// BUKA FORM TAMBAH SANTRI
+document.getElementById("addStudentBtn")?.addEventListener("click", function() {
+  const formBox = document.getElementById("studentFormBox");
+  const form = document.getElementById("studentForm");
+  const message = document.getElementById("studentFormMessage");
+
+  form.reset();
+  message.textContent = "";
+  formBox.style.display = "block";
+
+  formBox.scrollIntoView({ behavior: "smooth" });
+});
+
+// TUTUP FORM TAMBAH SANTRI
+document.getElementById("cancelStudentBtn")?.addEventListener("click", function() {
+  document.getElementById("studentFormBox").style.display = "none";
+});
+
+// CEGAH PENGIRIMAN SEBELUM API SIMPAN DIBUAT
+document.getElementById("studentForm")?.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  document.getElementById("studentFormMessage").textContent =
+    "Fitur penyimpanan sedang disiapkan. Data belum disimpan.";
+});
+
 </script>
 
 </body>
