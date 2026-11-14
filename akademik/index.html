@@ -433,9 +433,14 @@ document.getElementById("managerForm").addEventListener("submit", async function
       workerResult.user?.email || email
     );
 
-    notice.className = "notice show success";
-    notice.textContent =
-      "Login pengelola BERHASIL. Sesi telah dibuat dan disimpan sementara di browser. Dashboard pengelola akan disiapkan pada tahap berikutnya.";
+    
+notice.className = "notice show success";
+notice.textContent = "Login berhasil. Membuka dashboard pengelola...";
+
+setTimeout(function() {
+  window.location.href = "/akademik/pengelola/";
+}, 800);
+
 
   } catch (error) {
 
