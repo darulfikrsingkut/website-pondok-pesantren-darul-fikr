@@ -221,6 +221,43 @@ footer{
     </button>
   </section>
 
+  <!-- HALAMAN DATA SANTRI -->
+  <section id="studentSection" style="display:none;margin-top:30px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <h2 class="section-title" style="margin:0">Data Santri</h2>
+      <button id="backDashboard" class="logout"
+        style="background:#075638;color:white">
+        KEMBALI
+      </button>
+    </div>
+
+    <p id="studentInfo" style="margin:15px 0;color:#687b70">
+      Memuat data santri...
+    </p>
+
+    <div style="overflow-x:auto;background:white;border:1px solid #dce8df;border-radius:12px">
+      <table style="width:100%;border-collapse:collapse;min-width:650px">
+        <thead style="background:#075638;color:white">
+          <tr>
+            <th style="padding:13px;text-align:left">No.</th>
+            <th style="padding:13px;text-align:left">NIS</th>
+            <th style="padding:13px;text-align:left">Nama Santri</th>
+            <th style="padding:13px;text-align:left">Marhalah</th>
+            <th style="padding:13px;text-align:left">Kelas</th>
+            <th style="padding:13px;text-align:left">Status</th>
+          </tr>
+        </thead>
+        <tbody id="studentTable">
+          <tr>
+            <td colspan="6" style="padding:20px;text-align:center">
+              Memuat data...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
   <div class="status">
     <strong>Informasi:</strong> Dashboard awal telah disiapkan.
     Menu pengelolaan dan ringkasan data akan dihubungkan ke database
