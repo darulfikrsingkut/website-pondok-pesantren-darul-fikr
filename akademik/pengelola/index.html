@@ -502,6 +502,19 @@ alert(
 });
 
 checkSession();
+
+let studentData = [];
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
 async function loadStudents() {
   const section = document.getElementById("studentSection");
   const info = document.getElementById("studentInfo");
@@ -518,7 +531,7 @@ async function loadStudents() {
   info.textContent = "Sedang mengambil data santri...";
   table.innerHTML = `
     <tr>
-      <td colspan="6" style="padding:20px;text-align:center">
+      <td colspan="7" style="padding:20px;text-align:center">
         Memuat data...
       </td>
     </tr>
@@ -543,12 +556,14 @@ async function loadStudents() {
       throw new Error(result.message || "Gagal mengambil data santri.");
     }
 
+    studentData = result.students || [];
+
     info.textContent = "Jumlah santri: " + result.total;
 
-    if (!result.students || result.students.length === 0) {
+    if (studentData.length === 0) {
       table.innerHTML = `
         <tr>
-          <td colspan="6" style="padding:20px;text-align:center">
+          <td colspan="7" style="padding:20px;text-align:center">
             Belum ada data santri.
           </td>
         </tr>
@@ -556,14 +571,22 @@ async function loadStudents() {
       return;
     }
 
-    table.innerHTML = result.students.map((santri, index) => `
+    table.innerHTML = studentData.map((santri, index) => `
       <tr style="border-top:1px solid #e5ece7">
         <td style="padding:12px">${index + 1}</td>
-        <td style="padding:12px">${santri.nis || "-"}</td>
-        <td style="padding:12px">${santri.nama || "-"}</td>
-        <td style="padding:12px">${santri.marhalah || "-"}</td>
-        <td style="padding:12px">${santri.kelas || "-"}</td>
-        <td style="padding:12px">${santri.status || "-"}</td>
+        <td style="padding:12px">${escapeHtml(santri.nis || "-")}</td>
+        <td style="padding:12px">${escapeHtml(santri.nama || "-")}</td>
+        <td style="padding:12px">${escapeHtml(santri.marhalah || "-")}</td>
+        <td style="padding:12px">${escapeHtml(santri.kelas || "-")}</td>
+        <td style="padding:12px">${escapeHtml(santri.status || "-")}</td>
+        <td style="padding:12px;text-align:center">
+          <button
+            type="button"
+            data-edit-id="${escapeHtml(santri.documentId)}"
+            style="background:#087443;color:white;border:0;padding:8px 14px;border-radius:6px;cursor:pointer">
+            EDIT
+          </button>
+        </td>
       </tr>
     `).join("");
 
@@ -572,6 +595,7 @@ async function loadStudents() {
     table.innerHTML = "";
   }
 }
+
 
 document.getElementById("backDashboard")?.addEventListener("click", function() {
   document.getElementById("studentSection").style.display = "none";
