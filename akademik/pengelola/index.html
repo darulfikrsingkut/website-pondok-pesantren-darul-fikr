@@ -935,6 +935,185 @@ document.getElementById("backGradeDashboard")?.addEventListener("click", functio
 
 let studentData = [];
 
+// DATA UNTUK INPUT NILAI
+let gradeSubjectData = [];
+let gradeAcademicSettings = {};
+
+function gradeIsActive(status) {
+  const value = String(status || "").toLowerCase().trim();
+  return value === "aktif" || value === "active";
+}
+
+// MEMUAT DATA TAHUN PELAJARAN, SANTRI, DAN MAPEL
+window.loadGrades = async function () {
+  const info = document.getElementById("gradeInfo");
+  const adminToken = sessionStorage.getItem("darulfikr_admin_token");
+
+  if (!adminToken) {
+    info.textContent = "Sesi admin tidak ditemukan. Silakan login kembali.";
+    return;
+  }
+
+  info.textContent = "Sedang mengambil data dari database...";
+
+  try {
+    const headers = {
+      "Authorization": "Bearer " + adminToken
+    };
+
+    const [settingsResponse, studentsResponse, subjectsResponse] =
+      await Promise.all([
+        fetch(WORKER_URL + "/api/admin/academic-settings", {
+          method: "GET",
+          headers
+        }),
+        fetch(WORKER_URL + "/api/admin/students", {
+          method: "GET",
+          headers
+        }),
+        fetch(WORKER_URL + "/api/admin/subjects", {
+          method: "GET",
+          headers
+        })
+      ]);
+
+    const [settingsResult, studentsResult, subjectsResult] =
+      await Promise.all([
+        settingsResponse.json(),
+        studentsResponse.json(),
+        subjectsResponse.json()
+      ]);
+
+    if (!settingsResponse.ok || !settingsResult.success) {
+      throw new Error("Gagal mengambil pengaturan akademik.");
+    }
+
+    if (!studentsResponse.ok || !studentsResult.success) {
+      throw new Error("Gagal mengambil data santri.");
+    }
+
+    if (!subjectsResponse.ok || !subjectsResult.success) {
+      throw new Error("Gagal mengambil data mata pelajaran.");
+    }
+
+    gradeAcademicSettings = settingsResult.settings || {};
+    studentData = studentsResult.students || [];
+    gradeSubjectData = subjectsResult.subjects || [];
+
+    // TAHUN PELAJARAN
+    const yearSelect = document.getElementById("gradeAcademicYear");
+    yearSelect.innerHTML = '<option value="">Pilih Tahun Pelajaran</option>';
+
+    (gradeAcademicSettings.years || []).forEach(year => {
+      const option = document.createElement("option");
+      option.value = year.id;
+      option.textContent = year.label;
+      yearSelect.appendChild(option);
+    });
+
+    if (gradeAcademicSettings.activeYearId) {
+      yearSelect.value = gradeAcademicSettings.activeYearId;
+    }
+
+    // SEMESTER
+    const semesterSelect = document.getElementById("gradeSemester");
+    semesterSelect.innerHTML = '<option value="">Pilih Semester</option>';
+
+    (gradeAcademicSettings.semesters || []).forEach(semester => {
+      const option = document.createElement("option");
+      option.value = semester.name;
+      option.textContent = semester.name;
+      semesterSelect.appendChild(option);
+    });
+
+    // KOSONGKAN PILIHAN MARHALAH DAN KELAS
+    document.getElementById("gradeMarhalah").value = "";
+    document.getElementById("gradeClass").innerHTML =
+      '<option value="">Pilih Kelas</option>';
+
+    document.getElementById("gradeSubjectList").textContent =
+      "Pilih marhalah terlebih dahulu.";
+
+    info.textContent =
+      "Data berhasil dimuat. Silakan pilih tahun pelajaran, semester, dan marhalah.";
+
+  } catch (error) {
+    info.textContent = "Gagal memuat data: " + error.message;
+  }
+};
+
+// MEMUAT KELAS DAN MAPEL BERDASARKAN MARHALAH
+document.getElementById("gradeMarhalah").addEventListener("change", function () {
+  const marhalah = this.value;
+  const classSelect = document.getElementById("gradeClass");
+  const subjectList = document.getElementById("gradeSubjectList");
+
+  classSelect.innerHTML = '<option value="">Pilih Kelas</option>';
+  subjectList.innerHTML = "";
+
+  if (!marhalah) {
+    subjectList.textContent = "Pilih marhalah terlebih dahulu.";
+    return;
+  }
+
+  // KELAS DARI DATA SANTRI AKTIF
+  const classes = [...new Set(
+    studentData
+      .filter(student =>
+        student.marhalah === marhalah &&
+        gradeIsActive(student.status) &&
+        student.kelas
+      )
+      .map(student => student.kelas)
+  )].sort((a, b) => a.localeCompare(b, "id"));
+
+  classes.forEach(kelas => {
+    const option = document.createElement("option");
+    option.value = kelas;
+    option.textContent = kelas;
+    classSelect.appendChild(option);
+  });
+
+  // MAPEL AKTIF SESUAI MARHALAH
+  const subjects = gradeSubjectData.filter(subject =>
+    subject.marhalah === marhalah &&
+    gradeIsActive(subject.status)
+  );
+
+  if (subjects.length === 0) {
+    subjectList.textContent = "Belum ada mata pelajaran aktif.";
+    return;
+  }
+
+  subjects.forEach(subject => {
+    const label = document.createElement("label");
+    label.style.cssText =
+      "display:flex;align-items:center;gap:7px;padding:9px 12px;" +
+      "border:1px solid #dce8df;border-radius:8px;cursor:pointer";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.className = "grade-subject-check";
+    checkbox.value = subject.documentId;
+
+    const name = document.createElement("span");
+    name.textContent = subject.nama;
+
+    label.appendChild(checkbox);
+    label.appendChild(name);
+    subjectList.appendChild(label);
+  });
+});
+
+// PILIH SEMUA MATA PELAJARAN
+document.getElementById("selectAllGradeSubjects")
+  .addEventListener("click", function () {
+    document.querySelectorAll(".grade-subject-check")
+      .forEach(checkbox => {
+        checkbox.checked = true;
+      });
+  });
+
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, char => ({
     "&": "&amp;",
