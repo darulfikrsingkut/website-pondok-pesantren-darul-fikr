@@ -420,7 +420,57 @@ footer{
       </h3>
 
       <p id="classMembersInfo" style="color:#687b70;margin-bottom:15px"></p>
+<!-- FORM PEMINDAHAN SANTRI -->
+<div id="moveStudentBox"
+  style="display:none;background:#f1f6f1;border:1px solid #dce8df;border-radius:12px;padding:18px;margin-bottom:20px">
 
+  <h3 style="color:#075638;margin-bottom:12px">
+    Pindahkan Santri
+  </h3>
+
+  <p id="moveStudentName" style="margin-bottom:15px;font-weight:bold"></p>
+
+  <form id="moveStudentForm">
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+
+      <div>
+        <label>Marhalah Tujuan</label>
+        <select id="moveMarhalah" required
+          style="width:100%;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+          <option value="Ula">Ula</option>
+          <option value="Wustho">Wustho</option>
+          <option value="Ulya">Ulya</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Kelas Tujuan</label>
+        <select id="moveKelas" required
+          style="width:100%;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+        </select>
+      </div>
+
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:15px;flex-wrap:wrap">
+
+      <button type="submit" id="saveMoveStudent"
+        style="background:#075638;color:white;border:0;padding:11px 18px;border-radius:8px;cursor:pointer">
+        SIMPAN PEMINDAHAN
+      </button>
+
+      <button type="button" id="cancelMoveStudent"
+        style="background:#e8eee9;color:#34483b;border:0;padding:11px 18px;border-radius:8px;cursor:pointer">
+        BATAL
+      </button>
+
+    </div>
+
+    <p id="moveStudentMessage" style="margin-top:12px"></p>
+
+  </form>
+</div>
       <div style="overflow-x:auto;background:white;border:1px solid #dce8df;border-radius:12px">
         <table style="width:100%;border-collapse:collapse;min-width:550px">
           <thead style="background:#075638;color:white">
@@ -429,6 +479,7 @@ footer{
               <th style="padding:13px;text-align:left">NIS</th>
               <th style="padding:13px;text-align:left">Nama Santri</th>
               <th style="padding:13px;text-align:left">Jenis Kelamin</th>
+              <th style="padding:13px;text-align:left">Tindakan</th>
             </tr>
           </thead>
           <tbody id="classMembersTable"></tbody>
@@ -846,7 +897,15 @@ document.getElementById("classGrid").addEventListener("click", function(event) {
   showClassMembers(card.dataset.marhalah, card.dataset.kelas);
 });
 
+let currentClassMarhalah = "";
+let currentClassKelas = "";
+
+let selectedMoveStudent = null;
+
 function showClassMembers(marhalah, kelas) {
+  currentClassMarhalah = marhalah;
+  currentClassKelas = kelas;
+
   const anggota = classData.filter(function(santri) {
     return (
       String(santri.status || "").toLowerCase() === "aktif" &&
@@ -854,6 +913,48 @@ function showClassMembers(marhalah, kelas) {
       String(santri.kelas || "").trim() === kelas
     );
   });
+
+  document.getElementById("classGrid").style.display = "none";
+  document.getElementById("classMembersBox").style.display = "block";
+  document.getElementById("moveStudentBox").style.display = "none";
+
+  document.getElementById("classMembersTitle").textContent =
+    "Daftar Santri " + marhalah + " Kelas " + kelas;
+
+  document.getElementById("classMembersInfo").textContent =
+    "Jumlah santri aktif: " + anggota.length + " orang.";
+
+  const tbody = document.getElementById("classMembersTable");
+
+  if (anggota.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" style="padding:20px;text-align:center">
+          Belum ada santri aktif di kelas ini.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = anggota.map(function(santri, index) {
+    return `
+      <tr>
+        <td style="padding:12px;border-bottom:1px solid #eee">${index + 1}</td>
+        <td style="padding:12px;border-bottom:1px solid #eee">${escapeHtml(santri.nis || "-")}</td>
+        <td style="padding:12px;border-bottom:1px solid #eee">${escapeHtml(santri.nama || "-")}</td>
+        <td style="padding:12px;border-bottom:1px solid #eee">${escapeHtml(santri.jenisKelamin || "-")}</td>
+        <td style="padding:12px;border-bottom:1px solid #eee">
+          <button type="button"
+            data-move-id="${escapeHtml(santri.documentId)}"
+            style="background:#087443;color:white;border:0;padding:8px 12px;border-radius:6px;cursor:pointer">
+            PINDAHKAN
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
 
   document.getElementById("classGrid").style.display = "none";
   document.getElementById("classMembersBox").style.display = "block";
@@ -1027,7 +1128,179 @@ document.getElementById("studentForm")?.addEventListener("submit", async functio
   }
 });
 
+// =====================================
+// FITUR PINDAHKAN SANTRI ANTAR KELAS
+// =====================================
 
+function updateMoveClassOptions(selectedClass = "1") {
+  const marhalah = document.getElementById("moveMarhalah").value;
+  const kelasSelect = document.getElementById("moveKelas");
+
+  const jumlahKelas = {
+    Ula: 4,
+    Wustho: 3,
+    Ulya: 3
+  };
+
+  kelasSelect.innerHTML = "";
+
+  for (let i = 1; i <= jumlahKelas[marhalah]; i++) {
+    const option = document.createElement("option");
+    option.value = String(i);
+    option.textContent = "Kelas " + i;
+    kelasSelect.appendChild(option);
+  }
+
+  kelasSelect.value = selectedClass;
+
+  if (!kelasSelect.value) {
+    kelasSelect.value = "1";
+  }
+}
+
+// Membuka formulir pemindahan
+document.getElementById("classMembersTable").addEventListener("click", function(event) {
+
+  const button = event.target.closest("[data-move-id]");
+  if (!button) return;
+
+  const santri = classData.find(function(item) {
+    return item.documentId === button.dataset.moveId;
+  });
+
+  if (!santri) {
+    alert("Data santri tidak ditemukan.");
+    return;
+  }
+
+  selectedMoveStudent = santri;
+
+  document.getElementById("moveStudentName").textContent =
+    santri.nama + " (" + santri.nis + ")";
+
+  document.getElementById("moveMarhalah").value = santri.marhalah;
+
+  updateMoveClassOptions(santri.kelas);
+
+  document.getElementById("moveStudentMessage").textContent = "";
+
+  document.getElementById("moveStudentBox").style.display = "block";
+
+  document.getElementById("moveStudentBox").scrollIntoView({
+    behavior: "smooth"
+  });
+});
+
+// Mengubah pilihan kelas sesuai marhalah
+document.getElementById("moveMarhalah").addEventListener("change", function() {
+  updateMoveClassOptions("1");
+});
+
+// Tombol batal
+document.getElementById("cancelMoveStudent").addEventListener("click", function() {
+  document.getElementById("moveStudentBox").style.display = "none";
+  selectedMoveStudent = null;
+});
+
+// Menyimpan pemindahan santri
+document.getElementById("moveStudentForm").addEventListener("submit", async function(event) {
+
+  event.preventDefault();
+
+  if (!selectedMoveStudent) {
+    alert("Silakan pilih santri terlebih dahulu.");
+    return;
+  }
+
+  const santri = selectedMoveStudent;
+
+  const marhalahBaru = document.getElementById("moveMarhalah").value;
+  const kelasBaru = document.getElementById("moveKelas").value;
+
+  const message = document.getElementById("moveStudentMessage");
+  const button = document.getElementById("saveMoveStudent");
+
+  if (
+    santri.marhalah === marhalahBaru &&
+    String(santri.kelas) === kelasBaru
+  ) {
+    message.textContent = "Santri sudah berada di kelas tersebut.";
+    return;
+  }
+
+  const token = sessionStorage.getItem("darulfikr_admin_token");
+
+  if (!token) {
+    message.textContent = "Sesi berakhir. Silakan login kembali.";
+    return;
+  }
+
+  const konfirmasi = confirm(
+    "Pindahkan " + santri.nama +
+    " dari " + santri.marhalah + " Kelas " + santri.kelas +
+    " ke " + marhalahBaru + " Kelas " + kelasBaru + "?"
+  );
+
+  if (!konfirmasi) return;
+
+  const data = {
+    documentId: santri.documentId,
+    nama: santri.nama,
+    jenisKelamin: santri.jenisKelamin,
+    marhalah: marhalahBaru,
+    kelas: kelasBaru,
+    tahunMasuk: Number(santri.tahunMasuk),
+    status: santri.status,
+    tempatLahir: santri.tempatLahir || "",
+    tanggalLahir: santri.tanggalLahir || "",
+    namaAyah: santri.namaAyah || "",
+    namaIbu: santri.namaIbu || "",
+    alamat: santri.alamat || ""
+  };
+
+  button.disabled = true;
+  button.textContent = "MENYIMPAN...";
+  message.textContent = "Sedang menyimpan pemindahan...";
+
+  try {
+    const response = await fetch(
+      WORKER_URL + "/api/admin/students",
+      {
+        method: "PATCH",
+        headers: {
+          "Authorization": "Bearer " + token,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Pemindahan gagal.");
+    }
+
+    alert("Santri berhasil dipindahkan.");
+
+    document.getElementById("moveStudentBox").style.display = "none";
+
+    selectedMoveStudent = null;
+
+    // Ambil ulang data terbaru dari server
+    await loadClasses();
+
+    // Kembali menampilkan kelas asal
+    showClassMembers(currentClassMarhalah, currentClassKelas);
+
+  } catch (error) {
+    message.textContent = "Gagal memindahkan santri: " + error.message;
+
+  } finally {
+    button.disabled = false;
+    button.textContent = "SIMPAN PEMINDAHAN";
+  }
+});
 </script>
 
 </body>
