@@ -730,7 +730,10 @@ document.querySelectorAll("[data-menu]").forEach(function(button){
       loadClasses();
       return;
     }
-
+if (this.dataset.menu === "mapel") {
+  window.loadSubjects();
+  return;
+}
     alert(
       "Menu " + names[this.dataset.menu] +
       " akan kita bangun pada tahap berikutnya."
@@ -1396,6 +1399,265 @@ document.getElementById("moveStudentForm").addEventListener("submit", async func
     button.textContent = "SIMPAN PEMINDAHAN";
   }
 });
+  
+// ==========================================
+// MANAJEMEN MATA PELAJARAN
+// ==========================================
+
+(function () {
+  let subjectData = [];
+
+  const getEl = (id) => document.getElementById(id);
+
+  function escapeSubject(value) {
+    return String(value ?? "").replace(/[&<>"']/g, function (char) {
+      return {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[char];
+    });
+  }
+
+  function renderSubjects() {
+    const table = getEl("subjectTable");
+    const info = getEl("subjectInfo");
+    const filter = getEl("subjectFilterMarhalah");
+
+    if (!table) return;
+
+    const selectedMarhalah = filter ? filter.value : "";
+
+    const filtered = subjectData.filter(function (item) {
+      return !selectedMarhalah ||
+        item.marhalah === selectedMarhalah;
+    });
+
+    if (info) {
+      info.textContent =
+        "Menampilkan " + filtered.length +
+        " dari " + subjectData.length +
+        " mata pelajaran.";
+    }
+
+    if (filtered.length === 0) {
+      table.innerHTML =
+        '<tr><td colspan="5" style="padding:20px;text-align:center">' +
+        'Belum ada mata pelajaran.' +
+        '</td></tr>';
+      return;
+    }
+
+    table.innerHTML = filtered.map(function (item, index) {
+      const statusColor =
+        item.status === "Aktif" ? "#075638" : "#a15c00";
+
+      return `
+        <tr style="border-bottom:1px solid #e5ece7">
+          <td style="padding:13px">${index + 1}</td>
+          <td style="padding:13px;font-weight:bold">
+            ${escapeSubject(item.nama)}
+          </td>
+          <td style="padding:13px">
+            ${escapeSubject(item.marhalah)}
+          </td>
+          <td style="padding:13px">
+            <span style="color:${statusColor};font-weight:bold">
+              ${escapeSubject(item.status)}
+            </span>
+          </td>
+          <td style="padding:13px;text-align:center">
+            <button type="button"
+              data-edit-subject="${escapeSubject(item.documentId)}"
+              style="background:#e8eee9;color:#075638;border:0;padding:8px 12px;border-radius:6px;cursor:pointer;font-weight:bold">
+              EDIT
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  // Mengambil data mata pelajaran dari Worker
+  window.loadSubjects = async function () {
+    const section = getEl("subjectSection");
+    const info = getEl("subjectInfo");
+    const token = sessionStorage.getItem("darulfikr_admin_token");
+
+    if (!token) {
+      alert("Sesi admin tidak ditemukan. Silakan login kembali.");
+      return;
+    }
+
+    if (getEl("studentSection")) {
+      getEl("studentSection").style.display = "none";
+    }
+
+    if (getEl("classSection")) {
+      getEl("classSection").style.display = "none";
+    }
+
+    if (getEl("classMembersBox")) {
+      getEl("classMembersBox").style.display = "none";
+    }
+
+    if (section) section.style.display = "block";
+    if (info) info.textContent = "Memuat data mata pelajaran...";
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    try {
+      const response = await fetch(
+        WORKER_URL + "/api/admin/subjects",
+        {
+          method: "GET",
+          headers: {
+            "Authorization": "Bearer " + token
+          }
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message || "Gagal mengambil data mata pelajaran."
+        );
+      }
+
+      subjectData = result.subjects || [];
+      renderSubjects();
+
+    } catch (error) {
+      if (info) {
+        info.textContent =
+          "Gagal memuat mata pelajaran: " + error.message;
+      }
+    }
+  };
+
+  // Tombol tambah mata pelajaran
+  getEl("addSubjectBtn")?.addEventListener("click", function () {
+    getEl("subjectForm").reset();
+    getEl("subjectDocumentId").value = "";
+    getEl("subjectStatus").value = "Aktif";
+    getEl("subjectFormTitle").textContent = "Tambah Mata Pelajaran";
+    getEl("subjectFormMessage").textContent = "";
+    getEl("subjectFormBox").style.display = "block";
+  });
+
+  // Tombol batal
+  getEl("cancelSubjectForm")?.addEventListener("click", function () {
+    getEl("subjectFormBox").style.display = "none";
+  });
+
+  // Filter marhalah
+  getEl("subjectFilterMarhalah")?.addEventListener(
+    "change", renderSubjects
+  );
+
+  // Tombol edit pada tabel
+  getEl("subjectTable")?.addEventListener("click", function (event) {
+    const button = event.target.closest("[data-edit-subject]");
+    if (!button) return;
+
+    const documentId = button.dataset.editSubject;
+
+    const subject = subjectData.find(function (item) {
+      return item.documentId === documentId;
+    });
+
+    if (!subject) return;
+
+    getEl("subjectDocumentId").value = subject.documentId;
+    getEl("subjectNama").value = subject.nama;
+    getEl("subjectMarhalah").value = subject.marhalah;
+    getEl("subjectStatus").value = subject.status || "Aktif";
+
+    getEl("subjectFormTitle").textContent = "Edit Mata Pelajaran";
+    getEl("subjectFormMessage").textContent = "";
+    getEl("subjectFormBox").style.display = "block";
+
+    getEl("subjectFormBox").scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  });
+
+  // Simpan tambah atau perubahan mata pelajaran
+  getEl("subjectForm")?.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const token = sessionStorage.getItem("darulfikr_admin_token");
+    const documentId = getEl("subjectDocumentId").value.trim();
+
+    const data = {
+      nama: getEl("subjectNama").value.trim(),
+      marhalah: getEl("subjectMarhalah").value,
+      status: getEl("subjectStatus").value
+    };
+
+    if (documentId) {
+      data.documentId = documentId;
+    }
+
+    const button = this.querySelector('button[type="submit"]');
+    const message = getEl("subjectFormMessage");
+
+    button.disabled = true;
+    button.textContent = "MENYIMPAN...";
+    message.textContent = "";
+
+    try {
+      const response = await fetch(
+        WORKER_URL + "/api/admin/subjects",
+        {
+          method: documentId ? "PATCH" : "POST",
+          headers: {
+            "Authorization": "Bearer " + token,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message || "Gagal menyimpan mata pelajaran."
+        );
+      }
+
+      alert(result.message || "Data berhasil disimpan.");
+
+      getEl("subjectFormBox").style.display = "none";
+      getEl("subjectForm").reset();
+
+      await window.loadSubjects();
+
+    } catch (error) {
+      message.textContent = "Gagal menyimpan: " + error.message;
+      message.style.color = "#b42318";
+
+    } finally {
+      button.disabled = false;
+      button.textContent = "SIMPAN";
+    }
+  });
+
+  // Tombol kembali ke dashboard
+  getEl("backSubjectDashboard")?.addEventListener("click", function () {
+    getEl("subjectSection").style.display = "none";
+    getEl("subjectFormBox").style.display = "none";
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+})();
+
 </script>
 
 </body>
