@@ -1118,6 +1118,137 @@ document.getElementById("selectAllGradeSubjects")
       });
   });
 
+// MENAMPILKAN TABEL INPUT NILAI MANUAL
+function renderManualGradeTable() {
+  const info = document.getElementById("gradeInfo");
+  const box = document.getElementById("manualGradeBox");
+  const body = document.getElementById("gradeTableBody");
+
+  const year = document.getElementById("gradeAcademicYear").value;
+  const semester = document.getElementById("gradeSemester").value;
+  const marhalah = document.getElementById("gradeMarhalah").value;
+  const kelas = document.getElementById("gradeClass").value;
+
+  const selectedIds = Array.from(
+    document.querySelectorAll(".grade-subject-check:checked")
+  ).map(item => item.value);
+
+  if (!year || !semester || !marhalah || !kelas) {
+    box.style.display = "none";
+    info.textContent =
+      "Lengkapi tahun pelajaran, semester, marhalah, dan kelas.";
+    return;
+  }
+
+  if (selectedIds.length === 0) {
+    box.style.display = "none";
+    info.textContent = "Pilih minimal satu mata pelajaran.";
+    return;
+  }
+
+  const subjects = gradeSubjectData.filter(subject =>
+    selectedIds.includes(subject.documentId) &&
+    subject.marhalah === marhalah &&
+    gradeIsActive(subject.status)
+  );
+
+  const students = studentData.filter(student =>
+    student.marhalah === marhalah &&
+    student.kelas === kelas &&
+    gradeIsActive(student.status)
+  ).sort((a, b) =>
+    String(a.nama || "").localeCompare(String(b.nama || ""), "id")
+  );
+
+  body.innerHTML = "";
+
+  if (students.length === 0) {
+    box.style.display = "none";
+    info.textContent = "Tidak ada santri aktif pada kelas ini.";
+    return;
+  }
+
+  if (subjects.length === 0) {
+    box.style.display = "none";
+    info.textContent = "Mata pelajaran aktif tidak ditemukan.";
+    return;
+  }
+
+  let nomor = 0;
+
+  students.forEach(student => {
+    subjects.forEach(subject => {
+      nomor++;
+
+      const row = document.createElement("tr");
+      const values = [
+        nomor,
+        student.nis || student.documentId || "",
+        student.nama || "",
+        subject.nama || ""
+      ];
+
+      values.forEach(value => {
+        const cell = document.createElement("td");
+        cell.style.cssText =
+          "padding:11px;border-bottom:1px solid #e5ebe6";
+        cell.textContent = value;
+        row.appendChild(cell);
+      });
+
+      const inputCell = document.createElement("td");
+      inputCell.style.cssText =
+        "padding:8px;text-align:center;border-bottom:1px solid #e5ebe6";
+
+      const input = document.createElement("input");
+      input.type = "number";
+      input.min = "0";
+      input.max = "100";
+      input.step = "0.01";
+      input.placeholder = "0–100";
+      input.className = "grade-score-input";
+      input.dataset.nis = student.nis || student.documentId || "";
+      input.dataset.subjectId = subject.documentId;
+      input.dataset.subjectName = subject.nama || "";
+      input.style.cssText =
+        "width:100px;padding:9px;border:1px solid #ccd9d0;border-radius:7px;text-align:center;box-sizing:border-box";
+
+      inputCell.appendChild(input);
+      row.appendChild(inputCell);
+      body.appendChild(row);
+    });
+  });
+
+  box.style.display = "block";
+
+  info.textContent =
+    "Menampilkan " + students.length + " santri dan " +
+    subjects.length + " mata pelajaran. Total " +
+    nomor + " isian nilai.";
+
+  box.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+// TOMBOL INPUT NILAI MANUAL
+document.getElementById("manualGradeBtn")
+  .addEventListener("click", renderManualGradeTable);
+
+// PERBARUI TABEL JIKA KELAS BERUBAH
+document.getElementById("gradeClass")
+  .addEventListener("change", function () {
+    if (document.getElementById("manualGradeBox").style.display === "block") {
+      renderManualGradeTable();
+    }
+  });
+
+// PERBARUI TABEL JIKA PILIHAN MAPEL BERUBAH
+document.getElementById("gradeSubjectList")
+  .addEventListener("change", function () {
+    if (document.getElementById("manualGradeBox").style.display === "block") {
+      renderManualGradeTable();
+    }
+  });
+
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, char => ({
     "&": "&amp;",
