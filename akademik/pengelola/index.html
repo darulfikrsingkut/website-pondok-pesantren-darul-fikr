@@ -902,6 +902,18 @@ if (this.dataset.menu === "mapel") {
   window.loadSubjects();
   return;
 }
+    
+if (this.dataset.menu === "nilai") {
+  document.getElementById("studentSection").style.display = "none";
+  document.getElementById("classSection").style.display = "none";
+  document.getElementById("subjectSection").style.display = "none";
+
+  document.getElementById("gradeSection").style.display = "block";
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  return;
+}
+
     alert(
       "Menu " + names[this.dataset.menu] +
       " akan kita bangun pada tahap berikutnya."
