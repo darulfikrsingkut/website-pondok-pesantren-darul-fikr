@@ -949,6 +949,7 @@ function gradeIsActive(status) {
 }
 
 // MEMUAT DATA TAHUN PELAJARAN, SANTRI, DAN MAPEL
+
 window.loadGrades = async function () {
   const info = document.getElementById("gradeInfo");
   const adminToken = sessionStorage.getItem("darulfikr_admin_token");
@@ -958,51 +959,60 @@ window.loadGrades = async function () {
     return;
   }
 
-  info.textContent = "Sedang mengambil data dari database...";
+  info.textContent = "Sedang mengambil data akademik...";
 
   try {
     const headers = {
       "Authorization": "Bearer " + adminToken
     };
 
-    const [settingsResponse, studentsResponse, subjectsResponse] =
-      await Promise.all([
-        fetch(WORKER_URL + "/api/admin/academic-settings", {
-          method: "GET",
-          headers
-        }),
-        fetch(WORKER_URL + "/api/admin/students", {
-          method: "GET",
-          headers
-        }),
-        fetch(WORKER_URL + "/api/admin/subjects", {
-          method: "GET",
-          headers
-        })
-      ]);
+    const [
+      settingsResponse,
+      studentsResponse,
+      enrollmentsResponse,
+      classesResponse,
+      classSubjectsResponse
+    ] = await Promise.all([
+      fetch(WORKER_URL + "/api/admin/academic-settings", { headers }),
+      fetch(WORKER_URL + "/api/admin/students", { headers }),
+      fetch(WORKER_URL + "/api/admin/enrollments", { headers }),
+      fetch(WORKER_URL + "/api/admin/classes", { headers }),
+      fetch(WORKER_URL + "/api/admin/class-subjects", { headers })
+    ]);
 
-    const [settingsResult, studentsResult, subjectsResult] =
-      await Promise.all([
-        settingsResponse.json(),
-        studentsResponse.json(),
-        subjectsResponse.json()
-      ]);
+    const [
+      settingsResult,
+      studentsResult,
+      enrollmentsResult,
+      classesResult,
+      classSubjectsResult
+    ] = await Promise.all([
+      settingsResponse.json(),
+      studentsResponse.json(),
+      enrollmentsResponse.json(),
+      classesResponse.json(),
+      classSubjectsResponse.json()
+    ]);
 
-    if (!settingsResponse.ok || !settingsResult.success) {
-      throw new Error("Gagal mengambil pengaturan akademik.");
-    }
+    const responses = [
+      [settingsResponse, settingsResult, "pengaturan akademik"],
+      [studentsResponse, studentsResult, "data santri"],
+      [enrollmentsResponse, enrollmentsResult, "penempatan santri"],
+      [classesResponse, classesResult, "data kelas"],
+      [classSubjectsResponse, classSubjectsResult, "mata pelajaran per kelas"]
+    ];
 
-    if (!studentsResponse.ok || !studentsResult.success) {
-      throw new Error("Gagal mengambil data santri.");
-    }
-
-    if (!subjectsResponse.ok || !subjectsResult.success) {
-      throw new Error("Gagal mengambil data mata pelajaran.");
+    for (const [response, result, label] of responses) {
+      if (!response.ok || !result.success) {
+        throw new Error("Gagal mengambil " + label + ".");
+      }
     }
 
     gradeAcademicSettings = settingsResult.settings || {};
     studentData = studentsResult.students || [];
-    gradeSubjectData = subjectsResult.subjects || [];
+    window.gradeEnrollmentData = enrollmentsResult.enrollments || [];
+    window.gradeClassData = classesResult.classes || [];
+    window.gradeClassSubjectData = classSubjectsResult.classSubjects || [];
 
     // TAHUN PELAJARAN
     const yearSelect = document.getElementById("gradeAcademicYear");
@@ -1030,13 +1040,38 @@ window.loadGrades = async function () {
       semesterSelect.appendChild(option);
     });
 
-    // KOSONGKAN PILIHAN MARHALAH DAN KELAS
-    document.getElementById("gradeMarhalah").value = "";
+    // MARHALAH
+    const marhalahSelect = document.getElementById("gradeMarhalah");
+    marhalahSelect.innerHTML = '<option value="">Pilih Marhalah</option>';
+
+    const activeMarhalah = [...new Set(
+      window.gradeClassData
+        .filter(item => gradeIsActive(item.status))
+        .map(item => item.marhalah)
+        .filter(Boolean)
+    )];
+
+    const urutanMarhalah = ["Ula", "Wustho", "Ulya"];
+
+    activeMarhalah.sort((a, b) =>
+      urutanMarhalah.indexOf(a) - urutanMarhalah.indexOf(b)
+    );
+
+    activeMarhalah.forEach(marhalah => {
+      const option = document.createElement("option");
+      option.value = marhalah;
+      option.textContent = marhalah;
+      marhalahSelect.appendChild(option);
+    });
+
+    // KOSONGKAN KELAS DAN MAPEL
     document.getElementById("gradeClass").innerHTML =
       '<option value="">Pilih Kelas</option>';
 
     document.getElementById("gradeSubjectList").textContent =
       "Pilih marhalah terlebih dahulu.";
+
+    document.getElementById("manualGradeBox").style.display = "none";
 
     info.textContent =
       "Data berhasil dimuat. Silakan pilih tahun pelajaran, semester, dan marhalah.";
