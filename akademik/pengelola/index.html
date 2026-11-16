@@ -1172,6 +1172,7 @@ document.getElementById("selectAllGradeSubjects")
   });
 
 // MENAMPILKAN TABEL INPUT NILAI MANUAL
+
 function renderManualGradeTable() {
   const info = document.getElementById("gradeInfo");
   const box = document.getElementById("manualGradeBox");
@@ -1180,77 +1181,111 @@ function renderManualGradeTable() {
   const year = document.getElementById("gradeAcademicYear").value;
   const semester = document.getElementById("gradeSemester").value;
   const marhalah = document.getElementById("gradeMarhalah").value;
-  const kelas = document.getElementById("gradeClass").value;
+  const kelasId = document.getElementById("gradeClass").value;
 
-  const selectedIds = Array.from(
+  const selectedSubjects = Array.from(
     document.querySelectorAll(".grade-subject-check:checked")
-  ).map(item => item.value);
+  ).map(item => ({
+    id: item.value,
+    nama: item.dataset.subjectName || ""
+  }));
 
-  if (!year || !semester || !marhalah || !kelas) {
+  if (!year || !semester || !marhalah || !kelasId) {
     box.style.display = "none";
     info.textContent =
       "Lengkapi tahun pelajaran, semester, marhalah, dan kelas.";
     return;
   }
 
-  if (selectedIds.length === 0) {
+  if (selectedSubjects.length === 0) {
     box.style.display = "none";
     info.textContent = "Pilih minimal satu mata pelajaran.";
     return;
   }
 
-  const subjects = gradeSubjectData.filter(subject =>
-    selectedIds.includes(subject.documentId) &&
-    subject.marhalah === marhalah &&
-    gradeIsActive(subject.status)
+  // AMBIL PENEMPATAN SANTRI SESUAI TAHUN DAN KELAS
+  const enrollments = window.gradeEnrollmentData.filter(item =>
+    item.tahunAjaranId === year &&
+    item.kelasId === kelasId &&
+    item.marhalah === marhalah &&
+    gradeIsActive(item.status)
   );
 
-  const students = studentData.filter(student =>
-    student.marhalah === marhalah &&
-    student.kelas === kelas &&
-    gradeIsActive(student.status)
-  ).sort((a, b) =>
-    String(a.nama || "").localeCompare(String(b.nama || ""), "id")
+  // GABUNGKAN DATA PENEMPATAN DENGAN DATA INDUK SANTRI
+  const students = enrollments.map(enrollment => {
+    const student = studentData.find(item =>
+      item.nis === enrollment.nis &&
+      gradeIsActive(item.status)
+    );
+
+    if (!student) return null;
+
+    return {
+      nis: student.nis,
+      nama: student.nama || enrollment.namaSantri || ""
+    };
+  }).filter(Boolean);
+
+  students.sort((a, b) =>
+    String(a.nama).localeCompare(String(b.nama), "id")
   );
 
   body.innerHTML = "";
 
+  // MEMBUAT HEADER TABEL DINAMIS
+  const table = body.closest("table");
+  let head = table.querySelector("thead");
+
+  if (!head) {
+    head = document.createElement("thead");
+    table.insertBefore(head, body.parentElement);
+  }
+
+  head.innerHTML = "";
+
+  const headerRow = document.createElement("tr");
+  const headers = ["No", "NIS", "Nama Santri"];
+
+  headers.forEach(title => {
+    const th = document.createElement("th");
+    th.textContent = title;
+    th.style.cssText =
+      "padding:11px;border-bottom:2px solid #dce8df;text-align:left";
+    headerRow.appendChild(th);
+  });
+
+  selectedSubjects.forEach(subject => {
+    const th = document.createElement("th");
+    th.textContent = subject.nama;
+    th.style.cssText =
+      "padding:11px;border-bottom:2px solid #dce8df;text-align:center";
+    headerRow.appendChild(th);
+  });
+
+  head.appendChild(headerRow);
+
   if (students.length === 0) {
     box.style.display = "none";
-    info.textContent = "Tidak ada santri aktif pada kelas ini.";
+    info.textContent =
+      "Tidak ada santri aktif yang terdaftar pada kelas dan tahun pelajaran ini.";
     return;
   }
 
-  if (subjects.length === 0) {
-    box.style.display = "none";
-    info.textContent = "Mata pelajaran aktif tidak ditemukan.";
-    return;
-  }
+  // MEMBUAT SATU BARIS UNTUK SETIAP SANTRI
+  students.forEach((student, index) => {
+    const row = document.createElement("tr");
 
-  let nomor = 0;
+    [index + 1, student.nis, student.nama].forEach(value => {
+      const cell = document.createElement("td");
+      cell.textContent = value;
+      cell.style.cssText =
+        "padding:11px;border-bottom:1px solid #e5ebe6";
+      row.appendChild(cell);
+    });
 
-  students.forEach(student => {
-    subjects.forEach(subject => {
-      nomor++;
-
-      const row = document.createElement("tr");
-      const values = [
-        nomor,
-        student.nis || student.documentId || "",
-        student.nama || "",
-        subject.nama || ""
-      ];
-
-      values.forEach(value => {
-        const cell = document.createElement("td");
-        cell.style.cssText =
-          "padding:11px;border-bottom:1px solid #e5ebe6";
-        cell.textContent = value;
-        row.appendChild(cell);
-      });
-
-      const inputCell = document.createElement("td");
-      inputCell.style.cssText =
+    selectedSubjects.forEach(subject => {
+      const cell = document.createElement("td");
+      cell.style.cssText =
         "padding:8px;text-align:center;border-bottom:1px solid #e5ebe6";
 
       const input = document.createElement("input");
@@ -1260,27 +1295,29 @@ function renderManualGradeTable() {
       input.step = "0.01";
       input.placeholder = "0–100";
       input.className = "grade-score-input";
-      input.dataset.nis = student.nis || student.documentId || "";
-      input.dataset.subjectId = subject.documentId;
-      input.dataset.subjectName = subject.nama || "";
+      input.dataset.nis = student.nis;
+      input.dataset.subjectId = subject.id;
+      input.dataset.subjectName = subject.nama;
       input.style.cssText =
-        "width:100px;padding:9px;border:1px solid #ccd9d0;border-radius:7px;text-align:center;box-sizing:border-box";
+        "width:90px;padding:9px;border:1px solid #ccd9d0;" +
+        "border-radius:7px;text-align:center;box-sizing:border-box";
 
-      inputCell.appendChild(input);
-      row.appendChild(inputCell);
-      body.appendChild(row);
+      cell.appendChild(input);
+      row.appendChild(cell);
     });
+
+    body.appendChild(row);
   });
 
   box.style.display = "block";
 
   info.textContent =
     "Menampilkan " + students.length + " santri dan " +
-    subjects.length + " mata pelajaran. Total " +
-    nomor + " isian nilai.";
+    selectedSubjects.length + " mata pelajaran.";
 
   box.scrollIntoView({ behavior: "smooth", block: "start" });
 }
+
 
 // TOMBOL INPUT NILAI MANUAL
 document.getElementById("manualGradeBtn")
