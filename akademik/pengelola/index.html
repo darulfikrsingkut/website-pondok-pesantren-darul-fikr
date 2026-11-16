@@ -956,40 +956,6 @@ function showClassMembers(marhalah, kelas) {
   }).join("");
 }
 
-  document.getElementById("classGrid").style.display = "none";
-  document.getElementById("classMembersBox").style.display = "block";
-
-  document.getElementById("classMembersTitle").textContent =
-    "Daftar Santri " + marhalah + " Kelas " + kelas;
-
-  document.getElementById("classMembersInfo").textContent =
-    "Jumlah santri aktif: " + anggota.length + " orang.";
-
-  const tbody = document.getElementById("classMembersTable");
-
-  if (anggota.length === 0) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="4" style="padding:20px;text-align:center">
-          Belum ada santri aktif di kelas ini.
-        </td>
-      </tr>
-    `;
-    return;
-  }
-
-  tbody.innerHTML = anggota.map(function(santri, index) {
-    return `
-      <tr>
-        <td style="padding:12px;border-bottom:1px solid #eee">${index + 1}</td>
-        <td style="padding:12px;border-bottom:1px solid #eee">${escapeHtml(santri.nis || "-")}</td>
-        <td style="padding:12px;border-bottom:1px solid #eee">${escapeHtml(santri.nama || "-")}</td>
-        <td style="padding:12px;border-bottom:1px solid #eee">${escapeHtml(santri.jenisKelamin || "-")}</td>
-      </tr>
-    `;
-  }).join("");
-}
-
 // Kembali ke daftar kelas
 document.getElementById("backToClassList").addEventListener("click", function() {
   document.getElementById("classMembersBox").style.display = "none";
