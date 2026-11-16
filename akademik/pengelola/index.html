@@ -489,6 +489,135 @@ footer{
 
   </section>
 
+<!-- HALAMAN MATA PELAJARAN -->
+<section id="subjectSection" style="display:none;margin-top:30px">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+
+    <h2 class="section-title" style="margin:0">
+      Data Mata Pelajaran
+    </h2>
+
+    <button id="backSubjectDashboard" type="button"
+      style="background:#687b70;color:white;border:0;padding:11px 16px;border-radius:8px;cursor:pointer;font-weight:bold">
+      KEMBALI
+    </button>
+
+  </div>
+
+  <p id="subjectInfo" style="margin:15px 0;color:#687b70">
+    Memuat data mata pelajaran...
+  </p>
+
+  <!-- FILTER DAN TOMBOL TAMBAH -->
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px">
+
+    <select id="subjectFilterMarhalah"
+      style="padding:11px;border:1px solid #ccd9d0;border-radius:8px;min-width:180px">
+
+      <option value="">Semua Marhalah</option>
+      <option value="Ula">Ula</option>
+      <option value="Wustho">Wustho</option>
+      <option value="Ulya">Ulya</option>
+
+    </select>
+
+    <button id="addSubjectBtn" type="button"
+      style="background:#075638;color:white;border:0;padding:11px 16px;border-radius:8px;cursor:pointer;font-weight:bold">
+      + TAMBAH MATA PELAJARAN
+    </button>
+
+  </div>
+
+  <!-- FORM TAMBAH DAN EDIT -->
+  <div id="subjectFormBox"
+    style="display:none;background:#f1f6f1;border:1px solid #dce8df;border-radius:12px;padding:18px;margin-bottom:20px">
+
+    <h3 id="subjectFormTitle" style="color:#075638;margin-bottom:15px">
+      Tambah Mata Pelajaran
+    </h3>
+
+    <form id="subjectForm">
+
+      <input type="hidden" id="subjectDocumentId">
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+
+        <div>
+          <label>Nama Mata Pelajaran</label>
+          <input type="text" id="subjectNama" required maxlength="100"
+            placeholder="Contoh: Fikih"
+            style="width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+        </div>
+
+        <div>
+          <label>Marhalah</label>
+          <select id="subjectMarhalah" required
+            style="width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+
+            <option value="Ula">Ula</option>
+            <option value="Wustho">Wustho</option>
+            <option value="Ulya">Ulya</option>
+
+          </select>
+        </div>
+
+        <div>
+          <label>Status</label>
+          <select id="subjectStatus" required
+            style="width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+
+            <option value="Aktif">Aktif</option>
+            <option value="Tidak Aktif">Tidak Aktif</option>
+
+          </select>
+        </div>
+
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:15px;flex-wrap:wrap">
+
+        <button type="submit"
+          style="background:#075638;color:white;border:0;padding:11px 18px;border-radius:8px;cursor:pointer">
+          SIMPAN
+        </button>
+
+        <button type="button" id="cancelSubjectForm"
+          style="background:#e8eee9;color:#34483b;border:0;padding:11px 18px;border-radius:8px;cursor:pointer">
+          BATAL
+        </button>
+
+      </div>
+
+      <p id="subjectFormMessage" style="margin-top:12px"></p>
+
+    </form>
+
+  </div>
+
+  <!-- TABEL MATA PELAJARAN -->
+  <div style="overflow-x:auto;background:white;border:1px solid #dce8df;border-radius:12px">
+
+    <table style="width:100%;border-collapse:collapse;min-width:550px">
+
+      <thead style="background:#075638;color:white">
+        <tr>
+          <th style="padding:13px;text-align:left">No.</th>
+          <th style="padding:13px;text-align:left">Mata Pelajaran</th>
+          <th style="padding:13px;text-align:left">Marhalah</th>
+          <th style="padding:13px;text-align:left">Status</th>
+          <th style="padding:13px;text-align:center">Tindakan</th>
+        </tr>
+      </thead>
+
+      <tbody id="subjectTable"></tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
   <div class="status">
     <strong>Informasi:</strong> Dashboard awal telah disiapkan.
     Menu pengelolaan dan ringkasan data akan dihubungkan ke database
