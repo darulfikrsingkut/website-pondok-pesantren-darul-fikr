@@ -1081,6 +1081,7 @@ window.loadGrades = async function () {
   }
 };
 
+
 // MEMUAT KELAS DAN MAPEL BERDASARKAN MARHALAH
 document.getElementById("gradeMarhalah").addEventListener("change", function () {
   const marhalah = this.value;
@@ -1089,38 +1090,53 @@ document.getElementById("gradeMarhalah").addEventListener("change", function () 
 
   classSelect.innerHTML = '<option value="">Pilih Kelas</option>';
   subjectList.innerHTML = "";
+  document.getElementById("manualGradeBox").style.display = "none";
 
   if (!marhalah) {
     subjectList.textContent = "Pilih marhalah terlebih dahulu.";
     return;
   }
 
-  // KELAS DARI DATA SANTRI AKTIF
-  const classes = [...new Set(
-    studentData
-      .filter(student =>
-        student.marhalah === marhalah &&
-        gradeIsActive(student.status) &&
-        student.kelas
-      )
-      .map(student => student.kelas)
-  )].sort((a, b) => a.localeCompare(b, "id"));
+  // KELAS AKTIF SESUAI MARHALAH
+  const classes = window.gradeClassData.filter(item =>
+    item.marhalah === marhalah &&
+    gradeIsActive(item.status)
+  );
 
-  classes.forEach(kelas => {
+  classes.forEach(item => {
     const option = document.createElement("option");
-    option.value = kelas;
-    option.textContent = kelas;
+    option.value = item.documentId;
+    option.textContent = item.namaKelas;
     classSelect.appendChild(option);
   });
 
-  // MAPEL AKTIF SESUAI MARHALAH
-  const subjects = gradeSubjectData.filter(subject =>
-    subject.marhalah === marhalah &&
-    gradeIsActive(subject.status)
+  subjectList.textContent =
+    "Pilih kelas untuk melihat mata pelajaran.";
+});
+
+// MEMUAT MAPEL BERDASARKAN KELAS
+document.getElementById("gradeClass").addEventListener("change", function () {
+  const kelasId = this.value;
+  const marhalah = document.getElementById("gradeMarhalah").value;
+  const subjectList = document.getElementById("gradeSubjectList");
+
+  subjectList.innerHTML = "";
+  document.getElementById("manualGradeBox").style.display = "none";
+
+  if (!kelasId) {
+    subjectList.textContent = "Pilih kelas terlebih dahulu.";
+    return;
+  }
+
+  const subjects = window.gradeClassSubjectData.filter(item =>
+    item.kelasId === kelasId &&
+    item.marhalah === marhalah &&
+    gradeIsActive(item.status)
   );
 
   if (subjects.length === 0) {
-    subjectList.textContent = "Belum ada mata pelajaran aktif.";
+    subjectList.textContent =
+      "Belum ada mata pelajaran aktif untuk kelas ini.";
     return;
   }
 
@@ -1133,16 +1149,18 @@ document.getElementById("gradeMarhalah").addEventListener("change", function () 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.className = "grade-subject-check";
-    checkbox.value = subject.documentId;
+    checkbox.value = subject.mapelId;
+    checkbox.dataset.subjectName = subject.namaMapel;
 
     const name = document.createElement("span");
-    name.textContent = subject.nama;
+    name.textContent = subject.namaMapel;
 
     label.appendChild(checkbox);
     label.appendChild(name);
     subjectList.appendChild(label);
   });
 });
+
 
 // PILIH SEMUA MATA PELAJARAN
 document.getElementById("selectAllGradeSubjects")
