@@ -923,6 +923,16 @@ if (this.dataset.menu === "nilai") {
 checkSession();
 
 
+// TOMBOL KEMBALI DARI HALAMAN INPUT NILAI
+document.getElementById("backGradeDashboard")?.addEventListener("click", function () {
+  document.getElementById("gradeSection").style.display = "none";
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
+
 let studentData = [];
 
 function escapeHtml(value) {
