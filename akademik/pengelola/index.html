@@ -903,6 +903,7 @@ if (this.dataset.menu === "mapel") {
   return;
 }
     
+
 if (this.dataset.menu === "nilai") {
   document.getElementById("studentSection").style.display = "none";
   document.getElementById("classSection").style.display = "none";
@@ -910,9 +911,12 @@ if (this.dataset.menu === "nilai") {
 
   document.getElementById("gradeSection").style.display = "block";
 
+  window.loadGrades();
+
   window.scrollTo({ top: 0, behavior: "smooth" });
   return;
 }
+
 
     alert(
       "Menu " + names[this.dataset.menu] +
