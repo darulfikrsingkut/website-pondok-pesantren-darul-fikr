@@ -618,6 +618,174 @@ footer{
 
 </section>
 
+<!-- HALAMAN INPUT NILAI -->
+<section id="gradeSection" style="display:none;margin-top:30px">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+    <h2 class="section-title" style="margin:0">Input Nilai Santri</h2>
+    <button id="backGradeDashboard" type="button"
+      style="background:#687b70;color:white;border:0;padding:11px 16px;border-radius:8px;cursor:pointer;font-weight:bold">
+      KEMBALI
+    </button>
+  </div>
+
+  <p style="color:#687b70;margin:12px 0 20px">
+    Pengelolaan nilai akhir santri berdasarkan tahun pelajaran,
+    semester, marhalah, kelas, dan mata pelajaran.
+  </p>
+
+  <!-- PENGATURAN PENILAIAN -->
+  <div style="background:#f1f6f1;border:1px solid #dce8df;border-radius:12px;padding:18px;margin-bottom:20px">
+
+    <h3 style="color:#075638;margin:0 0 15px">Pengaturan Penilaian</h3>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px">
+
+      <div>
+        <label>Tahun Pelajaran</label>
+        <select id="gradeAcademicYear"
+          style="width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+          <option value="">Pilih Tahun Pelajaran</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Semester</label>
+        <select id="gradeSemester"
+          style="width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+          <option value="">Pilih Semester</option>
+          <option value="Ganjil">Ganjil</option>
+          <option value="Genap">Genap</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Marhalah</label>
+        <select id="gradeMarhalah"
+          style="width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+          <option value="">Pilih Marhalah</option>
+          <option value="Ula">Ula</option>
+          <option value="Wustho">Wustho</option>
+          <option value="Ulya">Ulya</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Kelas</label>
+        <select id="gradeClass"
+          style="width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+          <option value="">Pilih Kelas</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PILIH MATA PELAJARAN -->
+  <div style="background:white;border:1px solid #dce8df;border-radius:12px;padding:18px;margin-bottom:20px">
+
+    <h3 style="color:#075638;margin:0 0 12px">Mata Pelajaran</h3>
+
+    <p style="color:#687b70;margin:0 0 12px">
+      Pilih satu, beberapa, atau semua mata pelajaran sesuai marhalah.
+    </p>
+
+    <div id="gradeSubjectList"
+      style="display:flex;gap:12px;flex-wrap:wrap">
+      <span style="color:#687b70">
+        Pilih marhalah terlebih dahulu.
+      </span>
+    </div>
+
+    <button id="selectAllGradeSubjects" type="button"
+      style="background:#e8eee9;color:#34483b;border:0;padding:10px 14px;border-radius:8px;margin-top:15px;cursor:pointer">
+      PILIH SEMUA MAPEL
+    </button>
+
+  </div>
+
+  <!-- METODE INPUT -->
+  <div style="background:white;border:1px solid #dce8df;border-radius:12px;padding:18px;margin-bottom:20px">
+
+    <h3 style="color:#075638;margin:0 0 15px">Metode Input Nilai</h3>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+
+      <button id="manualGradeBtn" type="button"
+        style="background:#075638;color:white;border:0;padding:12px 16px;border-radius:8px;cursor:pointer;font-weight:bold">
+        INPUT NILAI MANUAL
+      </button>
+
+      <button id="downloadGradeTemplate" type="button"
+        style="background:#1769aa;color:white;border:0;padding:12px 16px;border-radius:8px;cursor:pointer;font-weight:bold">
+        UNDUH TEMPLATE EXCEL
+      </button>
+
+      <button id="uploadGradeExcelBtn" type="button"
+        style="background:#687b70;color:white;border:0;padding:12px 16px;border-radius:8px;cursor:pointer;font-weight:bold">
+        UNGGAH EXCEL
+      </button>
+
+      <input type="file" id="gradeExcelFile"
+        accept=".xlsx,.xls" style="display:none">
+
+    </div>
+
+    <p id="gradeInfo" style="color:#687b70;margin:15px 0 0">
+      Pilih tahun pelajaran, semester, marhalah, kelas,
+      dan mata pelajaran untuk memulai input nilai.
+    </p>
+
+  </div>
+
+  <!-- TABEL INPUT NILAI -->
+  <div id="manualGradeBox"
+    style="display:none;background:white;border:1px solid #dce8df;border-radius:12px;padding:18px;margin-bottom:20px">
+
+    <h3 style="color:#075638;margin:0 0 15px">Daftar Nilai Santri</h3>
+
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;min-width:600px">
+        <thead style="background:#075638;color:white">
+          <tr>
+            <th style="padding:12px;text-align:left">No.</th>
+            <th style="padding:12px;text-align:left">NIS</th>
+            <th style="padding:12px;text-align:left">Nama Santri</th>
+            <th style="padding:12px;text-align:left">Mata Pelajaran</th>
+            <th style="padding:12px;text-align:center">Nilai (0–100)</th>
+          </tr>
+        </thead>
+        <tbody id="gradeTableBody"></tbody>
+      </table>
+    </div>
+
+    <button id="saveManualGrades" type="button"
+      style="background:#075638;color:white;border:0;padding:12px 18px;border-radius:8px;margin-top:18px;cursor:pointer;font-weight:bold">
+      SIMPAN NILAI
+    </button>
+
+  </div>
+
+  <!-- PREVIEW EXCEL -->
+  <div id="gradePreviewBox"
+    style="display:none;background:white;border:1px solid #dce8df;border-radius:12px;padding:18px;margin-bottom:20px">
+
+    <h3 style="color:#075638;margin:0 0 12px">Pratinjau dan Validasi Excel</h3>
+
+    <p id="gradePreviewInfo" style="color:#687b70"></p>
+
+    <div id="gradePreviewTable" style="overflow-x:auto"></div>
+
+    <button id="confirmImportGrades" type="button"
+      style="background:#075638;color:white;border:0;padding:12px 18px;border-radius:8px;margin-top:18px;cursor:pointer;font-weight:bold">
+      KONFIRMASI SIMPAN NILAI
+    </button>
+
+  </div>
+
+</section>
+<!-- AKHIR HALAMAN INPUT NILAI -->
+
   <div class="status">
     <strong>Informasi:</strong> Dashboard awal telah disiapkan.
     Menu pengelolaan dan ringkasan data akan dihubungkan ke database
