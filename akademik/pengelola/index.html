@@ -1081,6 +1081,236 @@ window.loadGrades = async function () {
   }
 };
 
+// ==========================================
+// MENYIMPAN NILAI SANTRI
+// ==========================================
+
+document.getElementById("saveManualGrades").onclick = async function () {
+  const button = this;
+  const info = document.getElementById("gradeInfo");
+
+  const adminToken = sessionStorage.getItem("darulfikr_admin_token");
+
+  if (!adminToken) {
+    alert("Sesi admin tidak ditemukan. Silakan login kembali.");
+    return;
+  }
+
+  const tahunAjaranId =
+    document.getElementById("gradeAcademicYear").value;
+
+  const semester =
+    document.getElementById("gradeSemester").value;
+
+  const marhalah =
+    document.getElementById("gradeMarhalah").value;
+
+  const kelasId =
+    document.getElementById("gradeClass").value;
+
+  // PERIKSA PILIHAN AKADEMIK
+  if (!tahunAjaranId || !semester || !marhalah || !kelasId) {
+    alert("Lengkapi tahun pelajaran, semester, marhalah, dan kelas.");
+    return;
+  }
+
+  // AMBIL NAMA TAHUN PELAJARAN
+  const selectedYear = (gradeAcademicSettings.years || []).find(
+    item => item.id === tahunAjaranId
+  );
+
+  if (!selectedYear) {
+    alert("Data tahun pelajaran tidak ditemukan.");
+    return;
+  }
+
+  // AMBIL DATA KELAS
+  const selectedClass = (window.gradeClassData || []).find(
+    item => item.documentId === kelasId
+  );
+
+  if (!selectedClass) {
+    alert("Data kelas tidak ditemukan.");
+    return;
+  }
+
+  // AMBIL MAPEL YANG DIPILIH
+  const selectedSubjects = Array.from(
+    document.querySelectorAll(".grade-subject-check:checked")
+  );
+
+  if (selectedSubjects.length === 0) {
+    alert("Pilih minimal satu mata pelajaran.");
+    return;
+  }
+
+  // SIAPKAN DATA NILAI
+  const inputs = Array.from(
+    document.querySelectorAll(".grade-score-input")
+  );
+
+  const records = [];
+  const invalidInputs = [];
+
+  inputs.forEach(input => {
+    const rawValue = input.value.trim();
+
+    // NILAI KOSONG TIDAK IKUT DISIMPAN
+    if (rawValue === "") return;
+
+    const nilai = Number(rawValue);
+
+    if (
+      !Number.isFinite(nilai) ||
+      nilai < 0 ||
+      nilai > 100
+    ) {
+      invalidInputs.push(input);
+      return;
+    }
+
+    const nis = input.dataset.nis;
+    const mapelId = input.dataset.subjectId;
+    const namaMapel = input.dataset.subjectName;
+
+    const student = studentData.find(item =>
+      item.nis === nis && gradeIsActive(item.status)
+    );
+
+    if (!student) {
+      invalidInputs.push(input);
+      return;
+    }
+
+    records.push({
+      tahunAjaranId: tahunAjaranId,
+      tahunAjaran: selectedYear.label,
+      semester: semester,
+      nis: student.nis,
+      namaSantri: student.nama,
+      kelasId: kelasId,
+      namaKelas: selectedClass.namaKelas,
+      marhalah: marhalah,
+      mapelId: mapelId,
+      namaMapel: namaMapel,
+      nilai: nilai
+    });
+  });
+
+  if (invalidInputs.length > 0) {
+    alert(
+      "Ada nilai tidak valid atau data santri tidak ditemukan. " +
+      "Periksa kembali tabel nilai."
+    );
+
+    invalidInputs[0].focus();
+    return;
+  }
+
+  if (records.length === 0) {
+    alert("Belum ada nilai yang diisi.");
+    return;
+  }
+
+  // KONFIRMASI JUMLAH NILAI
+  const lanjut = confirm(
+    "Anda akan menyimpan " + records.length +
+    " nilai santri.\n\n" +
+    "Tahun Pelajaran: " + selectedYear.label + "\n" +
+    "Semester: " + semester + "\n" +
+    "Kelas: " + selectedClass.namaKelas + "\n\n" +
+    "Apakah Anda ingin melanjutkan?"
+  );
+
+  if (!lanjut) return;
+
+  button.disabled = true;
+  button.textContent = "MENYIMPAN...";
+  info.textContent = "Sedang menyimpan nilai santri...";
+
+  try {
+    // FUNGSI MENGIRIM DATA KE WORKER
+    async function sendGrades(confirmOverwrite) {
+      const response = await fetch(
+        WORKER_URL + "/api/admin/grades",
+        {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer " + adminToken,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            records: records,
+            confirmOverwrite: confirmOverwrite
+          })
+        }
+      );
+
+      const result = await response.json();
+
+      return {
+        response: response,
+        result: result
+      };
+    }
+
+    let saveResult = await sendGrades(false);
+
+    // JIKA ADA NILAI LAMA, MINTA KONFIRMASI
+    if (
+      saveResult.response.status === 409 &&
+      saveResult.result.requiresConfirmation
+    ) {
+      const setuju = confirm(
+        saveResult.result.message + "\n\n" +
+        "Jumlah nilai yang sudah tersimpan: " +
+        saveResult.result.existingCount +
+        "\n\n" +
+        "Apakah Anda yakin ingin memperbarui nilai tersebut?"
+      );
+
+      if (!setuju) {
+        info.textContent =
+          "Penyimpanan dibatalkan. Nilai lama tidak diubah.";
+        return;
+      }
+
+      info.textContent = "Sedang memperbarui nilai lama...";
+
+      saveResult = await sendGrades(true);
+    }
+
+    if (!saveResult.response.ok || !saveResult.result.success) {
+      throw new Error(
+        saveResult.result.message ||
+        "Penyimpanan nilai gagal."
+      );
+    }
+
+    const result = saveResult.result;
+
+    alert(
+      "PENYIMPANAN NILAI BERHASIL\n\n" +
+      "Total nilai: " + result.total + "\n" +
+      "Nilai baru: " + result.createdCount + "\n" +
+      "Nilai diperbarui: " + result.updatedCount
+    );
+
+    info.textContent =
+      "Berhasil menyimpan " + result.total +
+      " nilai. Nilai baru: " + result.createdCount +
+      ", diperbarui: " + result.updatedCount + ".";
+
+  } catch (error) {
+    alert("Gagal menyimpan nilai: " + error.message);
+    info.textContent = "Gagal menyimpan nilai: " + error.message;
+
+  } finally {
+    button.disabled = false;
+    button.textContent = "SIMPAN NILAI";
+  }
+};
+
 
 // MEMUAT KELAS DAN MAPEL BERDASARKAN MARHALAH
 document.getElementById("gradeMarhalah").addEventListener("change", function () {
