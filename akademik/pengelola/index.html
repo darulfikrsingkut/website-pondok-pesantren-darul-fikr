@@ -2538,6 +2538,87 @@ document.getElementById("moveStudentForm").addEventListener("submit", async func
 
 })();
 
+// =====================================
+// PENGATURAN AKADEMIK
+// =====================================
+
+window.loadAcademicSettings = async function() {
+  const list = document.getElementById("academicYearList");
+  const message = document.getElementById("academicYearMessage");
+
+  list.innerHTML = "Memuat daftar tahun ajaran...";
+  message.textContent = "";
+
+  try {
+    const token = sessionStorage.getItem("darulfikr_admin_token");
+
+    const response = await fetch(
+      WORKER_URL + "/api/admin/academic-settings",
+      {
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Gagal membaca tahun ajaran.");
+    }
+
+    const settings = result.settings || {};
+    const years = settings.years || [];
+    const activeYearId = settings.activeYearId || "";
+
+    if (years.length === 0) {
+      list.innerHTML = "Belum ada data tahun ajaran.";
+      return;
+    }
+
+    list.innerHTML = years.map(function(year) {
+      const active = year.id === activeYearId;
+
+      return `
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          gap:12px;
+          flex-wrap:wrap;
+          padding:14px;
+          margin-bottom:10px;
+          border:1px solid #e2e8f0;
+          border-radius:10px;
+        ">
+          <div>
+            <strong>${year.label}</strong>
+            <div style="font-size:13px;color:#64748b">
+              ID: ${year.id}
+            </div>
+          </div>
+          <span style="
+            padding:6px 12px;
+            border-radius:20px;
+            background:${active ? '#dcfce7' : '#f1f5f9'};
+            color:${active ? '#166534' : '#475569'};
+            font-size:13px;
+            font-weight:bold;
+          ">
+            ${active ? 'TAHUN AKTIF' : 'TIDAK AKTIF'}
+          </span>
+        </div>
+      `;
+    }).join("");
+
+  } catch (error) {
+    list.innerHTML = "Gagal memuat daftar tahun ajaran.";
+    message.textContent = error.message;
+    message.style.color = "red";
+  }
+};
+  
 </script>
 
 </body>
