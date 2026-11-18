@@ -2619,6 +2619,70 @@ window.loadAcademicSettings = async function() {
   }
 };
   
+// =====================================
+// MEMBUAT TAHUN AJARAN BERIKUTNYA
+// =====================================
+
+document.getElementById("createNextAcademicYearBtn")
+  .addEventListener("click", async function() {
+
+    const button = this;
+    const message = document.getElementById("academicYearMessage");
+
+    const yakin = confirm(
+      "Buat tahun ajaran berikutnya sekarang?"
+    );
+
+    if (!yakin) return;
+
+    button.disabled = true;
+    button.textContent = "SEDANG MEMBUAT...";
+    message.textContent = "Mohon tunggu...";
+    message.style.color = "#64748b";
+
+    try {
+      const token = sessionStorage.getItem("darulfikr_admin_token");
+
+      const response = await fetch(
+        WORKER_URL + "/api/admin/academic-years/create-next",
+        {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer " + token
+          }
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message || "Gagal membuat tahun ajaran."
+        );
+      }
+
+      message.textContent = result.message;
+      message.style.color = "green";
+
+      await window.loadAcademicSettings();
+
+    } catch (error) {
+      message.textContent = error.message;
+      message.style.color = "red";
+
+    } finally {
+      button.disabled = false;
+      button.textContent = "+ BUAT TAHUN AJARAN BERIKUTNYA";
+    }
+  });
+
+// Tombol kembali ke dashboard
+document.getElementById("backAcademicSettingsDashboard")
+  .addEventListener("click", function() {
+    document.getElementById("academicSettingsSection").style.display = "none";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
 </script>
 
 </body>
