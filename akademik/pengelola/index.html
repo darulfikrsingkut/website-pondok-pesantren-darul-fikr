@@ -229,10 +229,26 @@ footer{
     <h2 class="section-title" style="margin:0">Data Santri</h2>
 
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button id="addStudentBtn" type="button"
-        style="background:#075638;color:white;border:0;padding:11px 16px;border-radius:8px;cursor:pointer;font-weight:bold">
-        + TAMBAH SANTRI
-      </button>
+      
+<button id="downloadStudentTemplateBtn" type="button"
+  style="background:#2563eb;color:white;border:0;padding:11px 16px;border-radius:8px;cursor:pointer;font-weight:bold">
+  ↓ UNDUH TEMPLATE EXCEL
+</button>
+
+<button id="uploadStudentExcelBtn" type="button"
+  style="background:#0d9488;color:white;border:0;padding:11px 16px;border-radius:8px;cursor:pointer;font-weight:bold">
+  ↑ UNGGAH EXCEL
+</button>
+
+<input id="studentExcelFile" type="file"
+  accept=".xlsx,.xls"
+  style="display:none">
+
+<button id="addStudentBtn" type="button"
+  style="background:#075638;color:white;border:0;padding:11px 16px;border-radius:8px;cursor:pointer;font-weight:bold">
+  + TAMBAH SANTRI
+</button>
+
 
       <button id="backDashboard" class="logout"
         style="background:#687b70;color:white">
