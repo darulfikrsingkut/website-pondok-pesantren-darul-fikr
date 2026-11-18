@@ -918,8 +918,11 @@ document.getElementById("logoutButton").addEventListener(
   }
 );
 
+
 document.querySelectorAll("[data-menu]").forEach(function(button){
   button.addEventListener("click", function(){
+    const menu = this.dataset.menu;
+
     const names = {
       santri: "Data Santri",
       kelas: "Data Kelas",
@@ -929,41 +932,54 @@ document.querySelectorAll("[data-menu]").forEach(function(button){
       pengaturan: "Pengaturan Akademik"
     };
 
-    if (this.dataset.menu === "santri") {
+    if (menu === "santri") {
       document.getElementById("classSection").style.display = "none";
       return;
     }
 
-    if (this.dataset.menu === "kelas") {
+    if (menu === "kelas") {
       loadClasses();
       return;
     }
-if (this.dataset.menu === "mapel") {
-  window.loadSubjects();
-  return;
-}
-    
 
-if (this.dataset.menu === "nilai") {
-  document.getElementById("studentSection").style.display = "none";
-  document.getElementById("classSection").style.display = "none";
-  document.getElementById("subjectSection").style.display = "none";
+    if (menu === "mapel") {
+      window.loadSubjects();
+      return;
+    }
 
-  document.getElementById("gradeSection").style.display = "block";
+    if (menu === "nilai") {
+      document.getElementById("studentSection").style.display = "none";
+      document.getElementById("classSection").style.display = "none";
+      document.getElementById("subjectSection").style.display = "none";
+      document.getElementById("gradeSection").style.display = "block";
 
-  window.loadGrades();
+      window.loadGrades();
 
-  window.scrollTo({ top: 0, behavior: "smooth" });
-  return;
-}
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
 
+    if (menu === "pengaturan") {
+      document.getElementById("studentSection").style.display = "none";
+      document.getElementById("classSection").style.display = "none";
+      document.getElementById("subjectSection").style.display = "none";
+      document.getElementById("gradeSection").style.display = "none";
+
+      document.getElementById("academicSettingsSection").style.display = "block";
+
+      window.loadAcademicSettings();
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
 
     alert(
-      "Menu " + names[this.dataset.menu] +
+      "Menu " + names[menu] +
       " akan kita bangun pada tahap berikutnya."
     );
   });
 });
+
 checkSession();
 
 
