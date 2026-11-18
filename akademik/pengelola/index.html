@@ -786,6 +786,46 @@ footer{
 </section>
 <!-- AKHIR HALAMAN INPUT NILAI -->
 
+<!-- HALAMAN PENGATURAN AKADEMIK -->
+<section id="academicSettingsSection" style="display:none;margin-top:30px">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px">
+    <h2 class="section-title" style="margin:0">Pengaturan Akademik</h2>
+    <button id="backAcademicSettingsDashboard" type="button" style="padding:10px 18px;border:0;border-radius:8px;background:#64748b;color:white;cursor:pointer">
+      KEMBALI
+    </button>
+  </div>
+
+  <div style="background:white;padding:20px;border-radius:12px;margin-bottom:20px">
+    <h3>Daftar Tahun Ajaran</h3>
+    <p style="color:#64748b">
+      Kelola tahun ajaran dan lihat tahun ajaran yang sedang aktif.
+    </p>
+
+    <button id="createNextAcademicYearBtn" type="button" style="padding:12px 18px;border:0;border-radius:8px;background:#15803d;color:white;font-weight:bold;cursor:pointer">
+      + BUAT TAHUN AJARAN BERIKUTNYA
+    </button>
+
+    <p id="academicYearMessage" style="margin-top:15px"></p>
+
+    <div id="academicYearList" style="margin-top:20px">
+      Memuat daftar tahun ajaran...
+    </div>
+  </div>
+
+  <div style="background:white;padding:20px;border-radius:12px">
+    <h3>Pengaturan Semester</h3>
+    <p style="color:#64748b">
+      Pengaturan semester Ganjil dan Genap akan ditampilkan di sini.
+    </p>
+    <div id="semesterSettingsContent">
+      Silakan pilih tahun ajaran untuk mengatur semester.
+    </div>
+  </div>
+
+</section>
+<!-- AKHIR HALAMAN PENGATURAN AKADEMIK -->
+
   <div class="status">
     <strong>Informasi:</strong> Dashboard awal telah disiapkan.
     Menu pengelolaan dan ringkasan data akan dihubungkan ke database
