@@ -234,7 +234,7 @@ footer{
   style="background:#2563eb;color:white;border:0;padding:11px 16px;border-radius:8px;cursor:pointer;font-weight:bold">
   ↓ UNDUH TEMPLATE EXCEL
 </button>
-
+<button id="exportStudentExcelBtn" type="button">↓ UNDUH DATA SANTRI</button>
 <button id="uploadStudentExcelBtn" type="button"
   style="background:#0d9488;color:white;border:0;padding:11px 16px;border-radius:8px;cursor:pointer;font-weight:bold">
   ↑ UNGGAH EXCEL
@@ -2775,6 +2775,117 @@ document.getElementById("downloadStudentTemplateBtn")
     );
   });
 
+  // =====================================
+// UNDUH DATA SANTRI DARI DATABASE
+// =====================================
+
+document.getElementById("exportStudentExcelBtn")
+  .addEventListener("click", async function() {
+
+    const token = sessionStorage.getItem("darulfikr_admin_token");
+
+    if (!token) {
+      alert("Sesi login berakhir. Silakan login kembali.");
+      return;
+    }
+
+    if (typeof XLSX === "undefined") {
+      alert("Pustaka Excel belum berhasil dimuat.");
+      return;
+    }
+
+    const button = this;
+    button.disabled = true;
+    button.textContent = "MEMUAT DATA...";
+
+    try {
+      const response = await fetch(
+        WORKER_URL + "/api/admin/students",
+        {
+          method: "GET",
+          headers: {
+            "Authorization": "Bearer " + token
+          }
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message || "Gagal mengambil data santri."
+        );
+      }
+
+      const students = result.students || [];
+
+      if (students.length === 0) {
+        alert("Belum ada data santri di database.");
+        return;
+      }
+
+      const data = students.map(student => ({
+        nis: student.nis || "",
+        nama: student.nama || "",
+        jenisKelamin: student.jenisKelamin || "",
+        marhalah: student.marhalah || "",
+        kelas: student.kelas || "",
+        tahunMasuk: student.tahunMasuk || "",
+        status: student.status || "",
+        tempatLahir: student.tempatLahir || "",
+        tanggalLahir: student.tanggalLahir || "",
+        namaAyah: student.namaAyah || "",
+        namaIbu: student.namaIbu || "",
+        alamat: student.alamat || ""
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(data);
+
+      worksheet["!cols"] = [
+        { wch: 15 },
+        { wch: 25 },
+        { wch: 16 },
+        { wch: 15 },
+        { wch: 12 },
+        { wch: 14 },
+        { wch: 15 },
+        { wch: 18 },
+        { wch: 16 },
+        { wch: 25 },
+        { wch: 25 },
+        { wch: 35 }
+      ];
+
+      const workbook = XLSX.utils.book_new();
+
+      XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Data Santri"
+      );
+
+      XLSX.writeFile(
+        workbook,
+        "Data_Santri_Darul_Fikr.xlsx"
+      );
+
+      alert(
+        "Berhasil mengunduh " +
+        students.length +
+        " data santri."
+      );
+
+    } catch (error) {
+      alert(
+        "Gagal mengunduh data santri:\n" +
+        error.message
+      );
+
+    } finally {
+      button.disabled = false;
+      button.textContent = "↓ UNDUH DATA SANTRI";
+    }
+  });
 // =====================================
 // UNGGAH EXCEL DATA SANTRI
 // =====================================
