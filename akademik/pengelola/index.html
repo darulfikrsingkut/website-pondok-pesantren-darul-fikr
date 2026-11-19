@@ -2701,6 +2701,80 @@ document.getElementById("backAcademicSettingsDashboard")
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
+// =====================================
+// UNDUH TEMPLATE EXCEL DATA SANTRI
+// =====================================
+
+document.getElementById("downloadStudentTemplateBtn")
+  .addEventListener("click", function() {
+
+    if (typeof XLSX === "undefined") {
+      alert("Pustaka Excel belum berhasil dimuat. Periksa koneksi internet.");
+      return;
+    }
+
+    const data = [
+      [
+        "nis",
+        "nama",
+        "jenisKelamin",
+        "marhalah",
+        "kelas",
+        "tahunMasuk",
+        "status",
+        "tempatLahir",
+        "tanggalLahir",
+        "namaAyah",
+        "namaIbu",
+        "alamat"
+      ],
+      [
+        "DF0002",
+        "Nama Santri",
+        "Laki-laki",
+        "Wustho",
+        "1",
+        2026,
+        "Aktif",
+        "Singkut",
+        "2012-05-10",
+        "Nama Ayah",
+        "Nama Ibu",
+        "Alamat lengkap"
+      ]
+    ];
+
+    const worksheet = XLSX.utils.aoa_to_sheet(data);
+
+    worksheet["!cols"] = [
+      { wch: 15 },
+      { wch: 25 },
+      { wch: 16 },
+      { wch: 15 },
+      { wch: 12 },
+      { wch: 14 },
+      { wch: 15 },
+      { wch: 18 },
+      { wch: 16 },
+      { wch: 25 },
+      { wch: 25 },
+      { wch: 35 }
+    ];
+
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+      workbook,
+      worksheet,
+      "Data Santri"
+    );
+
+    XLSX.writeFile(
+      workbook,
+      "Template_Data_Santri_Darul_Fikr.xlsx"
+    );
+  });
+
 </script>
 
 </body>
