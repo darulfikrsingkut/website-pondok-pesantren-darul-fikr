@@ -1158,6 +1158,168 @@ window.loadGrades = async function () {
 };
 
 // ==========================================
+// UNDUH DATA NILAI DARI FIRESTORE KE EXCEL
+// ==========================================
+
+document.getElementById("downloadGradeTemplate")
+  .addEventListener("click", async function () {
+
+    const button = this;
+    const info = document.getElementById("gradeInfo");
+
+    const adminToken =
+      sessionStorage.getItem("darulfikr_admin_token");
+
+    const tahunAjaranId =
+      document.getElementById("gradeAcademicYear").value;
+
+    const semester =
+      document.getElementById("gradeSemester").value;
+
+    const marhalah =
+      document.getElementById("gradeMarhalah").value;
+
+    const kelasId =
+      document.getElementById("gradeClass").value;
+
+    const selectedSubjects = Array.from(
+      document.querySelectorAll(".grade-subject-check:checked")
+    ).map(item => item.value);
+
+    if (!adminToken) {
+      alert("Sesi pengelola tidak ditemukan. Silakan login kembali.");
+      return;
+    }
+
+    if (!tahunAjaranId || !semester || !marhalah || !kelasId) {
+      alert("Lengkapi tahun ajaran, semester, marhalah, dan kelas.");
+      return;
+    }
+
+    if (selectedSubjects.length === 0) {
+      alert("Pilih minimal satu mata pelajaran.");
+      return;
+    }
+
+    if (typeof XLSX === "undefined") {
+      alert("Pustaka Excel belum berhasil dimuat.");
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = "MENGAMBIL DATA...";
+
+    try {
+      const response = await fetch(
+        WORKER_URL + "/api/admin/grades",
+        {
+          method: "GET",
+          headers: {
+            "Authorization": "Bearer " + adminToken
+          }
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message || "Gagal mengambil data nilai."
+        );
+      }
+
+      const grades = result.grades || [];
+
+      const filteredGrades = grades.filter(item =>
+        item.tahunAjaranId === tahunAjaranId &&
+        item.semester === semester &&
+        item.marhalah === marhalah &&
+        item.kelasId === kelasId &&
+        selectedSubjects.includes(item.mapelId)
+      );
+
+      if (filteredGrades.length === 0) {
+        alert(
+          "Belum ada nilai tersimpan untuk pilihan tersebut."
+        );
+        return;
+      }
+
+      const rows = filteredGrades.map(item => ({
+        "Tahun Ajaran ID": item.tahunAjaranId,
+        "Tahun Ajaran": item.tahunAjaran,
+        "Semester": item.semester,
+        "NIS": item.nis,
+        "Nama Santri": item.namaSantri,
+        "Kelas ID": item.kelasId,
+        "Nama Kelas": item.namaKelas,
+        "Marhalah": item.marhalah,
+        "Mapel ID": item.mapelId,
+        "Mata Pelajaran": item.namaMapel,
+        "Nilai": item.nilai
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(rows);
+
+      worksheet["!cols"] = [
+        { wch: 22 },
+        { wch: 18 },
+        { wch: 12 },
+        { wch: 15 },
+        { wch: 25 },
+        { wch: 22 },
+        { wch: 18 },
+        { wch: 14 },
+        { wch: 22 },
+        { wch: 25 },
+        { wch: 12 }
+      ];
+
+      const workbook = XLSX.utils.book_new();
+
+      XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Data Nilai"
+      );
+
+      const namaKelas =
+        document.getElementById("gradeClass")
+          .selectedOptions[0].textContent;
+
+      const safeName = String(namaKelas)
+        .replace(/[^a-zA-Z0-9_-]/g, "-");
+
+      const filename =
+        "Data-Nilai-" +
+        semester + "-" +
+        safeName + "-" +
+        tahunAjaranId + ".xlsx";
+
+      XLSX.writeFile(workbook, filename);
+
+      info.textContent =
+        "Berhasil mengunduh " +
+        filteredGrades.length +
+        " data nilai dari database.";
+
+      alert(
+        "BERHASIL!\n\n" +
+        "Jumlah nilai: " + filteredGrades.length +
+        "\nFile: " + filename
+      );
+
+    } catch (error) {
+      alert("Gagal mengunduh Excel: " + error.message);
+      info.textContent = "Gagal mengunduh Excel: " + error.message;
+
+    } finally {
+      button.disabled = false;
+      button.textContent = "UNDUH TEMPLATE EXCEL";
+    }
+  });
+
+// ==========================================
 // MENYIMPAN NILAI SANTRI
 // ==========================================
 
