@@ -2775,6 +2775,170 @@ document.getElementById("downloadStudentTemplateBtn")
     );
   });
 
+// =====================================
+// UNGGAH EXCEL DATA SANTRI
+// =====================================
+
+const uploadStudentExcelBtn =
+  document.getElementById("uploadStudentExcelBtn");
+
+const studentExcelFile =
+  document.getElementById("studentExcelFile");
+
+// Klik tombol unggah untuk memilih file
+uploadStudentExcelBtn.addEventListener("click", function() {
+  if (typeof XLSX === "undefined") {
+    alert("Pustaka Excel belum berhasil dimuat.");
+    return;
+  }
+
+  studentExcelFile.click();
+});
+
+// Membaca dan mengunggah file Excel
+studentExcelFile.addEventListener("change", async function() {
+  const file = this.files[0];
+
+  if (!file) return;
+
+  const token = sessionStorage.getItem("darulfikr_admin_token");
+
+  if (!token) {
+    alert("Sesi login berakhir. Silakan login kembali.");
+    this.value = "";
+    return;
+  }
+
+  if (typeof XLSX === "undefined") {
+    alert("Pustaka Excel belum berhasil dimuat.");
+    this.value = "";
+    return;
+  }
+
+  if (!confirm(
+    "Unggah data santri dari file Excel ini?\n\n" +
+    "Pastikan data sudah benar dan baris contoh pada template sudah diganti."
+  )) {
+    this.value = "";
+    return;
+  }
+
+  uploadStudentExcelBtn.disabled = true;
+  uploadStudentExcelBtn.textContent = "MEMPROSES EXCEL...";
+
+  try {
+    const buffer = await file.arrayBuffer();
+    const workbook = XLSX.read(buffer, { type: "array" });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+    const rows = XLSX.utils.sheet_to_json(sheet, {
+      defval: "",
+      raw: false
+    });
+
+    if (rows.length === 0) {
+      throw new Error("File Excel tidak berisi data.");
+    }
+
+    if (rows.length > 100) {
+      throw new Error("Maksimal 100 santri dalam satu kali unggahan.");
+    }
+
+    const kolomWajib = [
+      "nis",
+      "nama",
+      "jenisKelamin",
+      "marhalah",
+      "kelas",
+      "tahunMasuk",
+      "status"
+    ];
+
+    const kolomFile = Object.keys(rows[0]);
+
+    const kolomKurang = kolomWajib.filter(
+      kolom => !kolomFile.includes(kolom)
+    );
+
+    if (kolomKurang.length > 0) {
+      throw new Error(
+        "Kolom Excel tidak sesuai. Kolom yang kurang: " +
+        kolomKurang.join(", ")
+      );
+    }
+
+    const students = rows.map(row => ({
+      nis: String(row.nis || "").trim(),
+      nama: String(row.nama || "").trim(),
+      jenisKelamin: String(row.jenisKelamin || "").trim(),
+      marhalah: String(row.marhalah || "").trim(),
+      kelas: String(row.kelas || "").trim(),
+      tahunMasuk: Number(row.tahunMasuk),
+      status: String(row.status || "").trim(),
+      tempatLahir: String(row.tempatLahir || "").trim(),
+      tanggalLahir: String(row.tanggalLahir || "").trim(),
+      namaAyah: String(row.namaAyah || "").trim(),
+      namaIbu: String(row.namaIbu || "").trim(),
+      alamat: String(row.alamat || "").trim()
+    }));
+
+    const response = await fetch(
+      WORKER_URL + "/api/admin/students/import",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + token,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ students })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || "Unggah Excel gagal."
+      );
+    }
+
+    let laporan =
+      "HASIL UNGGAH DATA SANTRI\n\n" +
+      "Jumlah data: " + result.total + "\n" +
+      "Berhasil: " + result.berhasil + "\n" +
+      "Gagal: " + result.gagal;
+
+    const gagal = (result.results || []).filter(
+      item => !item.success
+    );
+
+    if (gagal.length > 0) {
+      laporan += "\n\nDATA YANG GAGAL:\n";
+
+      gagal.forEach(item => {
+        laporan +=
+          "\nBaris " + item.baris +
+          " (NIS: " + item.nis + "): " +
+          item.message + "\n";
+      });
+    }
+
+    alert(laporan);
+
+    if (result.berhasil > 0) {
+      await loadStudents();
+    }
+
+  } catch (error) {
+    alert("Gagal mengunggah Excel:\n" + error.message);
+
+  } finally {
+    uploadStudentExcelBtn.disabled = false;
+    uploadStudentExcelBtn.textContent = "↑ UNGGAH EXCEL";
+    this.value = "";
+  }
+});
+
 </script>
 
 </body>
