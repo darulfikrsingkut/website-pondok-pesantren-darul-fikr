@@ -2934,7 +2934,7 @@ studentExcelFile.addEventListener("change", async function() {
   }
 
   uploadStudentExcelBtn.disabled = true;
-  uploadStudentExcelBtn.textContent = "MEMPROSES EXCEL...";
+  uploadStudentExcelBtn.textContent = "MEMPROSES DATA SANTRI...";
 
   try {
     const buffer = await file.arrayBuffer();
@@ -3044,7 +3044,7 @@ studentExcelFile.addEventListener("change", async function() {
 
   } finally {
     uploadStudentExcelBtn.disabled = false;
-    uploadStudentExcelBtn.textContent = "↑ UNGGAH EXCEL";
+    uploadStudentExcelBtn.textContent = "↑ UNGGAH DATA SANTRI";
     this.value = "";
   }
 });
