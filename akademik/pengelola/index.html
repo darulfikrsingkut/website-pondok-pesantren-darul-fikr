@@ -1161,6 +1161,7 @@ window.loadGrades = async function () {
 // UNDUH DATA NILAI DARI FIRESTORE KE EXCEL
 // ==========================================
 
+
 document.getElementById("downloadGradeTemplate")
   .addEventListener("click", async function () {
 
@@ -1245,35 +1246,153 @@ document.getElementById("downloadGradeTemplate")
         return;
       }
 
-      const rows = filteredGrades.map(item => ({
-        "Tahun Ajaran ID": item.tahunAjaranId,
-        "Tahun Ajaran": item.tahunAjaran,
-        "Semester": item.semester,
-        "NIS": item.nis,
-        "Nama Santri": item.namaSantri,
-        "Kelas ID": item.kelasId,
-        "Nama Kelas": item.namaKelas,
-        "Marhalah": item.marhalah,
-        "Mapel ID": item.mapelId,
-        "Mata Pelajaran": item.namaMapel,
-        "Nilai": item.nilai
+      // =====================================
+      // DAFTAR MATA PELAJARAN SESUAI PILIHAN
+      // =====================================
+
+      const subjectNameById = {};
+
+      filteredGrades.forEach(item => {
+        subjectNameById[item.mapelId] =
+          item.namaMapel || item.mapelId;
+      });
+
+      const subjectColumns = selectedSubjects.map(id => ({
+        id: id,
+        nama: subjectNameById[id] || id
       }));
 
-      const worksheet = XLSX.utils.json_to_sheet(rows);
+      // =====================================
+      // KELOMPOKKAN NILAI PER SANTRI
+      // SATU SANTRI HANYA SATU BARIS
+      // =====================================
 
-      worksheet["!cols"] = [
-        { wch: 22 },
-        { wch: 18 },
-        { wch: 12 },
-        { wch: 15 },
-        { wch: 25 },
-        { wch: 22 },
-        { wch: 18 },
-        { wch: 14 },
-        { wch: 22 },
-        { wch: 25 },
-        { wch: 12 }
+      const studentMap = new Map();
+
+      filteredGrades.forEach(item => {
+
+        if (!studentMap.has(item.nis)) {
+          studentMap.set(item.nis, {
+            tahunAjaranId: item.tahunAjaranId,
+            tahunAjaran: item.tahunAjaran,
+            semester: item.semester,
+            nis: item.nis,
+            namaSantri: item.namaSantri,
+            kelasId: item.kelasId,
+            namaKelas: item.namaKelas,
+            marhalah: item.marhalah,
+            grades: {}
+          });
+        }
+
+        const student = studentMap.get(item.nis);
+
+        const nilai = Number(item.nilai);
+
+        if (
+          item.nilai !== "" &&
+          item.nilai !== null &&
+          Number.isFinite(nilai)
+        ) {
+          student.grades[item.mapelId] = nilai;
+        }
+      });
+
+      const students = Array.from(studentMap.values());
+
+      students.sort((a, b) =>
+        String(a.namaSantri || "").localeCompare(
+          String(b.namaSantri || ""),
+          "id"
+        )
+      );
+
+      // =====================================
+      // BUAT HEADER EXCEL
+      // =====================================
+
+      const headers = [
+        "Tahun Ajaran ID",
+        "Tahun Ajaran",
+        "Semester",
+        "NIS",
+        "Nama Santri",
+        "Kelas ID",
+        "Nama Kelas",
+        "Marhalah",
+        ...subjectColumns.map(subject => subject.nama),
+        "JUMLAH NILAI",
+        "RATA-RATA"
       ];
+
+      // =====================================
+      // BUAT SATU BARIS UNTUK SETIAP SANTRI
+      // =====================================
+
+      const rows = students.map(student => {
+
+        const subjectValues = subjectColumns.map(subject => {
+          const value = student.grades[subject.id];
+          return value === undefined ? "" : value;
+        });
+
+        const filledValues = subjectValues.filter(
+          value => value !== ""
+        );
+
+        const total = filledValues.reduce(
+          (sum, value) => sum + Number(value),
+          0
+        );
+
+        const average = filledValues.length > 0
+          ? Number((total / filledValues.length).toFixed(2))
+          : "";
+
+        return [
+          student.tahunAjaranId,
+          student.tahunAjaran,
+          student.semester,
+          student.nis,
+          student.namaSantri,
+          student.kelasId,
+          student.namaKelas,
+          student.marhalah,
+          ...subjectValues,
+          filledValues.length > 0 ? total : "",
+          average
+        ];
+      });
+
+      // =====================================
+      // BUAT FILE EXCEL
+      // =====================================
+
+      const worksheet = XLSX.utils.aoa_to_sheet([
+        headers,
+        ...rows
+      ]);
+
+      // Lebar kolom
+      worksheet["!cols"] = [
+        { wch: 18 },
+        { wch: 15 },
+        { wch: 12 },
+        { wch: 13 },
+        { wch: 25 },
+        { wch: 13 },
+        { wch: 17 },
+        { wch: 12 },
+        ...subjectColumns.map(() => ({ wch: 20 })),
+        { wch: 17 },
+        { wch: 15 }
+      ];
+
+      // Bekukan baris judul dan identitas santri
+      worksheet["!freeze"] = {
+        xSplit: 8,
+        ySplit: 1
+      };
 
       const workbook = XLSX.utils.book_new();
 
@@ -1299,23 +1418,29 @@ document.getElementById("downloadGradeTemplate")
       XLSX.writeFile(workbook, filename);
 
       info.textContent =
-        "Berhasil mengunduh " +
-        filteredGrades.length +
-        " data nilai dari database.";
+        "Berhasil mengunduh data " +
+        students.length +
+        " santri.";
 
       alert(
         "BERHASIL!\n\n" +
-        "Jumlah nilai: " + filteredGrades.length +
+        "Jumlah santri: " + students.length +
+        "\nJumlah mata pelajaran: " + subjectColumns.length +
         "\nFile: " + filename
       );
 
     } catch (error) {
+
       alert("Gagal mengunduh Excel: " + error.message);
-      info.textContent = "Gagal mengunduh Excel: " + error.message;
+
+      info.textContent =
+        "Gagal mengunduh Excel: " + error.message;
 
     } finally {
+
       button.disabled = false;
       button.textContent = "UNDUH TEMPLATE EXCEL";
+
     }
   });
 
