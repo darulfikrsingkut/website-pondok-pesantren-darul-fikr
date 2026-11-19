@@ -1786,7 +1786,20 @@ function renderManualGradeTable() {
   box.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+// PERBARUI JUMLAH DAN RATA-RATA SAAT NILAI DIUBAH
+const gradeTableBody = document.getElementById("gradeTableBody");
 
+if (gradeTableBody) {
+  gradeTableBody.addEventListener("input", function(event) {
+    if (event.target.classList.contains("grade-score-input")) {
+      const row = event.target.closest("tr");
+
+      if (row) {
+        updateGradeRowTotals(row);
+      }
+    }
+  });
+}
 // TOMBOL INPUT NILAI MANUAL
 document.getElementById("manualGradeBtn")
   .addEventListener("click", renderManualGradeTable);
