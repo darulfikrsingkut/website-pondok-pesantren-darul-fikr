@@ -1881,78 +1881,211 @@ async function showStudentReport() {
       item => item.documentId === kelasId
     );
 
-    // IDENTITAS RAPOR
+
+    // TAMPILAN RAPOR RESMI DARUL FIKR
+
+    const tanggalCetak = new Date().toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+
     let html = `
-      <div style="color:#075638;text-align:center;margin-bottom:20px">
-        <h2 style="margin:0">RAPOR HASIL BELAJAR SANTRI</h2>
-        <h3 style="margin:6px 0">PONDOK PESANTREN DARUL FIKR</h3>
-      </div>
+      <div style="
+        font-family:Arial,sans-serif;
+        color:#222;
+        background:#fff;
+        padding:25px;
+        max-width:900px;
+        margin:auto;
+      ">
 
-      <table style="width:100%;margin-bottom:20px;border-collapse:collapse">
-        <tr>
-          <td style="padding:6px">Nama Santri</td>
-          <td style="padding:6px">: ${student?.nama || ""}</td>
-        </tr>
-        <tr>
-          <td style="padding:6px">NIS</td>
-          <td style="padding:6px">: ${nis}</td>
-        </tr>
-        <tr>
-          <td style="padding:6px">Kelas</td>
-          <td style="padding:6px">: ${selectedClass?.namaKelas || ""}</td>
-        </tr>
-        <tr>
-          <td style="padding:6px">Marhalah</td>
-          <td style="padding:6px">: ${marhalah}</td>
-        </tr>
-        <tr>
-          <td style="padding:6px">Tahun Pelajaran</td>
-          <td style="padding:6px">: ${selectedYear?.label || ""}</td>
-        </tr>
-        <tr>
-          <td style="padding:6px">Semester</td>
-          <td style="padding:6px">: ${semester}</td>
-        </tr>
-      </table>
+        <!-- KOP PONDOK -->
+        <div style="
+          display:flex;
+          align-items:center;
+          gap:18px;
+          border-bottom:4px double #075638;
+          padding-bottom:15px;
+          margin-bottom:22px;
+        ">
+          <img
+            src="https://website-darul-fikr-singkut.pages.dev/icon-ponpes.png.png"
+            alt="Logo Pondok Pesantren Darul Fikr"
+            style="width:100px;height:100px;object-fit:contain"
+          >
 
-      <h3 style="color:#075638">A. HASIL BELAJAR</h3>
+          <div style="flex:1;text-align:center">
+            <h2 style="margin:0;font-size:19px;color:#075638">
+              YAYASAN DARUL FIKR SINGKUT
+            </h2>
+            <h1 style="margin:5px 0;font-size:25px;color:#075638">
+              PONDOK PESANTREN DARUL FIKR
+            </h1>
+            <h3 style="margin:4px 0;font-size:14px">
+              CIANJUR SINGKUT · SAROLANGUN
+            </h3>
+            <p style="font-size:11px;margin:5px 0 0">
+              Jl. Pinang RW 07 Cianjur Singkut, Kabupaten Sarolangun
+            </p>
+          </div>
+        </div>
 
-      <table style="width:100%;border-collapse:collapse">
-        <thead>
-          <tr style="background:#e8f1e9">
-            <th style="border:1px solid #b9cbbd;padding:10px">No.</th>
-            <th style="border:1px solid #b9cbbd;padding:10px;text-align:left">Mata Pelajaran</th>
-            <th style="border:1px solid #b9cbbd;padding:10px">Nilai</th>
+        <!-- JUDUL RAPOR -->
+        <div style="text-align:center;margin:20px 0">
+          <h2 style="
+            margin:0;
+            text-decoration:underline;
+            font-size:18px;
+            color:#075638;
+          ">
+            RAPOR HASIL BELAJAR SANTRI
+          </h2>
+          <p style="margin:7px 0;font-size:14px">
+            Tahun Pelajaran ${selectedYear?.label || ""}
+            - Semester ${semester}
+          </p>
+        </div>
+
+        <!-- IDENTITAS SANTRI -->
+        <table style="
+          width:100%;
+          margin-bottom:22px;
+          border-collapse:collapse;
+          font-size:13px;
+        ">
+          <tr>
+            <td style="padding:6px;width:155px">Nama Santri</td>
+            <td style="padding:6px">: ${student?.nama || ""}</td>
           </tr>
-        </thead>
-        <tbody>
+          <tr>
+            <td style="padding:6px">NIS</td>
+            <td style="padding:6px">: ${nis}</td>
+          </tr>
+          <tr>
+            <td style="padding:6px">Marhalah</td>
+            <td style="padding:6px">: ${marhalah}</td>
+          </tr>
+          <tr>
+            <td style="padding:6px">Kelas</td>
+            <td style="padding:6px">: ${selectedClass?.namaKelas || ""}</td>
+          </tr>
+        </table>
+
+        <!-- HASIL BELAJAR -->
+        <h3 style="font-size:15px;color:#075638;margin-bottom:10px">
+          A. HASIL BELAJAR
+        </h3>
+
+        <table style="
+          width:100%;
+          border-collapse:collapse;
+          font-size:13px;
+        ">
+          <thead>
+            <tr style="background:#e8f1e9">
+              <th style="border:1px solid #777;padding:9px;width:45px">
+                No.
+              </th>
+              <th style="border:1px solid #777;padding:9px;text-align:left">
+                Mata Pelajaran
+              </th>
+              <th style="border:1px solid #777;padding:9px;width:100px">
+                Nilai
+              </th>
+            </tr>
+          </thead>
+          <tbody>
     `;
 
     filteredGrades.forEach((item, index) => {
       html += `
         <tr>
-          <td style="border:1px solid #b9cbbd;padding:9px;text-align:center">${index + 1}</td>
-          <td style="border:1px solid #b9cbbd;padding:9px">${item.namaMapel || "-"}</td>
-          <td style="border:1px solid #b9cbbd;padding:9px;text-align:center">${Number(item.nilai)}</td>
+          <td style="border:1px solid #777;padding:8px;text-align:center">
+            ${index + 1}
+          </td>
+          <td style="border:1px solid #777;padding:8px">
+            ${item.namaMapel || "-"}
+          </td>
+          <td style="border:1px solid #777;padding:8px;text-align:center">
+            ${Number(item.nilai)}
+          </td>
         </tr>
       `;
     });
 
     html += `
-        </tbody>
-      </table>
+          </tbody>
+        </table>
 
-      <table style="width:100%;margin-top:15px;border-collapse:collapse">
-        <tr>
-          <td style="padding:8px"><strong>Jumlah Nilai</strong></td>
-          <td style="padding:8px;text-align:right"><strong>${total.toFixed(2)}</strong></td>
-        </tr>
-        <tr>
-          <td style="padding:8px"><strong>Rata-rata</strong></td>
-          <td style="padding:8px;text-align:right"><strong>${rataRata.toFixed(2)}</strong></td>
-        </tr>
-      </table>
+        <!-- JUMLAH DAN RATA-RATA -->
+        <table style="
+          width:100%;
+          margin-top:12px;
+          border-collapse:collapse;
+          font-size:13px;
+        ">
+          <tr>
+            <td style="padding:7px"><strong>Jumlah Nilai</strong></td>
+            <td style="padding:7px;text-align:right">
+              <strong>${total.toFixed(2)}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:7px"><strong>Rata-rata</strong></td>
+            <td style="padding:7px;text-align:right">
+              <strong>${rataRata.toFixed(2)}</strong>
+            </td>
+          </tr>
+        </table>
+
+        <!-- TEMPAT DAN TANGGAL -->
+        <div style="
+          margin-top:40px;
+          font-size:13px;
+          page-break-inside:avoid;
+        ">
+          <p style="text-align:right;margin-bottom:15px">
+            Cianjur Singkut, ${tanggalCetak}
+          </p>
+
+          <!-- TANDA TANGAN BASAH -->
+          <table style="
+            width:100%;
+            border-collapse:collapse;
+            text-align:center;
+          ">
+            <tr>
+              <td style="width:33%;vertical-align:top;padding:5px">
+                Wali Santri
+                <div style="height:85px"></div>
+                <p style="margin:0">
+                  (................................)
+                </p>
+              </td>
+
+              <td style="width:33%;vertical-align:top;padding:5px">
+                Roisul Ma'had
+                <div style="height:85px"></div>
+                <p style="margin:0">
+                  (................................)
+                </p>
+              </td>
+
+              <td style="width:33%;vertical-align:top;padding:5px">
+                Roisul Marhalah
+                <div style="height:85px"></div>
+                <p style="margin:0">
+                  (................................)
+                </p>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+      </div>
     `;
+
 
     content.innerHTML = html;
 
