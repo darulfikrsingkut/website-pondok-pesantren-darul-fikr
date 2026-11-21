@@ -1646,6 +1646,43 @@ function loadReportFilters() {
 }
 
 // ==========================================
+// MEMUAT KELAS BERDASARKAN MARHALAH RAPOR
+// ==========================================
+
+function loadReportClasses() {
+
+  const marhalah =
+    document.getElementById("reportMarhalah").value;
+
+  const classSelect =
+    document.getElementById("reportClass");
+
+  classSelect.innerHTML =
+    '<option value="">Pilih Kelas</option>';
+
+  document.getElementById("reportStudent").innerHTML =
+    '<option value="">Pilih Santri</option>';
+
+  if (!marhalah) return;
+
+  const classes = (window.gradeClassData || []).filter(item =>
+    item.marhalah === marhalah &&
+    gradeIsActive(item.status)
+  );
+
+  classes.forEach(item => {
+    const option = document.createElement("option");
+    option.value = item.documentId;
+    option.textContent = item.namaKelas;
+    classSelect.appendChild(option);
+  });
+}
+// MEMUAT KELAS SAAT MARHALAH DIPILIH
+document.getElementById("reportMarhalah")
+  .addEventListener("change", function () {
+    loadReportClasses();
+  });
+// ==========================================
 // UNDUH DATA NILAI DARI FIRESTORE KE EXCEL
 // ==========================================
 
