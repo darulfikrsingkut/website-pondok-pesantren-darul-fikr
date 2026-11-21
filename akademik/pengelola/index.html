@@ -1770,6 +1770,206 @@ document.getElementById("reportAcademicYear")
   });
 
 // ==========================================
+// MENAMPILKAN NILAI RAPOR SANTRI
+// ==========================================
+
+async function showStudentReport() {
+
+  const info = document.getElementById("reportInfo");
+  const preview = document.getElementById("reportPreviewBox");
+  const content = document.getElementById("reportPreviewContent");
+
+  const tahunAjaranId =
+    document.getElementById("reportAcademicYear").value;
+
+  const semester =
+    document.getElementById("reportSemester").value;
+
+  const marhalah =
+    document.getElementById("reportMarhalah").value;
+
+  const kelasId =
+    document.getElementById("reportClass").value;
+
+  const nis =
+    document.getElementById("reportStudent").value;
+
+  if (!tahunAjaranId || !semester || !marhalah || !kelasId || !nis) {
+    alert("Lengkapi seluruh pilihan rapor terlebih dahulu.");
+    return;
+  }
+
+  const adminToken =
+    sessionStorage.getItem("darulfikr_admin_token");
+
+  if (!adminToken) {
+    alert("Sesi pengelola tidak ditemukan. Silakan login kembali.");
+    return;
+  }
+
+  info.textContent = "Sedang mengambil nilai santri...";
+  content.textContent = "Memuat data nilai...";
+  preview.style.display = "block";
+
+  try {
+
+    const response = await fetch(
+      WORKER_URL + "/api/admin/grades",
+      {
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer " + adminToken
+        }
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || "Gagal mengambil data nilai."
+      );
+    }
+
+    const grades = result.grades || [];
+
+    const filteredGrades = grades.filter(item =>
+      item.tahunAjaranId === tahunAjaranId &&
+      item.semester === semester &&
+      item.marhalah === marhalah &&
+      item.kelasId === kelasId &&
+      item.nis === nis &&
+      item.nilai !== "" &&
+      item.nilai !== null &&
+      Number.isFinite(Number(item.nilai))
+    );
+
+    if (filteredGrades.length === 0) {
+      content.textContent =
+        "Belum ada nilai tersimpan untuk santri dan periode ini.";
+
+      info.textContent =
+        "Data nilai belum tersedia.";
+
+      return;
+    }
+
+    // URUTKAN MATA PELAJARAN
+    filteredGrades.sort((a, b) =>
+      String(a.namaMapel || "").localeCompare(
+        String(b.namaMapel || ""),
+        "id"
+      )
+    );
+
+    const total = filteredGrades.reduce(
+      (sum, item) => sum + Number(item.nilai),
+      0
+    );
+
+    const rataRata = total / filteredGrades.length;
+
+    const student = studentData.find(item =>
+      item.nis === nis
+    );
+
+    const selectedYear = (gradeAcademicSettings.years || []).find(
+      item => item.id === tahunAjaranId
+    );
+
+    const selectedClass = (window.gradeClassData || []).find(
+      item => item.documentId === kelasId
+    );
+
+    // IDENTITAS RAPOR
+    let html = `
+      <div style="color:#075638;text-align:center;margin-bottom:20px">
+        <h2 style="margin:0">RAPOR HASIL BELAJAR SANTRI</h2>
+        <h3 style="margin:6px 0">PONDOK PESANTREN DARUL FIKR</h3>
+      </div>
+
+      <table style="width:100%;margin-bottom:20px;border-collapse:collapse">
+        <tr>
+          <td style="padding:6px">Nama Santri</td>
+          <td style="padding:6px">: ${student?.nama || ""}</td>
+        </tr>
+        <tr>
+          <td style="padding:6px">NIS</td>
+          <td style="padding:6px">: ${nis}</td>
+        </tr>
+        <tr>
+          <td style="padding:6px">Kelas</td>
+          <td style="padding:6px">: ${selectedClass?.namaKelas || ""}</td>
+        </tr>
+        <tr>
+          <td style="padding:6px">Marhalah</td>
+          <td style="padding:6px">: ${marhalah}</td>
+        </tr>
+        <tr>
+          <td style="padding:6px">Tahun Pelajaran</td>
+          <td style="padding:6px">: ${selectedYear?.label || ""}</td>
+        </tr>
+        <tr>
+          <td style="padding:6px">Semester</td>
+          <td style="padding:6px">: ${semester}</td>
+        </tr>
+      </table>
+
+      <h3 style="color:#075638">A. HASIL BELAJAR</h3>
+
+      <table style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr style="background:#e8f1e9">
+            <th style="border:1px solid #b9cbbd;padding:10px">No.</th>
+            <th style="border:1px solid #b9cbbd;padding:10px;text-align:left">Mata Pelajaran</th>
+            <th style="border:1px solid #b9cbbd;padding:10px">Nilai</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    filteredGrades.forEach((item, index) => {
+      html += `
+        <tr>
+          <td style="border:1px solid #b9cbbd;padding:9px;text-align:center">${index + 1}</td>
+          <td style="border:1px solid #b9cbbd;padding:9px">${item.namaMapel || "-"}</td>
+          <td style="border:1px solid #b9cbbd;padding:9px;text-align:center">${Number(item.nilai)}</td>
+        </tr>
+      `;
+    });
+
+    html += `
+        </tbody>
+      </table>
+
+      <table style="width:100%;margin-top:15px;border-collapse:collapse">
+        <tr>
+          <td style="padding:8px"><strong>Jumlah Nilai</strong></td>
+          <td style="padding:8px;text-align:right"><strong>${total.toFixed(2)}</strong></td>
+        </tr>
+        <tr>
+          <td style="padding:8px"><strong>Rata-rata</strong></td>
+          <td style="padding:8px;text-align:right"><strong>${rataRata.toFixed(2)}</strong></td>
+        </tr>
+      </table>
+    `;
+
+    content.innerHTML = html;
+
+    info.textContent =
+      "Rapor berhasil ditampilkan dengan " +
+      filteredGrades.length + " mata pelajaran.";
+
+  } catch (error) {
+
+    content.textContent = "Gagal menampilkan rapor.";
+
+    info.textContent =
+      "Gagal mengambil rapor: " + error.message;
+  }
+}
+
+// ==========================================
 // UNDUH DATA NILAI DARI FIRESTORE KE EXCEL
 // ==========================================
 
