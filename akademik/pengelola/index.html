@@ -2860,8 +2860,36 @@ document.getElementById("selectAllGradeSubjects")
   });
 
 // MENAMPILKAN TABEL INPUT NILAI MANUAL
+// MENGAMBIL NILAI TERSIMPAN DARI FIRESTORE
+async function loadSavedGradesForManualInput() {
+  const adminToken =
+    sessionStorage.getItem("darulfikr_admin_token");
 
-function renderManualGradeTable() {
+  if (!adminToken) {
+    throw new Error("Sesi admin tidak ditemukan. Silakan login kembali.");
+  }
+
+  const response = await fetch(
+    WORKER_URL + "/api/admin/grades",
+    {
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer " + adminToken
+      }
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok || !result.success) {
+    throw new Error(
+      result.message || "Gagal mengambil nilai tersimpan."
+    );
+  }
+
+  return result.grades || [];
+}
+async function renderManualGradeTable() {
   const info = document.getElementById("gradeInfo");
   const box = document.getElementById("manualGradeBox");
   const body = document.getElementById("gradeTableBody");
@@ -2890,7 +2918,17 @@ function renderManualGradeTable() {
     info.textContent = "Pilih minimal satu mata pelajaran.";
     return;
   }
+// MEMUAT NILAI YANG SUDAH TERSIMPAN
+let savedGrades = [];
 
+try {
+  savedGrades = await loadSavedGradesForManualInput();
+} catch (error) {
+  box.style.display = "none";
+  info.textContent =
+    "Gagal memuat nilai tersimpan: " + error.message;
+  return;
+}
   // AMBIL PENEMPATAN SANTRI SESUAI TAHUN DAN KELAS
   const enrollments = window.gradeEnrollmentData.filter(item =>
     item.tahunAjaranId === year &&
@@ -2986,6 +3024,23 @@ function renderManualGradeTable() {
       input.dataset.nis = student.nis;
       input.dataset.subjectId = subject.id;
       input.dataset.subjectName = subject.nama;
+     // MENGISI NILAI LAMA JIKA SUDAH TERSIMPAN
+const savedGrade = savedGrades.find(item =>
+  item.tahunAjaranId === year &&
+  item.semester === semester &&
+  item.marhalah === marhalah &&
+  item.kelasId === kelasId &&
+  item.nis === student.nis &&
+  item.mapelId === subject.id
+);
+
+if (
+  savedGrade &&
+  savedGrade.nilai !== null &&
+  savedGrade.nilai !== ""
+) {
+  input.value = savedGrade.nilai;
+}
       input.style.cssText =
         "width:90px;padding:9px;border:1px solid #ccd9d0;" +
         "border-radius:7px;text-align:center;box-sizing:border-box";
