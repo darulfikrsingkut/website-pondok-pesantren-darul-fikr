@@ -1968,7 +1968,11 @@ async function showStudentReport() {
       "Gagal mengambil rapor: " + error.message;
   }
 }
-
+// TOMBOL MENAMPILKAN RAPOR SANTRI
+document.getElementById("showStudentReportBtn")
+  .addEventListener("click", function () {
+    showStudentReport();
+  });
 // ==========================================
 // UNDUH DATA NILAI DARI FIRESTORE KE EXCEL
 // ==========================================
