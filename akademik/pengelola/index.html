@@ -1682,6 +1682,93 @@ document.getElementById("reportMarhalah")
   .addEventListener("change", function () {
     loadReportClasses();
   });
+  
+// ==========================================
+// MEMUAT SANTRI BERDASARKAN KELAS RAPOR
+// ==========================================
+
+function loadReportStudents() {
+
+  const tahunAjaranId =
+    document.getElementById("reportAcademicYear").value;
+
+  const marhalah =
+    document.getElementById("reportMarhalah").value;
+
+  const kelasId =
+    document.getElementById("reportClass").value;
+
+  const studentSelect =
+    document.getElementById("reportStudent");
+
+  studentSelect.innerHTML =
+    '<option value="">Pilih Santri</option>';
+
+  if (!tahunAjaranId || !marhalah || !kelasId) return;
+
+  // AMBIL PENEMPATAN SANTRI AKTIF
+  const enrollments = (window.gradeEnrollmentData || []).filter(item =>
+    item.tahunAjaranId === tahunAjaranId &&
+    item.kelasId === kelasId &&
+    item.marhalah === marhalah &&
+    gradeIsActive(item.status)
+  );
+
+  // COCOKKAN DENGAN DATA INDUK SANTRI
+  const students = enrollments.map(enrollment => {
+
+    const student = studentData.find(item =>
+      item.nis === enrollment.nis &&
+      gradeIsActive(item.status)
+    );
+
+    if (!student) return null;
+
+    return {
+      nis: student.nis,
+      nama: student.nama || enrollment.namaSantri || ""
+    };
+
+  }).filter(Boolean);
+
+  // URUTKAN BERDASARKAN NAMA
+  students.sort((a, b) =>
+    String(a.nama).localeCompare(String(b.nama), "id")
+  );
+
+  // TAMPILKAN PILIHAN SANTRI
+  students.forEach(student => {
+
+    const option = document.createElement("option");
+
+    option.value = student.nis;
+    option.textContent =
+      student.nama + " (" + student.nis + ")";
+
+    studentSelect.appendChild(option);
+  });
+
+  if (students.length === 0) {
+    document.getElementById("reportInfo").textContent =
+      "Tidak ada santri aktif pada kelas dan tahun pelajaran ini.";
+  } else {
+    document.getElementById("reportInfo").textContent =
+      "Ditemukan " + students.length + " santri. Silakan pilih santri.";
+  }
+}
+
+// MEMUAT SANTRI SAAT KELAS BERUBAH
+document.getElementById("reportClass")
+  .addEventListener("change", function () {
+    loadReportStudents();
+  });
+
+// MEMUAT ULANG SANTRI SAAT TAHUN PELAJARAN BERUBAH
+document.getElementById("reportAcademicYear")
+  .addEventListener("change", function () {
+    loadReportStudents();
+  });
+
 // ==========================================
 // UNDUH DATA NILAI DARI FIRESTORE KE EXCEL
 // ==========================================
