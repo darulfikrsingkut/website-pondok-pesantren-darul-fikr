@@ -1143,6 +1143,24 @@ document.querySelectorAll("[data-menu]").forEach(function(button){
       return;
     }
 
+    if (menu === "rapor") {
+      document.getElementById("studentSection").style.display = "none";
+      document.getElementById("classSection").style.display = "none";
+      document.getElementById("subjectSection").style.display = "none";
+      document.getElementById("gradeSection").style.display = "none";
+      document.getElementById("academicSettingsSection").style.display = "none";
+
+      document.getElementById("reportSection").style.display = "block";
+
+      document.getElementById("reportInfo").textContent =
+        "Pilih tahun pelajaran, semester, marhalah, kelas, dan santri.";
+
+      document.getElementById("reportPreviewBox").style.display = "none";
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
     if (menu === "pengaturan") {
       document.getElementById("studentSection").style.display = "none";
       document.getElementById("classSection").style.display = "none";
