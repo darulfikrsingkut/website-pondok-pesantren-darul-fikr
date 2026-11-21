@@ -1781,24 +1781,20 @@ document.getElementById("reportAcademicYear")
 // MENAMPILKAN NILAI RAPOR SANTRI
 // ==========================================
 
-async function showStudentReport() {
 
+async function showStudentReport() {
   const info = document.getElementById("reportInfo");
   const preview = document.getElementById("reportPreviewBox");
   const content = document.getElementById("reportPreviewContent");
 
   const tahunAjaranId =
     document.getElementById("reportAcademicYear").value;
-
   const semester =
     document.getElementById("reportSemester").value;
-
   const marhalah =
     document.getElementById("reportMarhalah").value;
-
   const kelasId =
     document.getElementById("reportClass").value;
-
   const nis =
     document.getElementById("reportStudent").value;
 
@@ -1820,7 +1816,6 @@ async function showStudentReport() {
   preview.style.display = "block";
 
   try {
-
     const response = await fetch(
       WORKER_URL + "/api/admin/grades",
       {
@@ -1855,14 +1850,10 @@ async function showStudentReport() {
     if (filteredGrades.length === 0) {
       content.textContent =
         "Belum ada nilai tersimpan untuk santri dan periode ini.";
-
-      info.textContent =
-        "Data nilai belum tersedia.";
-
+      info.textContent = "Data nilai belum tersedia.";
       return;
     }
 
-    // URUTKAN MATA PELAJARAN
     filteredGrades.sort((a, b) =>
       String(a.namaMapel || "").localeCompare(
         String(b.namaMapel || ""),
@@ -1889,218 +1880,356 @@ async function showStudentReport() {
       item => item.documentId === kelasId
     );
 
-
-    // TAMPILAN RAPOR RESMI DARUL FIKR
-
     const tanggalCetak = new Date().toLocaleDateString("id-ID", {
       day: "numeric",
       month: "long",
       year: "numeric"
     });
 
+    const logoUrl =
+      "https://website-darul-fikr-singkut.pages.dev/icon-ponpes.png.png";
+
     let html = `
-      <div style="
-        font-family:Arial,sans-serif;
-        color:#222;
-        background:#fff;
-        padding:25px;
-        max-width:900px;
-        margin:auto;
-      ">
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
 
-        <!-- KOP PONDOK -->
-        <div style="
-          display:flex;
-          align-items:center;
-          gap:18px;
-          border-bottom:4px double #075638;
-          padding-bottom:15px;
-          margin-bottom:22px;
-        ">
-          <img
-            src="https://website-darul-fikr-singkut.pages.dev/icon-ponpes.png.png"
-            alt="Logo Pondok Pesantren Darul Fikr"
-            style="width:100px;height:100px;object-fit:contain"
-          >
+        .df-report {
+          position: relative;
+          isolation: isolate;
+          box-sizing: border-box;
+          width: 100%;
+          max-width: 794px;
+          min-height: 1123px;
+          margin: auto;
+          padding: 38px 42px;
+          background: #ffffff;
+          color: #25352d;
+          font-family: Arial, sans-serif;
+          font-size: 13px;
+          line-height: 1.5;
+          overflow: hidden;
+        }
 
-          <div style="flex:1;text-align:center">
- <h2 dir="rtl" style="
-  margin:0;
-  font-family:'Layla Diwani',serif;
-  font-size:32px;
-  font-weight:normal;
-  color:#075638;
-  text-align:center;
-">
-  المعهد الديني الإسلامي دار الفكر
-</h2>
-            <h1 style="margin:5px 0;font-size:25px;color:#075638">
-              PONDOK PESANTREN DARUL FIKR
-            </h1>
-            <h3 style="margin:4px 0;font-size:14px">
-              CIANJUR SINGKUT · SAROLANGUN
-            </h3>
-            <p style="font-size:11px;margin:5px 0 0">
-              Jl. Pinang RW 07 Cianjur Singkut, Kabupaten Sarolangun
-            </p>
-          </div>
-        </div>
+        .df-report * {
+          box-sizing: border-box;
+        }
 
-        <!-- JUDUL RAPOR -->
-        <div style="text-align:center;margin:20px 0">
-          <h2 style="
-            margin:0;
-            text-decoration:underline;
-            font-size:18px;
-            color:#075638;
-          ">
-            RAPOR HASIL BELAJAR SANTRI
-          </h2>
-          <p style="margin:7px 0;font-size:14px">
-            Tahun Pelajaran ${selectedYear?.label || ""}
-            - Semester ${semester}
-          </p>
-        </div>
+        .df-watermark {
+          position: absolute;
+          z-index: -1;
+          width: 330px;
+          height: 330px;
+          object-fit: contain;
+          opacity: 0.055;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          pointer-events: none;
+        }
 
-        <!-- IDENTITAS SANTRI -->
-        <table style="
-          width:100%;
-          margin-bottom:22px;
-          border-collapse:collapse;
-          font-size:13px;
-        ">
-          <tr>
-            <td style="padding:6px;width:155px">Nama Santri</td>
-            <td style="padding:6px">: ${student?.nama || ""}</td>
-          </tr>
-          <tr>
-            <td style="padding:6px">NIS</td>
-            <td style="padding:6px">: ${nis}</td>
-          </tr>
-          <tr>
-            <td style="padding:6px">Marhalah</td>
-            <td style="padding:6px">: ${marhalah}</td>
-          </tr>
-          <tr>
-            <td style="padding:6px">Kelas</td>
-            <td style="padding:6px">: ${selectedClass?.namaKelas || ""}</td>
-          </tr>
-        </table>
+        .df-content {
+          position: relative;
+          z-index: 1;
+        }
 
-        <!-- HASIL BELAJAR -->
-        <h3 style="font-size:15px;color:#075638;margin-bottom:10px">
-          A. HASIL BELAJAR
-        </h3>
+        .df-arabic {
+          margin: 0;
+          color: #075638;
+          font-family: 'Noto Naskh Arabic', serif;
+          font-size: 34px;
+          font-weight: 600;
+          line-height: 1.8;
+          text-align: center;
+        }
 
-        <table style="
-          width:100%;
-          border-collapse:collapse;
-          font-size:13px;
-        ">
-          <thead>
-            <tr style="background:#e8f1e9">
-              <th style="border:1px solid #777;padding:9px;width:45px">
-                No.
-              </th>
-              <th style="border:1px solid #777;padding:9px;text-align:left">
-                Mata Pelajaran
-              </th>
-              <th style="border:1px solid #777;padding:9px;width:100px">
-                Nilai
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-    `;
+        .df-school-name {
+          margin: 3px 0;
+          color: #075638;
+          font-size: 24px;
+          font-weight: 800;
+          letter-spacing: 0.5px;
+        }
 
-    filteredGrades.forEach((item, index) => {
-      html += `
-        <tr>
-          <td style="border:1px solid #777;padding:8px;text-align:center">
-            ${index + 1}
-          </td>
-          <td style="border:1px solid #777;padding:8px">
-            ${item.namaMapel || "-"}
-          </td>
-          <td style="border:1px solid #777;padding:8px;text-align:center">
-            ${Number(item.nilai)}
-          </td>
-        </tr>
-      `;
-    });
+        .df-gold-line {
+          height: 4px;
+          margin-top: 12px;
+          border-top: 2px solid #b99a50;
+          border-bottom: 1px solid #075638;
+        }
 
-    html += `
-          </tbody>
-        </table>
+        .df-section-title {
+          margin: 20px 0 9px;
+          padding: 7px 10px;
+          color: #ffffff;
+          background: #075638;
+          border-left: 5px solid #c4a45b;
+          font-size: 14px;
+          font-weight: bold;
+        }
 
-        <!-- JUMLAH DAN RATA-RATA -->
-        <table style="
-          width:100%;
-          margin-top:12px;
-          border-collapse:collapse;
-          font-size:13px;
-        ">
-          <tr>
-            <td style="padding:7px"><strong>Jumlah Nilai</strong></td>
-            <td style="padding:7px;text-align:right">
-              <strong>${total.toFixed(2)}</strong>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:7px"><strong>Rata-rata</strong></td>
-            <td style="padding:7px;text-align:right">
-              <strong>${rataRata.toFixed(2)}</strong>
-            </td>
-          </tr>
-        </table>
+        .df-identity {
+          width: 100%;
+          border-collapse: collapse;
+          margin-bottom: 16px;
+        }
 
-        <!-- TEMPAT DAN TANGGAL -->
-        <div style="
-          margin-top:40px;
-          font-size:13px;
-          page-break-inside:avoid;
-        ">
-          <p style="text-align:right;margin-bottom:15px">
-            Cianjur Singkut, ${tanggalCetak}
-          </p>
+        .df-identity td {
+          padding: 5px 7px;
+          border-bottom: 1px solid #dce7df;
+        }
 
-          <!-- TANDA TANGAN BASAH -->
-          <table style="
-            width:100%;
-            border-collapse:collapse;
+        .df-grades {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 12px;
+        }
+
+        .df-grades th {
+          padding: 9px 7px;
+          color: #ffffff;
+          background: #075638;
+          border: 1px solid #075638;
+        }
+
+        .df-grades td {
+          padding: 8px 7px;
+          border: 1px solid #cbd8ce;
+        }
+
+        .df-grades tbody tr:nth-child(even) {
+          background: #f0f6f1;
+        }
+
+        .df-summary {
+          display: flex;
+          gap: 12px;
+          margin-top: 14px;
+        }
+
+        .df-summary-item {
+          flex: 1;
+          padding: 12px;
+          text-align: center;
+          background: #edf4ee;
+          border: 1px solid #cbdccf;
+          border-bottom: 3px solid #b99a50;
+          border-radius: 5px;
+        }
+
+        .df-summary-item strong {
+          display: block;
+          margin-top: 4px;
+          color: #075638;
+          font-size: 21px;
+        }
+
+        .df-signatures {
+          width: 100%;
+          margin-top: 45px;
+          border-collapse: collapse;
+          text-align: center;
+          page-break-inside: avoid;
+        }
+
+        .df-signatures td {
+          width: 33.33%;
+          padding: 5px;
+          vertical-align: top;
+        }
+
+        .df-signature-space {
+          height: 85px;
+        }
+
+        @media print {
+          @page {
+            size: A4 portrait;
+            margin: 10mm;
+          }
+
+          .df-report {
+            width: 100%;
+            max-width: none;
+            min-height: 0;
+            margin: 0;
+            padding: 5mm;
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+          }
+
+          .df-section-title,
+          .df-grades th,
+          .df-summary-item {
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+          }
+
+          .df-watermark {
+            opacity: 0.055;
+          }
+        }
+      </style>
+
+      <div class="df-report">
+        <img class="df-watermark"
+          src="${logoUrl}"
+          alt=""
+        >
+
+        <div class="df-content">
+
+          <!-- KOP PONDOK -->
+          <div style="
+            display:flex;
+            align-items:center;
+            gap:15px;
             text-align:center;
           ">
+            <img
+              src="${logoUrl}"
+              alt="Logo Pondok Pesantren Darul Fikr"
+              style="
+                width:95px;
+                height:95px;
+                object-fit:contain;
+              "
+            >
+
+            <div style="flex:1">
+              <h2 class="df-arabic" dir="rtl">
+                المعهد الديني الإسلامي دار الفكر
+              </h2>
+
+              <h1 class="df-school-name">
+                PONDOK PESANTREN DARUL FIKR
+              </h1>
+
+              <div style="
+                font-size:13px;
+                font-weight:bold;
+                letter-spacing:1px;
+              ">
+                CIANJUR SINGKUT · SAROLANGUN
+              </div>
+
+              <div style="font-size:10px;margin-top:4px">
+                Jl. Pinang RW 07 Cianjur Singkut, Kabupaten Sarolangun
+              </div>
+            </div>
+          </div>
+
+          <div class="df-gold-line"></div>
+
+          <!-- JUDUL RAPOR -->
+          <div style="text-align:center;margin:22px 0">
+            <h2 style="
+              color:#075638;
+              font-size:19px;
+              margin:0;
+              text-decoration:underline;
+            ">
+              RAPOR HASIL BELAJAR SANTRI
+            </h2>
+
+            <div style="margin-top:6px;font-size:13px">
+              Tahun Pelajaran ${selectedYear?.label || ""}
+              · Semester ${semester}
+            </div>
+          </div>
+
+          <!-- IDENTITAS SANTRI -->
+          <h3 class="df-section-title">IDENTITAS SANTRI</h3>
+
+          <table class="df-identity">
             <tr>
-              <td style="width:33%;vertical-align:top;padding:5px">
+              <td style="width:155px">Nama Santri</td>
+              <td>: ${student?.nama || ""}</td>
+            </tr>
+            <tr>
+              <td>NIS</td>
+              <td>: ${nis}</td>
+            </tr>
+            <tr>
+              <td>Marhalah</td>
+              <td>: ${marhalah}</td>
+            </tr>
+            <tr>
+              <td>Kelas</td>
+              <td>: ${selectedClass?.namaKelas || ""}</td>
+            </tr>
+          </table>
+
+          <!-- HASIL BELAJAR -->
+          <h3 class="df-section-title">A. HASIL BELAJAR</h3>
+
+          <table class="df-grades">
+            <thead>
+              <tr>
+                <th style="width:45px">No.</th>
+                <th style="text-align:left">Mata Pelajaran</th>
+                <th style="width:100px">Nilai</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${filteredGrades.map((item, index) => `
+                <tr>
+                  <td style="text-align:center">${index + 1}</td>
+                  <td>${item.namaMapel || "-"}</td>
+                  <td style="text-align:center">
+                    ${Number(item.nilai)}
+                  </td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+
+          <!-- JUMLAH DAN RATA-RATA -->
+          <div class="df-summary">
+            <div class="df-summary-item">
+              Jumlah Nilai
+              <strong>${total.toFixed(2)}</strong>
+            </div>
+
+            <div class="df-summary-item">
+              Rata-rata
+              <strong>${rataRata.toFixed(2)}</strong>
+            </div>
+          </div>
+
+          <!-- TANDA TANGAN -->
+          <div style="
+            margin-top:42px;
+            text-align:right;
+            font-size:12px;
+          ">
+            Cianjur Singkut, ${tanggalCetak}
+          </div>
+
+          <table class="df-signatures">
+            <tr>
+              <td>
                 Wali Santri
-                <div style="height:85px"></div>
-                <p style="margin:0">
-                  (................................)
-                </p>
+                <div class="df-signature-space"></div>
+                <strong>(................................)</strong>
               </td>
 
-              <td style="width:33%;vertical-align:top;padding:5px">
+              <td>
                 Roisul Ma'had
-                <div style="height:85px"></div>
-                <p style="margin:0">
-                  (................................)
-                </p>
+                <div class="df-signature-space"></div>
+                <strong>(................................)</strong>
               </td>
 
-              <td style="width:33%;vertical-align:top;padding:5px">
+              <td>
                 Roisul Marhalah
-                <div style="height:85px"></div>
-                <p style="margin:0">
-                  (................................)
-                </p>
+                <div class="df-signature-space"></div>
+                <strong>(................................)</strong>
               </td>
             </tr>
           </table>
-        </div>
 
+        </div>
       </div>
     `;
-
 
     content.innerHTML = html;
 
@@ -2109,13 +2238,12 @@ async function showStudentReport() {
       filteredGrades.length + " mata pelajaran.";
 
   } catch (error) {
-
     content.textContent = "Gagal menampilkan rapor.";
-
     info.textContent =
       "Gagal mengambil rapor: " + error.message;
   }
 }
+
 // TOMBOL MENAMPILKAN RAPOR SANTRI
 document.getElementById("showStudentReportBtn")
   .addEventListener("click", function () {
