@@ -1157,6 +1157,16 @@ document.querySelectorAll("[data-menu]").forEach(function(button){
 
       document.getElementById("reportPreviewBox").style.display = "none";
 
+      document.getElementById("reportInfo").textContent =
+        "Sedang memuat data tahun pelajaran dan marhalah...";
+
+      window.loadGrades().then(() => {
+        loadReportFilters();
+
+        document.getElementById("reportInfo").textContent =
+          "Data akademik berhasil dimuat. Silakan pilih tahun pelajaran, semester, dan marhalah.";
+      });
+
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
@@ -1560,6 +1570,80 @@ window.loadGrades = async function () {
     info.textContent = "Gagal memuat data: " + error.message;
   }
 };
+
+// ==========================================
+// MEMUAT PILIHAN FILTER RAPOR SANTRI
+// ==========================================
+
+function loadReportFilters() {
+
+  // TAHUN PELAJARAN
+  const yearSelect =
+    document.getElementById("reportAcademicYear");
+
+  yearSelect.innerHTML =
+    '<option value="">Pilih Tahun Pelajaran</option>';
+
+  (gradeAcademicSettings.years || []).forEach(year => {
+    const option = document.createElement("option");
+    option.value = year.id;
+    option.textContent = year.label;
+    yearSelect.appendChild(option);
+  });
+
+  if (gradeAcademicSettings.activeYearId) {
+    yearSelect.value = gradeAcademicSettings.activeYearId;
+  }
+
+  // MARHALAH
+  const marhalahSelect =
+    document.getElementById("reportMarhalah");
+
+  marhalahSelect.innerHTML =
+    '<option value="">Pilih Marhalah</option>';
+
+  const activeMarhalah = [...new Set(
+    (window.gradeClassData || [])
+      .filter(item => gradeIsActive(item.status))
+      .map(item => item.marhalah)
+      .filter(Boolean)
+  )];
+
+  const urutanMarhalah = ["Ula", "Wustho", "Ulya"];
+
+  activeMarhalah.sort((a, b) =>
+    urutanMarhalah.indexOf(a) -
+    urutanMarhalah.indexOf(b)
+  );
+
+  activeMarhalah.forEach(marhalah => {
+    const option = document.createElement("option");
+    option.value = marhalah;
+    option.textContent = marhalah;
+    marhalahSelect.appendChild(option);
+  });
+
+  // SEMESTER
+  const semesterSelect =
+    document.getElementById("reportSemester");
+
+  semesterSelect.innerHTML =
+    '<option value="">Pilih Semester</option>';
+
+  (gradeAcademicSettings.semesters || []).forEach(semester => {
+    const option = document.createElement("option");
+    option.value = semester.name;
+    option.textContent = semester.name;
+    semesterSelect.appendChild(option);
+  });
+
+  // KOSONGKAN PILIHAN KELAS DAN SANTRI
+  document.getElementById("reportClass").innerHTML =
+    '<option value="">Pilih Kelas</option>';
+
+  document.getElementById("reportStudent").innerHTML =
+    '<option value="">Pilih Santri</option>';
+}
 
 // ==========================================
 // UNDUH DATA NILAI DARI FIRESTORE KE EXCEL
