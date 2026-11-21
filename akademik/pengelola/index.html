@@ -1175,6 +1175,118 @@ async function loadGradeLockStatus() {
 ["gradeAcademicYear", "gradeSemester", "gradeClass"].forEach(id => {
   document.getElementById(id).addEventListener("change", loadGradeLockStatus);
 });
+  
+// MENYIMPAN PENGUNCIAN DAN PEMBUKAAN NILAI
+async function setGradeLock(action) {
+  const tahunAjaranId =
+    document.getElementById("gradeAcademicYear").value;
+
+  const semester =
+    document.getElementById("gradeSemester").value;
+
+  const kelasSelect =
+    document.getElementById("gradeClass");
+
+  const kelasId = kelasSelect.value;
+
+  const namaKelas =
+    kelasSelect.options[kelasSelect.selectedIndex]?.textContent.trim() || "";
+
+  const reason =
+    document.getElementById("gradeLockReason").value.trim();
+
+  const lockButton =
+    document.getElementById("lockGradesBtn");
+
+  const unlockButton =
+    document.getElementById("unlockGradesBtn");
+
+  if (!tahunAjaranId || !semester || !kelasId) {
+    alert("Pilih tahun ajaran, semester, dan kelas terlebih dahulu.");
+    return;
+  }
+
+  if (reason.length < 5) {
+    alert("Alasan penguncian atau pembukaan kunci minimal 5 karakter.");
+    return;
+  }
+
+  const actionLabel =
+    action === "lock" ? "MENGUNCI" : "MEMBUKA KUNCI";
+
+  if (!confirm(
+    `Apakah Anda yakin ingin ${actionLabel} nilai kelas ${namaKelas}, semester ${semester}, tahun ajaran ${tahunAjaranId}?`
+  )) {
+    return;
+  }
+
+  const adminToken =
+    sessionStorage.getItem("darulfikr_admin_token");
+
+  if (!adminToken) {
+    alert("Sesi pengelola tidak ditemukan. Silakan login kembali.");
+    return;
+  }
+
+  lockButton.disabled = true;
+  unlockButton.disabled = true;
+
+  try {
+    const response = await fetch(
+      WORKER_URL + "/api/admin/grade-locks",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + adminToken,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          tahunAjaranId,
+          semester,
+          kelasId,
+          namaKelas,
+          action,
+          reason
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || "Pengaturan penguncian nilai gagal."
+      );
+    }
+
+    let message =
+      result.message || "Pengaturan penguncian nilai berhasil disimpan.";
+
+    if (result.warning) {
+      message += "\n\nPERINGATAN: " + result.warning;
+    }
+
+    alert(message);
+
+    document.getElementById("gradeLockReason").value = "";
+
+  } catch (error) {
+    alert("Gagal memproses penguncian nilai: " + error.message);
+
+  } finally {
+    await loadGradeLockStatus();
+  }
+}
+
+// TOMBOL KUNCI DAN BUKA KUNCI NILAI
+document.getElementById("lockGradesBtn").addEventListener("click", () => {
+  setGradeLock("lock");
+});
+
+document.getElementById("unlockGradesBtn").addEventListener("click", () => {
+  setGradeLock("unlock");
+});
+
 function gradeIsActive(status) {
   const value = String(status || "").toLowerCase().trim();
   return value === "aktif" || value === "active";
