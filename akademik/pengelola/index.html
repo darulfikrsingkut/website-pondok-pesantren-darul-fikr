@@ -754,9 +754,55 @@ footer{
       dan mata pelajaran untuk memulai input nilai.
     </p>
 
+  
+  </div>
+
+  <!-- PANEL PENGUNCIAN NILAI -->
+  <div id="gradeLockBox"
+    style="background:white;border:1px solid #dce8df;border-radius:12px;padding:18px;margin-bottom:20px">
+
+    <h3 style="color:#075638;margin:0 0 12px">
+      Penguncian Nilai
+    </h3>
+
+    <p style="color:#687b70;margin:0 0 12px">
+      Penguncian berlaku untuk satu kelas pada satu semester dan tahun ajaran.
+      Nilai yang sudah dikunci tidak dapat disimpan atau diubah.
+    </p>
+
+    <div id="gradeLockStatus"
+      style="padding:12px;background:#f1f6f1;border-radius:8px;margin-bottom:14px;color:#687b70">
+      Pilih tahun pelajaran, semester, dan kelas untuk melihat status penguncian.
+    </div>
+
+    <label for="gradeLockReason">
+      Alasan penguncian atau pembukaan kunci
+    </label>
+
+    <textarea id="gradeLockReason"
+      rows="3"
+      placeholder="Contoh: Pemeriksaan nilai telah selesai dan nilai siap diterbitkan."
+      style="width:100%;box-sizing:border-box;padding:11px;margin-top:7px;border:1px solid #ccd9d0;border-radius:7px">
+    </textarea>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+
+      <button id="lockGradesBtn" type="button"
+        style="background:#b45309;color:white;border:0;padding:12px 16px;border-radius:8px;cursor:pointer;font-weight:bold">
+        KUNCI NILAI
+      </button>
+
+      <button id="unlockGradesBtn" type="button"
+        style="background:#075638;color:white;border:0;padding:12px 16px;border-radius:8px;cursor:pointer;font-weight:bold">
+        BUKA KUNCI NILAI
+      </button>
+
+    </div>
+
   </div>
 
   <!-- TABEL INPUT NILAI -->
+
   <div id="manualGradeBox"
     style="display:none;background:white;border:1px solid #dce8df;border-radius:12px;padding:18px;margin-bottom:20px">
 
@@ -1018,6 +1064,112 @@ let studentData = [];
 // DATA UNTUK INPUT NILAI
 let gradeSubjectData = [];
 let gradeAcademicSettings = {};
+
+// ==========================================
+// PENGUNCIAN NILAI
+// ==========================================
+
+let currentGradeLockStatus = "Terbuka";
+
+async function loadGradeLockStatus() {
+  const statusBox = document.getElementById("gradeLockStatus");
+
+  const tahunAjaranId =
+    document.getElementById("gradeAcademicYear").value;
+
+  const semester =
+    document.getElementById("gradeSemester").value;
+
+  const kelasId =
+    document.getElementById("gradeClass").value;
+
+  const lockButton = document.getElementById("lockGradesBtn");
+  const unlockButton = document.getElementById("unlockGradesBtn");
+
+  if (!tahunAjaranId || !semester || !kelasId) {
+    currentGradeLockStatus = "Terbuka";
+
+    statusBox.textContent =
+      "Pilih tahun pelajaran, semester, dan kelas terlebih dahulu.";
+
+    lockButton.disabled = true;
+    unlockButton.disabled = true;
+    return;
+  }
+
+  statusBox.textContent = "Memeriksa status penguncian...";
+
+  lockButton.disabled = true;
+  unlockButton.disabled = true;
+
+  try {
+    const adminToken =
+      sessionStorage.getItem("darulfikr_admin_token");
+
+    const response = await fetch(
+      WORKER_URL + "/api/admin/grade-locks",
+      {
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer " + adminToken
+        }
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || "Gagal membaca status penguncian."
+      );
+    }
+
+    const currentLock = (result.locks || []).find(item =>
+      item.tahunAjaranId === tahunAjaranId &&
+      item.semester === semester &&
+      item.kelasId === kelasId
+    );
+
+    currentGradeLockStatus =
+      currentLock?.status || "Terbuka";
+
+    if (currentGradeLockStatus === "Terkunci") {
+      statusBox.textContent =
+        "NILAI TERKUNCI — " +
+        (currentLock.lockReason || "Tidak ada keterangan alasan.");
+
+      statusBox.style.background = "#fff1f0";
+      statusBox.style.color = "#b42318";
+
+      lockButton.disabled = true;
+      unlockButton.disabled = false;
+
+    } else {
+      currentGradeLockStatus = "Terbuka";
+
+      statusBox.textContent =
+        "NILAI TERBUKA — Nilai masih dapat diinput dan diubah.";
+
+      statusBox.style.background = "#f1f6f1";
+      statusBox.style.color = "#075638";
+
+      lockButton.disabled = false;
+      unlockButton.disabled = true;
+    }
+
+  } catch (error) {
+    currentGradeLockStatus = "Tidak diketahui";
+
+    statusBox.textContent =
+      "Gagal membaca status penguncian: " + error.message;
+
+    statusBox.style.background = "#fff1f0";
+    statusBox.style.color = "#b42318";
+
+    lockButton.disabled = true;
+    unlockButton.disabled = true;
+  }
+}
 
 function gradeIsActive(status) {
   const value = String(status || "").toLowerCase().trim();
