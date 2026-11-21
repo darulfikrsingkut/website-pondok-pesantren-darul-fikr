@@ -1170,7 +1170,11 @@ async function loadGradeLockStatus() {
     unlockButton.disabled = true;
   }
 }
-
+  
+// MEMANTAU PERUBAHAN PILIHAN UNTUK STATUS PENGUNCIAN
+["gradeAcademicYear", "gradeSemester", "gradeClass"].forEach(id => {
+  document.getElementById(id).addEventListener("change", loadGradeLockStatus);
+});
 function gradeIsActive(status) {
   const value = String(status || "").toLowerCase().trim();
   return value === "aktif" || value === "active";
