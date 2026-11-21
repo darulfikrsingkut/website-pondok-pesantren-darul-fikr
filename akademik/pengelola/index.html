@@ -850,6 +850,124 @@ footer{
 </section>
 <!-- AKHIR HALAMAN INPUT NILAI -->
 
+<!-- HALAMAN RAPOR SANTRI -->
+<section id="reportSection" style="display:none;margin-top:30px">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+
+    <h2 class="section-title" style="margin:0">
+      Rapor Santri
+    </h2>
+
+    <button id="backReportDashboard" type="button"
+      style="background:#687b70;color:white;border:0;padding:11px 16px;border-radius:8px;cursor:pointer;font-weight:bold">
+      KEMBALI
+    </button>
+
+  </div>
+
+  <p style="color:#687b70;margin:12px 0 20px">
+    Pilih tahun pelajaran, semester, kelas, dan santri
+    untuk menampilkan rapor hasil belajar.
+  </p>
+
+  <!-- FILTER RAPOR -->
+  <div style="background:#f1f6f1;border:1px solid #dce8df;border-radius:12px;padding:18px;margin-bottom:20px">
+
+    <h3 style="color:#075638;margin:0 0 15px">
+      Pilihan Rapor
+    </h3>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px">
+
+      <div>
+        <label>Tahun Pelajaran</label>
+        <select id="reportAcademicYear"
+          style="width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+          <option value="">Pilih Tahun Pelajaran</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Semester</label>
+        <select id="reportSemester"
+          style="width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+          <option value="">Pilih Semester</option>
+          <option value="Ganjil">Ganjil</option>
+          <option value="Genap">Genap</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Marhalah</label>
+        <select id="reportMarhalah"
+          style="width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+          <option value="">Pilih Marhalah</option>
+          <option value="Ula">Ula</option>
+          <option value="Wustho">Wustho</option>
+          <option value="Ulya">Ulya</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Kelas</label>
+        <select id="reportClass"
+          style="width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+          <option value="">Pilih Kelas</option>
+        </select>
+      </div>
+
+      <div style="grid-column:1/-1">
+        <label>Nama Santri</label>
+        <select id="reportStudent"
+          style="width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #ccd9d0;border-radius:7px">
+          <option value="">Pilih Santri</option>
+        </select>
+      </div>
+
+    </div>
+
+    <button id="showStudentReportBtn" type="button"
+      style="background:#075638;color:white;border:0;padding:12px 20px;border-radius:8px;margin-top:18px;cursor:pointer;font-weight:bold">
+      TAMPILKAN RAPOR
+    </button>
+
+    <p id="reportInfo" style="color:#687b70;margin:12px 0 0">
+      Silakan pilih seluruh data untuk menampilkan rapor.
+    </p>
+
+  </div>
+
+  <!-- PRATINJAU RAPOR -->
+  <div id="reportPreviewBox"
+    style="display:none;background:white;border:1px solid #dce8df;border-radius:12px;padding:20px;margin-bottom:20px">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px">
+
+      <h3 style="color:#075638;margin:0">
+        Pratinjau Rapor
+      </h3>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+
+        <button id="printStudentReportBtn" type="button"
+          style="background:#1769aa;color:white;border:0;padding:11px 16px;border-radius:8px;cursor:pointer;font-weight:bold">
+          CETAK RAPOR
+        </button>
+
+      </div>
+
+    </div>
+
+    <div id="reportPreviewContent">
+      Pratinjau rapor akan ditampilkan di sini.
+    </div>
+
+  </div>
+
+</section>
+<!-- AKHIR HALAMAN RAPOR SANTRI -->
+
 <!-- HALAMAN PENGATURAN AKADEMIK -->
 <section id="academicSettingsSection" style="display:none;margin-top:30px">
 
