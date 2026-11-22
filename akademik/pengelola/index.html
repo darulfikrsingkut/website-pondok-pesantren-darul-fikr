@@ -2656,15 +2656,16 @@ document.getElementById("saveManualGrades").onclick = async function () {
     return;
   }
 
-  // AMBIL MAPEL YANG DIPILIH
-  const selectedSubjects = Array.from(
-    document.querySelectorAll(".grade-subject-check:checked")
-  );
+  // AMBIL MAPEL AKTIF SESUAI MARHALAH
+const selectedSubjects = gradeSubjectData.filter(item =>
+  item.marhalah === marhalah &&
+  gradeIsActive(item.status)
+);
 
-  if (selectedSubjects.length === 0) {
-    alert("Pilih minimal satu mata pelajaran.");
-    return;
-  }
+if (selectedSubjects.length === 0) {
+  alert("Belum ada mata pelajaran aktif untuk marhalah ini.");
+  return;
+}
 
   // SIAPKAN DATA NILAI
   const inputs = Array.from(
@@ -2963,12 +2964,18 @@ async function renderManualGradeTable() {
   const marhalah = document.getElementById("gradeMarhalah").value;
   const kelasId = document.getElementById("gradeClass").value;
 
-  const selectedSubjects = Array.from(
-    document.querySelectorAll(".grade-subject-check:checked")
-  ).map(item => ({
-    id: item.value,
-    nama: item.dataset.subjectName || ""
-  }));
+  const selectedSubjects = gradeSubjectData
+  .filter(item =>
+    item.marhalah === marhalah &&
+    gradeIsActive(item.status)
+  )
+  .map(item => ({
+    id: item.documentId,
+    nama: item.nama
+  }))
+  .sort((a, b) =>
+    String(a.nama).localeCompare(String(b.nama), "id")
+  );
 
   if (!year || !semester || !marhalah || !kelasId) {
     box.style.display = "none";
