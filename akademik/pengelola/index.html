@@ -3052,7 +3052,13 @@ console.table(
       "padding:11px;border-bottom:2px solid #dce8df;text-align:center";
     headerRow.appendChild(th);
   });
-
+  ["JUMLAH NILAI", "RATA-RATA"].forEach(title => {
+    const th = document.createElement("th");
+    th.textContent = title;
+    th.style.cssText =
+      "padding:11px;border-bottom:2px solid #dce8df;text-align:center";
+    headerRow.appendChild(th);
+  });
   head.appendChild(headerRow);
 
   if (students.length === 0) {
@@ -3110,9 +3116,27 @@ if (
         "width:90px;padding:9px;border:1px solid #ccd9d0;" +
         "border-radius:7px;text-align:center;box-sizing:border-box";
 
-      cell.appendChild(input);
+            cell.appendChild(input);
       row.appendChild(cell);
     });
+
+    // KOLOM JUMLAH NILAI
+    const totalCell = document.createElement("td");
+    totalCell.className = "grade-total-cell";
+    totalCell.textContent = "-";
+    totalCell.style.cssText =
+      "padding:11px;text-align:center;font-weight:600";
+    row.appendChild(totalCell);
+
+    // KOLOM RATA-RATA
+    const averageCell = document.createElement("td");
+    averageCell.className = "grade-average-cell";
+    averageCell.textContent = "-";
+    averageCell.style.cssText =
+      "padding:11px;text-align:center;font-weight:600";
+    row.appendChild(averageCell);
+
+    updateGradeRowTotals(row);
 
     body.appendChild(row);
   });
@@ -3124,6 +3148,46 @@ if (
     selectedSubjects.length + " mata pelajaran.";
 
   box.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+// MENGHITUNG JUMLAH DAN RATA-RATA NILAI SANTRI
+function updateGradeRowTotals(row) {
+  if (!row) return;
+
+  const inputs = Array.from(
+    row.querySelectorAll(".grade-score-input")
+  );
+
+  const values = inputs
+    .map(input => input.value.trim())
+    .filter(value => value !== "" && Number.isFinite(Number(value)))
+    .map(Number);
+
+  const jumlah = values.reduce((total, nilai) => total + nilai, 0);
+
+  const rataRata = values.length > 0
+    ? jumlah / values.length
+    : 0;
+
+  const jumlahCell = row.querySelector(".grade-total-cell");
+  const averageCell = row.querySelector(".grade-average-cell");
+
+  if (jumlahCell) {
+    jumlahCell.textContent = values.length > 0
+      ? jumlah.toLocaleString("id-ID", {
+          maximumFractionDigits: 2
+        })
+      : "-";
+  }
+
+  if (averageCell) {
+    averageCell.textContent = values.length > 0
+      ? rataRata.toLocaleString("id-ID", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        })
+      : "-";
+  }
 }
 
 // PERBARUI JUMLAH DAN RATA-RATA SAAT NILAI DIUBAH
