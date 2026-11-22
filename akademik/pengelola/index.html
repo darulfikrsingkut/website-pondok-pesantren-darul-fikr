@@ -2835,85 +2835,32 @@ if (selectedSubjects.length === 0) {
 };
 
 
-// MEMUAT KELAS DAN MAPEL BERDASARKAN MARHALAH
-document.getElementById("gradeMarhalah").addEventListener("change", function () {
-  const marhalah = this.value;
-  const classSelect = document.getElementById("gradeClass");
-  const subjectList = document.getElementById("gradeSubjectList");
+// MEMUAT KELAS BERDASARKAN MARHALAH
+document.getElementById("gradeMarhalah")
+  .addEventListener("change", function () {
+    const marhalah = this.value;
+    const classSelect = document.getElementById("gradeClass");
 
-  classSelect.innerHTML = '<option value="">Pilih Kelas</option>';
-  subjectList.innerHTML = "";
-  document.getElementById("manualGradeBox").style.display = "none";
+    classSelect.innerHTML =
+      '<option value="">Pilih Kelas</option>';
 
-  if (!marhalah) {
-    subjectList.textContent = "Pilih marhalah terlebih dahulu.";
-    return;
-  }
+    document.getElementById("manualGradeBox").style.display = "none";
 
-  // KELAS AKTIF SESUAI MARHALAH
-  const classes = window.gradeClassData.filter(item =>
-    item.marhalah === marhalah &&
-    gradeIsActive(item.status)
-  );
+    if (!marhalah) return;
 
-  classes.forEach(item => {
-    const option = document.createElement("option");
-    option.value = item.documentId;
-    option.textContent = item.namaKelas;
-    classSelect.appendChild(option);
+    // MENGAMBIL KELAS AKTIF SESUAI MARHALAH
+    const classes = (window.gradeClassData || []).filter(item =>
+      item.marhalah === marhalah &&
+      gradeIsActive(item.status)
+    );
+
+    classes.forEach(item => {
+      const option = document.createElement("option");
+      option.value = item.documentId;
+      option.textContent = item.namaKelas;
+      classSelect.appendChild(option);
+    });
   });
-
-  subjectList.textContent =
-    "Pilih kelas untuk melihat mata pelajaran.";
-});
-
-// MEMUAT MAPEL BERDASARKAN KELAS
-document.getElementById("gradeClass").addEventListener("change", function () {
-  const kelasId = this.value;
-  const marhalah = document.getElementById("gradeMarhalah").value;
-  const subjectList = document.getElementById("gradeSubjectList");
-
-  subjectList.innerHTML = "";
-  document.getElementById("manualGradeBox").style.display = "none";
-
-  if (!kelasId) {
-    subjectList.textContent = "Pilih kelas terlebih dahulu.";
-    return;
-  }
-
-  const subjects = window.gradeClassSubjectData.filter(item =>
-    item.kelasId === kelasId &&
-    item.marhalah === marhalah &&
-    gradeIsActive(item.status)
-  );
-
-  if (subjects.length === 0) {
-    subjectList.textContent =
-      "Belum ada mata pelajaran aktif untuk kelas ini.";
-    return;
-  }
-
-  subjects.forEach(subject => {
-    const label = document.createElement("label");
-    label.style.cssText =
-      "display:flex;align-items:center;gap:7px;padding:9px 12px;" +
-      "border:1px solid #dce8df;border-radius:8px;cursor:pointer";
-
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.className = "grade-subject-check";
-    checkbox.value = subject.mapelId;
-    checkbox.dataset.subjectName = subject.namaMapel;
-
-    const name = document.createElement("span");
-    name.textContent = subject.namaMapel;
-
-    label.appendChild(checkbox);
-    label.appendChild(name);
-    subjectList.appendChild(label);
-  });
-});
-
 
 // PILIH SEMUA MATA PELAJARAN
 document.getElementById("selectAllGradeSubjects")
@@ -3229,23 +3176,13 @@ if (gradeTableBody) {
     }
   });
 }
-// TOMBOL INPUT NILAI MANUAL
-document.getElementById("manualGradeBtn")
-  .addEventListener("click", renderManualGradeTable);
-
-// PERBARUI TABEL JIKA KELAS BERUBAH
+// TAMPILKAN TABEL NILAI OTOMATIS SAAT KELAS DIPILIH
 document.getElementById("gradeClass")
   .addEventListener("change", function () {
-    if (document.getElementById("manualGradeBox").style.display === "block") {
+    if (this.value) {
       renderManualGradeTable();
-    }
-  });
-
-// PERBARUI TABEL JIKA PILIHAN MAPEL BERUBAH
-document.getElementById("gradeSubjectList")
-  .addEventListener("change", function () {
-    if (document.getElementById("manualGradeBox").style.display === "block") {
-      renderManualGradeTable();
+    } else {
+      document.getElementById("manualGradeBox").style.display = "none";
     }
   });
 
