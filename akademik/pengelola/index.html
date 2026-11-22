@@ -1888,7 +1888,31 @@ async function showStudentReport() {
 
     const logoUrl =
       "https://website-darul-fikr-singkut.pages.dev/icon-ponpes.png.png";
-
+const namaMapelArab = {
+  "Akhlak": "الأخلاق",
+  "Akidah": "العقيدة",
+  "Al-Qur'an": "القرآن الكريم",
+  "Bahasa Arab": "اللغة العربية",
+  "Fikih": "الفقه",
+  "Hadis": "الحديث",
+  "Praktik Ibadah": "التطبيق العملي للعبادات",
+  "Tarikh Islam": "التاريخ الإسلامي",
+  "Tilawah": "التلاوة",
+  "Akhlak / Tasawuf": "الأخلاق والتصوف",
+  "Balaghah": "البلاغة",
+  "Ilmu Hadis": "علم الحديث",
+  "Ilmu Kalam": "علم الكلام",
+  "Imla": "الإملاء",
+  "Nahwu": "النحو",
+  "Sharaf": "الصرف",
+  "Tafsir": "التفسير",
+  "Tauhid": "التوحيد",
+  "Ulumul Qur'an": "علوم القرآن",
+  "Ushul Fikih": "أصول الفقه",
+  "Akhlak / Tasawuf": "الأخلاق والتصوف",
+  "Akidah / Tauhid": "العقيدة والتوحيد",
+  "Tajwid": "التجويد"
+};
     let html = `
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
@@ -2153,13 +2177,9 @@ async function showStudentReport() {
               <td>: ${nis}</td>
             </tr>
             <tr>
-              <td>Marhalah</td>
-              <td>: ${marhalah}</td>
-            </tr>
-            <tr>
-              <td>Kelas</td>
-              <td>: ${selectedClass?.namaKelas || ""}</td>
-            </tr>
+  <td>Marhalah / Kelas</td>
+  <td>: ${marhalah} / ${String(selectedClass?.namaKelas || "").replace(/^.*?(\d+)$/, "$1")}</td>
+</tr>
           </table>
 
           <!-- HASIL BELAJAR -->
@@ -2177,10 +2197,32 @@ async function showStudentReport() {
               ${filteredGrades.map((item, index) => `
                 <tr>
                   <td style="text-align:center">${index + 1}</td>
-                  <td>${item.namaMapel || "-"}</td>
+                  <td>
+  <div style="font-weight:600">
+    ${item.namaMapel || "-"}
+  </div>
+  <div dir="rtl" style="
+    margin-top:3px;
+    font-family:'Noto Naskh Arabic',serif;
+    font-size:16px;
+    color:#075638;
+    text-align:left;
+  ">
+    ${namaMapelArab[item.namaMapel] || ""}
+  </div>
+</td>
                   <td style="text-align:center">
-                    ${Number(item.nilai)}
-                  </td>
+  ${Number(item.nilai)}
+  <span dir="rtl" style="
+    display:inline-block;
+    margin-left:8px;
+    font-family:'Noto Naskh Arabic',serif;
+    font-size:15px;
+    color:#075638;
+  ">
+    ${Number(item.nilai).toLocaleString("ar-EG")}
+  </span>
+</td>
                 </tr>
               `).join("")}
             </tbody>
