@@ -2976,6 +2976,25 @@ try {
   return;
 }
   // AMBIL PENEMPATAN SANTRI SESUAI TAHUN DAN KELAS
+ console.log("PILIHAN INPUT NILAI:", {
+  tahunAjaran: year,
+  semester: semester,
+  marhalah: marhalah,
+  kelasId: kelasId
+});
+
+console.log("SELURUH DATA PENEMPATAN:");
+console.table(
+  (window.gradeEnrollmentData || [])
+    .filter(item => item.kelasId === kelasId)
+    .map(item => ({
+      NIS: item.nis,
+      TahunAjaran: item.tahunAjaranId,
+      Kelas: item.kelasId,
+      Marhalah: item.marhalah,
+      Status: item.status
+    }))
+);
   const enrollments = window.gradeEnrollmentData.filter(item =>
     item.tahunAjaranId === year &&
     item.kelasId === kelasId &&
