@@ -1482,19 +1482,37 @@ window.loadGrades = async function () {
       fetch(WORKER_URL + "/api/admin/class-subjects", { headers })
     ]);
 
-    const [
-      settingsResult,
-      studentsResult,
-      enrollmentsResult,
-      classesResult,
-      classSubjectsResult
-    ] = await Promise.all([
-      settingsResponse.json(),
-      studentsResponse.json(),
-      enrollmentsResponse.json(),
-      classesResponse.json(),
-      classSubjectsResponse.json()
-    ]);
+   const [
+  settingsResponse,
+  studentsResponse,
+  enrollmentsResponse,
+  classesResponse,
+  classSubjectsResponse,
+  subjectsResponse
+] = await Promise.all([
+  fetch(WORKER_URL + "/api/admin/academic-settings", { headers }),
+  fetch(WORKER_URL + "/api/admin/students", { headers }),
+  fetch(WORKER_URL + "/api/admin/enrollments", { headers }),
+  fetch(WORKER_URL + "/api/admin/classes", { headers }),
+  fetch(WORKER_URL + "/api/admin/class-subjects", { headers }),
+  fetch(WORKER_URL + "/api/admin/subjects", { headers })
+]);
+
+const [
+  settingsResult,
+  studentsResult,
+  enrollmentsResult,
+  classesResult,
+  classSubjectsResult,
+  subjectsResult
+] = await Promise.all([
+  settingsResponse.json(),
+  studentsResponse.json(),
+  enrollmentsResponse.json(),
+  classesResponse.json(),
+  classSubjectsResponse.json(),
+  subjectsResponse.json()
+]);
 
     const responses = [
       [settingsResponse, settingsResult, "pengaturan akademik"],
@@ -1515,7 +1533,7 @@ window.loadGrades = async function () {
     window.gradeEnrollmentData = enrollmentsResult.enrollments || [];
     window.gradeClassData = classesResult.classes || [];
     window.gradeClassSubjectData = classSubjectsResult.classSubjects || [];
-
+gradeSubjectData = subjectsResult.subjects || [];
     // TAHUN PELAJARAN
     const yearSelect = document.getElementById("gradeAcademicYear");
     yearSelect.innerHTML = '<option value="">Pilih Tahun Pelajaran</option>';
