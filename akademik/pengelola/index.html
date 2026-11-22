@@ -1450,6 +1450,7 @@ function gradeIsActive(status) {
   return value === "aktif" || value === "active";
 }
 
+
 // MEMUAT DATA TAHUN PELAJARAN, SANTRI, DAN MAPEL
 
 window.loadGrades = async function () {
@@ -1468,58 +1469,48 @@ window.loadGrades = async function () {
       "Authorization": "Bearer " + adminToken
     };
 
+    // AMBIL SELURUH DATA YANG DIPERLUKAN
     const [
       settingsResponse,
       studentsResponse,
       enrollmentsResponse,
       classesResponse,
-      classSubjectsResponse
+      classSubjectsResponse,
+      subjectsResponse
     ] = await Promise.all([
       fetch(WORKER_URL + "/api/admin/academic-settings", { headers }),
       fetch(WORKER_URL + "/api/admin/students", { headers }),
       fetch(WORKER_URL + "/api/admin/enrollments", { headers }),
       fetch(WORKER_URL + "/api/admin/classes", { headers }),
-      fetch(WORKER_URL + "/api/admin/class-subjects", { headers })
+      fetch(WORKER_URL + "/api/admin/class-subjects", { headers }),
+      fetch(WORKER_URL + "/api/admin/subjects", { headers })
     ]);
 
-   const [
-  settingsResponse,
-  studentsResponse,
-  enrollmentsResponse,
-  classesResponse,
-  classSubjectsResponse,
-  subjectsResponse
-] = await Promise.all([
-  fetch(WORKER_URL + "/api/admin/academic-settings", { headers }),
-  fetch(WORKER_URL + "/api/admin/students", { headers }),
-  fetch(WORKER_URL + "/api/admin/enrollments", { headers }),
-  fetch(WORKER_URL + "/api/admin/classes", { headers }),
-  fetch(WORKER_URL + "/api/admin/class-subjects", { headers }),
-  fetch(WORKER_URL + "/api/admin/subjects", { headers })
-]);
+    // MEMBACA HASIL RESPONS
+    const [
+      settingsResult,
+      studentsResult,
+      enrollmentsResult,
+      classesResult,
+      classSubjectsResult,
+      subjectsResult
+    ] = await Promise.all([
+      settingsResponse.json(),
+      studentsResponse.json(),
+      enrollmentsResponse.json(),
+      classesResponse.json(),
+      classSubjectsResponse.json(),
+      subjectsResponse.json()
+    ]);
 
-const [
-  settingsResult,
-  studentsResult,
-  enrollmentsResult,
-  classesResult,
-  classSubjectsResult,
-  subjectsResult
-] = await Promise.all([
-  settingsResponse.json(),
-  studentsResponse.json(),
-  enrollmentsResponse.json(),
-  classesResponse.json(),
-  classSubjectsResponse.json(),
-  subjectsResponse.json()
-]);
-
+    // MEMERIKSA HASIL PENGAMBILAN DATA
     const responses = [
       [settingsResponse, settingsResult, "pengaturan akademik"],
       [studentsResponse, studentsResult, "data santri"],
       [enrollmentsResponse, enrollmentsResult, "penempatan santri"],
       [classesResponse, classesResult, "data kelas"],
-      [classSubjectsResponse, classSubjectsResult, "mata pelajaran per kelas"]
+      [classSubjectsResponse, classSubjectsResult, "mata pelajaran per kelas"],
+      [subjectsResponse, subjectsResult, "data mata pelajaran"]
     ];
 
     for (const [response, result, label] of responses) {
@@ -1528,12 +1519,14 @@ const [
       }
     }
 
+    // MENYIMPAN DATA KE VARIABEL
     gradeAcademicSettings = settingsResult.settings || {};
     studentData = studentsResult.students || [];
     window.gradeEnrollmentData = enrollmentsResult.enrollments || [];
     window.gradeClassData = classesResult.classes || [];
     window.gradeClassSubjectData = classSubjectsResult.classSubjects || [];
-gradeSubjectData = subjectsResult.subjects || [];
+    gradeSubjectData = subjectsResult.subjects || [];
+
     // TAHUN PELAJARAN
     const yearSelect = document.getElementById("gradeAcademicYear");
     yearSelect.innerHTML = '<option value="">Pilih Tahun Pelajaran</option>';
@@ -1584,22 +1577,22 @@ gradeSubjectData = subjectsResult.subjects || [];
       marhalahSelect.appendChild(option);
     });
 
-    // KOSONGKAN KELAS DAN MAPEL
+    // KOSONGKAN PILIHAN KELAS
     document.getElementById("gradeClass").innerHTML =
       '<option value="">Pilih Kelas</option>';
 
-    document.getElementById("gradeSubjectList").textContent =
-      "Pilih marhalah terlebih dahulu.";
-
+    // SEMBUNYIKAN TABEL NILAI SEBELUM KELAS DIPILIH
     document.getElementById("manualGradeBox").style.display = "none";
 
     info.textContent =
       "Data berhasil dimuat. Silakan pilih tahun pelajaran, semester, dan marhalah.";
 
   } catch (error) {
+    console.error("Gagal memuat data akademik:", error);
     info.textContent = "Gagal memuat data: " + error.message;
   }
 };
+
 
 // ==========================================
 // MEMUAT PILIHAN FILTER RAPOR SANTRI
