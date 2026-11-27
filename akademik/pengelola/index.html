@@ -1710,6 +1710,7 @@ document.getElementById("reportMarhalah")
 // MEMUAT SANTRI BERDASARKAN KELAS RAPOR
 // ==========================================
 
+
 function loadReportStudents() {
 
   const tahunAjaranId =
@@ -1724,61 +1725,127 @@ function loadReportStudents() {
   const studentSelect =
     document.getElementById("reportStudent");
 
+  const reportInfo =
+    document.getElementById("reportInfo");
+
   studentSelect.innerHTML =
     '<option value="">Pilih Santri</option>';
 
-  if (!tahunAjaranId || !marhalah || !kelasId) return;
+  if (!tahunAjaranId || !marhalah || !kelasId) {
+    reportInfo.textContent =
+      "Pilih tahun pelajaran, marhalah, dan kelas terlebih dahulu.";
+    return;
+  }
 
-  // AMBIL PENEMPATAN SANTRI AKTIF
-  const enrollments = (window.gradeEnrollmentData || []).filter(item =>
-    item.tahunAjaranId === tahunAjaranId &&
-    item.kelasId === kelasId &&
-    item.marhalah === marhalah &&
+  // AMBIL DATA PENEMPATAN SANTRI
+  const enrollments =
+    Array.isArray(window.gradeEnrollmentData)
+      ? window.gradeEnrollmentData
+      : [];
+
+  // AMBIL DATA INDUK SANTRI
+  const allStudents =
+    typeof studentData !== "undefined" &&
+    Array.isArray(studentData)
+      ? studentData
+      : [];
+
+  // NORMALISASI TEKS UNTUK MENGHINDARI
+  // PERBEDAAN SPASI DAN HURUF BESAR/KECIL
+  const normalize = value =>
+    String(value ?? "").trim().toUpperCase();
+
+  // FILTER PENEMPATAN BERDASARKAN TAHUN,
+  // MARHALAH, KELAS, DAN STATUS AKTIF
+  const filteredEnrollments = enrollments.filter(item =>
+    normalize(item.tahunAjaranId) === normalize(tahunAjaranId) &&
+    normalize(item.kelasId) === normalize(kelasId) &&
+    normalize(item.marhalah) === normalize(marhalah) &&
     gradeIsActive(item.status)
   );
 
-  // COCOKKAN DENGAN DATA INDUK SANTRI
-  const students = enrollments.map(enrollment => {
+  // COCOKKAN NIS PENEMPATAN DENGAN DATA INDUK
+  const students = [];
 
-    const student = studentData.find(item =>
-      item.nis === enrollment.nis &&
+  const nisTerpakai = new Set();
+
+  filteredEnrollments.forEach(enrollment => {
+
+    const nisEnrollment = normalize(enrollment.nis);
+
+    const student = allStudents.find(item =>
+      normalize(item.nis) === nisEnrollment &&
       gradeIsActive(item.status)
     );
 
-    if (!student) return null;
+    if (!student) return;
 
-    return {
+    if (nisTerpakai.has(nisEnrollment)) return;
+
+    nisTerpakai.add(nisEnrollment);
+
+    students.push({
       nis: student.nis,
       nama: student.nama || enrollment.namaSantri || ""
-    };
+    });
 
-  }).filter(Boolean);
+  });
 
   // URUTKAN BERDASARKAN NAMA
   students.sort((a, b) =>
     String(a.nama).localeCompare(String(b.nama), "id")
   );
 
-  // TAMPILKAN PILIHAN SANTRI
+  // TAMPILKAN DAFTAR SANTRI
   students.forEach(student => {
 
     const option = document.createElement("option");
 
     option.value = student.nis;
+
     option.textContent =
       student.nama + " (" + student.nis + ")";
 
     studentSelect.appendChild(option);
+
   });
 
+  // INFORMASI HASIL PEMERIKSAAN
+  console.log("PEMERIKSAAN DAFTAR SANTRI RAPOR");
+  console.log("Jumlah data induk:", allStudents.length);
+  console.log("Jumlah seluruh penempatan:", enrollments.length);
+  console.log("Penempatan sesuai pilihan:", filteredEnrollments.length);
+  console.log("Santri berhasil dicocokkan:", students.length);
+
+  console.table(
+    filteredEnrollments.map(item => ({
+      NIS: item.nis,
+      Nama: item.namaSantri,
+      Tahun: item.tahunAjaranId,
+      Marhalah: item.marhalah,
+      Kelas: item.kelasId,
+      Status: item.status,
+      CocokDataInduk: allStudents.some(student =>
+        normalize(student.nis) === normalize(item.nis)
+      )
+    }))
+  );
+
   if (students.length === 0) {
-    document.getElementById("reportInfo").textContent =
-      "Tidak ada santri aktif pada kelas dan tahun pelajaran ini.";
+
+    reportInfo.textContent =
+      "Tidak ada santri aktif yang cocok dengan penempatan kelas ini.";
+
   } else {
-    document.getElementById("reportInfo").textContent =
-      "Ditemukan " + students.length + " santri. Silakan pilih santri.";
+
+    reportInfo.textContent =
+      "Ditemukan " + students.length +
+      " santri. Silakan pilih santri.";
+
   }
+
 }
+
 
 // MEMUAT SANTRI SAAT KELAS BERUBAH
 document.getElementById("reportClass")
